@@ -8,47 +8,47 @@
       </div>
     </div>
     <div class="content col-12 row no-margin pl-2 pr-2">
-      <div class="cst-card col-6 mr-auto">
+      <div class="cst-card col-6">
         <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
         <p class="title-product">Botol Minum Aqua Miner...</p>
         <p class="product-price">Rp.3.000</p>
       </div>
-      <div class="cst-card col-6 mr-auto">
+      <div class="cst-card col-6">
         <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
         <p class="title-product">Botol Minum Aqua Miner...</p>
         <p class="product-price">Rp.3.000</p>
       </div>
-      <div class="cst-card col-6 mr-auto">
+      <div class="cst-card col-6">
         <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
         <p class="title-product">Botol Minum Aqua Miner...</p>
         <p class="product-price">Rp.3.000</p>
       </div>
-      <div class="cst-card col-6 mr-auto">
+      <div class="cst-card col-6">
         <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
         <p class="title-product">Botol Minum Aqua Miner...</p>
         <p class="product-price">Rp.3.000</p>
       </div>
-      <div class="cst-card col-6 mr-auto">
+      <div class="cst-card col-6">
         <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
         <p class="title-product">Botol Minum Aqua Miner...</p>
         <p class="product-price">Rp.3.000</p>
       </div>
-      <div class="cst-card col-6 mr-auto">
+      <div class="cst-card col-6">
         <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
         <p class="title-product">Botol Minum Aqua Miner...</p>
         <p class="product-price">Rp.3.000</p>
       </div>
-      <div class="cst-card col-6 mr-auto">
+      <div class="cst-card col-6">
+        <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
+        <p class="title-product">Botol Minum Aqua Miner...</p>
+        <p class="product-price">Rp.3.000.000.000.0000.000</p>
+      </div>
+      <div class="cst-card col-6">
         <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
         <p class="title-product">Botol Minum Aqua Miner...</p>
         <p class="product-price">Rp.3.000</p>
       </div>
-      <div class="cst-card col-6 mr-auto">
-        <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-        <p class="title-product">Botol Minum Aqua Miner...</p>
-        <p class="product-price">Rp.3.000</p>
-      </div>
-      <div class="cst-card col-6 mr-auto">
+      <div class="cst-card col-6">
         <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
         <p class="title-product">Botol Minum Aqua Miner...</p>
         <p class="product-price">Rp.3.000</p>
@@ -76,8 +76,9 @@
 }
 
 .un-active:hover {
-    background: #e86c00 radial-gradient(circle, transparent 1%, #e86c00 1%) center/15000%;
-    color: white;
+  background: #e86c00 radial-gradient(circle, transparent 1%, #e86c00 1%)
+    center/15000%;
+  color: white;
 }
 
 .un-active:active {
@@ -98,6 +99,9 @@
 .product-price {
   font-family: "Noto Sans KR", sans-serif;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: #ff7600;
 }
 
@@ -106,9 +110,13 @@
   border-radius: 5px;
   padding: 0px;
   margin-top: 7px;
-  max-width: 169px;
+  max-width: 49.1%;
   border: 1px solid rgba(0, 0, 0, 0.061);
   padding: 7px;
+}
+
+.cst-card:nth-child(even) {
+  margin-left: 5px;
 }
 
 .img-product {
@@ -119,14 +127,6 @@
 
 p {
   margin: 0px;
-}
-
-.mr-auto {
-  margin-right: auto;
-}
-
-.ml-auto {
-  margin-left: auto;
 }
 
 .active {

@@ -1,26 +1,30 @@
 <template>
-<div>
-  <router-view/>
-</div>
-<!-- <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-</div>-->
+  <header class="header">
+    <nav class="no-padding">
+      <div class="row col-12 no-padding no-margin pt-2 pb-2 bg-bl">
+        <div class="col-9 no-padding mt-mb-auto">
+          <div class="ml-2">
+            <font-awesome-icon v-on:click="back" icon="chevron-left" />
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
 </template>
 
-<script>
+<script type="text/javascript">
 
 export default {
-  name: 'App',
-  components: {
+  methods: {
+    back() {
+      window.history.back();
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
-@import "./style/font/font.scss";
+@import "../style/font/font.scss";
 
 $break-small: 720px;
 $break-large: 730px;
@@ -31,8 +35,8 @@ header {
 
 nav {
   color: white;
-  padding-top: 3px;
-  padding-bottom: 3px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 
   @media screen and (max-width: $break-small) {
   }
@@ -49,6 +53,7 @@ a {
 
 .bg-bl {
   background-color: #0095da;
+  height: 50px;
 }
 
 .blilogo {
@@ -75,7 +80,7 @@ a {
   position: fixed;
 }
 
-.sign-in {
+.mt-mb-auto {
   margin-top: auto;
   margin-bottom: auto;
 }
@@ -99,24 +104,4 @@ a {
 .shadow-box {
   box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.3);
 }
-// #app {
-//   font-family: Avenir, Helvetica, Arial, sans-serif;
-//   -webkit-font-smoothing: antialiased;
-//   -moz-osx-font-smoothing: grayscale;
-//   text-align: center;
-//   color: #2c3e50;
-// }
-
-// #nav {
-//   padding: 30px;
-
-//   a {
-//     font-weight: bold;
-//     color: #2c3e50;
-
-//     &.router-link-exact-active {
-//       color: #42b983;
-//     }
-//   }
-// }
 </style>

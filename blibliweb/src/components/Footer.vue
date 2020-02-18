@@ -22,6 +22,7 @@
 .footer {
   border-top: 4px solid #0eb3ff;
   margin-top: 15px;
+  margin-bottom: 50px;
 }
 
 .footer-detail {
