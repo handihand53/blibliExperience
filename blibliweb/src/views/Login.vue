@@ -1,13 +1,13 @@
 <template>
     <div>
         <PlainHeader/>
-        <div>
+        <div class="center">
             <img src="@/assets/logo/blibli_logo.png" class="login-logo">
         </div>
         <div class="login-area">
             <p class="login-text">Masuk Ke Akun Kamu</p>
-            <input type="text" placeholder="Email" class="form-control form-input">
             <div class="form-input">
+              <input type="text" placeholder="Email" class="form-control mb-4">
                 <span @click="showPassword">
                   <div>
                     <font-awesome-icon
@@ -69,6 +69,10 @@ export default {
 <style lang="scss" scoped>
 @import "../style/font/font.scss";
 
+.center{
+  text-align: center;
+}
+
 .login-area{
   margin-bottom: 50px;
 }
@@ -89,7 +93,7 @@ export default {
 
 .btn-masuk {
     height: 58px;
-    width: 310px;
+    width: 100%;
     margin-top: 25px;
     background-color: #FF9100;
     color: white;
@@ -116,9 +120,9 @@ export default {
 }
 
 .form-input{
-    width: 310px;
-    margin-left: auto;
-    margin-right: auto;
+    // width: 310px;
+    margin-left: 25px;
+    margin-right: 25px;
     margin-bottom: 20px;
 }
 

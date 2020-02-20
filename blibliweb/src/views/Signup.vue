@@ -4,9 +4,9 @@
         <div>
             <img src="../assets/logo/blibli-icon-1.png" alt="" class="icon mr-auto ml-auto">
             <p class="center signup-title">Daftar Akun Baru</p>
-            <input type="text" placeholder="Masukkan Nama Lengkap" class="form-control form-input">
-            <input type="text" placeholder="Masukkan Email" class="form-control form-input">
             <div class="form-input">
+              <input type="text" placeholder="Masukkan Nama Lengkap" class="form-control">
+              <input type="text" placeholder="Masukkan Email" class="form-control mt-3">
                 <span @click="showPassword1">
                   <div>
                     <font-awesome-icon
@@ -35,8 +35,7 @@
                 </span>
                 <input type="password" id="password2" placeholder="Konfirmasi Kata Sandi"
                 class="form-control password-field">
-            </div>
-            <div class="form-input row no-padding">
+                <div class="row no-padding no-margin mt-3">
                 <div class="col-1 no-padding">
                     <input type="checkbox" class="form-control form-checkbox">
                 </div>
@@ -47,6 +46,7 @@
                 </div>
             </div>
             <button class="daftar-btn ml-auto mr-auto disable" disabled>Daftar</button>
+            </div>
             <p class="center redirect-text">Sudah punya akun ?
                 <router-link to="/login">Masuk disini</router-link>
             </p>
@@ -113,7 +113,7 @@ export default {
 .password-option{
     position: absolute;
     right: 40px;
-    margin-top: 10px;
+    margin-top: 30px;
     color: #808080;
     visibility: hidden;
 }
@@ -130,8 +130,15 @@ export default {
     visibility: hidden;
 }
 
+.no-margin{
+  margin: 0px;
+}
+
 .daftar-btn{
-    width: 311px;
+    // width: 311px;
+    margin-left: 25px;
+    margin-right: 25px;
+    width: 100%;
     display: block;
     height: 38px;
     border-radius: 5px;
@@ -160,9 +167,9 @@ export default {
 }
 
 .form-input{
-    width: 310px;
-    margin-left: auto;
-    margin-right: auto;
+    // width: 310px;
+    margin-left: 25px;
+    margin-right: 25px;
     font-weight: 500;
     margin-top: 20px;
 }

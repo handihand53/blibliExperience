@@ -17,13 +17,13 @@
           <p class="icon-text">Pindai</p>
         </div>
       </router-link>
-      <router-link to="/ee" class="col-navigation">
+      <router-link to="/cart" class="col-navigation">
         <div>
           <font-awesome-icon icon="shopping-cart" class="nav-icon" />
           <p class="icon-text">Keranjang</p>
         </div>
       </router-link>
-      <router-link to="/xx" class="col-navigation">
+      <router-link to="/account" class="col-navigation">
         <div>
           <font-awesome-icon icon="user-circle" class="nav-icon" />
           <p class="icon-text">Akun</p>

@@ -10,6 +10,9 @@
             <div v-on:click="dropdown" class="burger-button">
               <font-awesome-icon class="toggle-dropdown"
               :class="{rotate: isRotate}" icon="ellipsis-v" />
+              <router-link to="/cart">
+                <img src="@/assets/logo/blibli_wht_logoonly.png" class="stash-icon" alt="">
+              </router-link>
             </div>
             <div class="dropdown-content"
             :class="{visible: isVisible}">
@@ -64,6 +67,12 @@ export default {
 
 $break-small: 720px;
 $break-large: 730px;
+
+.stash-icon{
+    position: absolute;
+    width: 24px;
+    right: 35px;
+}
 
 .burger-button{
   display: inline-block;
