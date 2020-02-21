@@ -62,6 +62,38 @@ const routes = [
       title: 'Detail Product',
     },
   },
+  {
+    path: '/wishlist',
+    name: 'Wishlist',
+    component: () => import(/* webpackChunkName: "category" */ '../views/Wishlist.vue'),
+    meta: {
+      title: 'Wishlist',
+    },
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import(/* webpackChunkName: "category" */ '../views/Profile.vue'),
+    meta: {
+      title: 'Profil',
+    },
+  },
+  {
+    path: '/change-password',
+    name: 'Change Password',
+    component: () => import(/* webpackChunkName: "category" */ '../views/ChangePassword.vue'),
+    meta: {
+      title: 'Ganti Password',
+    },
+  },
+  {
+    path: '/post-product',
+    name: 'Post Product',
+    component: () => import(/* webpackChunkName: "category" */ '../views/PostProduct.vue'),
+    meta: {
+      title: 'Posting Barang',
+    },
+  },
 ];
 
 const router = new VueRouter({

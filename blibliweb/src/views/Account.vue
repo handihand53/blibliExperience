@@ -38,15 +38,9 @@
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>
-          <router-link to="/profile" class="alink">
+          <router-link to="/wishlist" class="alink">
             <div class="list-menu">
               Wishlist
-              <font-awesome-icon icon="chevron-right" class="right-arrow"/>
-            </div>
-          </router-link>
-          <router-link to="/profile" class="alink">
-            <div class="list-menu">
-              Profile
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>
@@ -68,7 +62,7 @@
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>
-          <router-link to="/profile" class="alink">
+          <router-link to="/post-product" class="alink">
             <div class="list-menu">
               Posting Produk
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
