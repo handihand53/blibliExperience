@@ -26,7 +26,7 @@
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>
-          <router-link to="/profile" class="alink">
+          <router-link to="/daftar-penawaran" class="alink">
             <div class="list-menu">
               Daftar Penawaran
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>

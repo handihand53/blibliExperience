@@ -4,78 +4,16 @@
         <div>
             <div class="background-white">
                 <div class="p-2">
-                    <small>Posting Produk</small>
+                    <small style="color: #AEAEAE">Posting Produk</small>
                 </div>
                 <div class="pl-2">
-                    <span class="barter active">Barter</span>
-                    <span class="cari-barang">Cari Barang</span>
+                    <span @click="barter" class="barter"
+                    :class="{active: isActive}">Barter</span>
+                    <span @click="cariBarang" class="cari-barang"
+                    :class="{active: !isActive}">Cari Barang</span>
                 </div>
             </div>
-            <div class="mt-1 p-3">
-                <label for="namabarang" class="detail-label">
-                    Nama Barang<span class="red">*</span></label>
-                <input type="text" class="form-control form-input"
-                placeholder="Nama Barang" id="namabarang" name="namabarang">
-                <label for="brand" class="detail-label">
-                    Brand<span class="red">*</span></label>
-                <input type="text" class="form-control form-input"
-                placeholder="Asus, Aqua, Acer" id="brand" name="brand">
-                <label for="harga" class="detail-label">
-                    Harga (Rp)<span class="red">*</span></label>
-                <input type="text" min="0" class="form-control form-input"
-                placeholder="Contoh: 13000" id="harga" name="harga">
-                <label for="kategori" class="detail-label">
-                    Kategori<span class="red">*</span></label>
-                <select name="kategori" id="kategori" class="form-control form-input">
-                    <option value="" hidden selected disabled>--- Pilih Kategori ---</option>
-                    <option value="">a</option>
-                    <option value="">b</option>
-                </select>
-                <label for="barangPreferensi" class="detail-label">
-                    Barang preferensi<span class="red">*</span></label>
-                <input type="text" class="form-control form-input"
-                placeholder="Kulkas / Handphone / Sepeda"
-                id="barangPreferensi" name="barangPreferensi">
-                <label class="detail-label">
-                    Kondisi Barang<span class="red">*</span></label><br>
-                <input type="radio" class="form-input"
-                id="baru" name="status">
-                <label for="baru" class="label-radio">Baru</label>
-                <input type="radio" class="form-input"
-                id="lama" name="status">
-                <label for="lama" class="label-radio">Lama</label>
-                <br>
-                <label for="berat" class="detail-label">
-                    Berat Barang (kg)<span class="red">*</span></label>
-                <input type="text" min="0" class="form-control form-input"
-                placeholder="Contoh: 12" id="berat" name="berat">
-                <label for="dimensi" class="detail-label">
-                    Dimensi<span class="red">*</span></label>
-                <input type="text" class="form-control form-input"
-                placeholder="Contoh : 12 cm x 15 cm x 30 cm" id="dimensi" name="dimensi">
-                <label for="kelengkapan" class="detail-label">
-                    Kelengkapan Paket<span class="red">*</span></label>
-                <input type="text" class="form-control form-input"
-                placeholder="Contoh: dus, buku panduan, kabel" id="kelengkapan" name="kelengkapan">
-                <label for="deskripsi" class="detail-label">
-                    Deskripsi<span class="red">*</span></label>
-                <textarea class="form-control form-input"
-                placeholder="Deskripsi" id="deskripsi" name="deskripsi">
-                </textarea>
-                <label for="foto" class="detail-label">
-                    Foto Produk<span class="red">*</span></label>
-                <div class="input-group">
-                    <div class="custom-file">
-                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                        <input type="file" class="custom-file-input" id="inputGroupFile01"
-                        aria-describedby="inputGroupFileAddon01">
-                    </div>
-                </div>
-                <small class="text-suggest">Format foto yang diperbolehkan : png,
-                jpeg, jpg</small><br>
-                <small class="text-suggest">Ukuran maks per foto adalah 5 mb</small><br>
-                <button class="save-btn">Posting</button>
-            </div>
+          <component :is="currentComponent"></component>
         </div>
         <Footer/>
     </div>
@@ -83,18 +21,36 @@
 
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
+import PostProductComponent from '@/components/PostProductComponent.vue';
+import CariProductComponent from '@/components/CariProductComponent.vue';
 import Footer from '@/components/Footer.vue';
 
 export default {
   name: 'PostProduct',
+  data() {
+    return {
+      isActive: true,
+      currentComponent: PostProductComponent,
+    };
+  },
   components: {
     HeaderWithCart,
     Footer,
   },
+  methods: {
+    barter() {
+      this.isActive = true;
+      this.currentComponent = PostProductComponent;
+    },
+    cariBarang() {
+      this.isActive = false;
+      this.currentComponent = CariProductComponent;
+    },
+  },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 $red: #FF0000;
 
 .save-btn{
@@ -141,20 +97,20 @@ $red: #FF0000;
     font-size: 13px;
 }
 
-.barter{
-    margin-right: 20px;
-    padding-bottom: 2px;
-    font-size: 14px;
-    display: inline-block;
-    color: #AEAEAE;
-}
-
 .red{
     color: $red;
 }
 
 .form-input{
     margin-bottom: 10px;
+}
+
+.barter{
+    margin-right: 20px;
+    padding-bottom: 2px;
+    font-size: 14px;
+    display: inline-block;
+    color: #AEAEAE;
 }
 
 .cari-barang{

@@ -94,6 +94,14 @@ const routes = [
       title: 'Posting Barang',
     },
   },
+  {
+    path: '/daftar-penawaran',
+    name: 'Daftar Penawaran',
+    component: () => import(/* webpackChunkName: "category" */ '../views/DaftarPenawaran.vue'),
+    meta: {
+      title: 'Daftar Penawaran',
+    },
+  },
 ];
 
 const router = new VueRouter({
