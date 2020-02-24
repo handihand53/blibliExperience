@@ -11,7 +11,7 @@
           <p class="icon-text">Kategori</p>
         </div>
       </router-link>
-      <router-link to="/ww" class="col-navigation">
+      <router-link to="/scan" class="col-navigation">
         <div>
           <font-awesome-icon icon="qrcode" class="nav-icon" />
           <p class="icon-text">Pindai</p>

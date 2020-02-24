@@ -102,6 +102,22 @@ const routes = [
       title: 'Daftar Penawaran',
     },
   },
+  {
+    path: '/daftar-pengajuan',
+    name: 'Daftar Pengajuan',
+    component: () => import(/* webpackChunkName: "category" */ '../views/DaftarPengajuan.vue'),
+    meta: {
+      title: 'Daftar Pengajuan',
+    },
+  },
+  {
+    path: '/scan',
+    name: 'Scanner',
+    component: () => import(/* webpackChunkName: "category" */ '../views/Scanner.vue'),
+    meta: {
+      title: 'Scanner',
+    },
+  },
 ];
 
 const router = new VueRouter({

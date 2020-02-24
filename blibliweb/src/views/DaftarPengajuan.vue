@@ -1,17 +1,17 @@
 <template>
-  <div class="background-white">
+  <div>
     <HeaderWithCart/>
     <div>
       <div class="background-white border-bottom box-shadow">
-          <div class="p-2">
-              <small style="color: #AEAEAE; font-weight: 600;">Daftar Penawaran</small>
-          </div>
-          <div class="pl-2">
-              <span @click="penawaranBarter" class="penawaran-barter"
-              :class="{active: isActive}">Penawaran Barter</span>
-              <span @click="penawaranBarang" class="penawaran-barang"
-              :class="{active: !isActive}">Penawaran Barang</span>
-          </div>
+        <div class="p-2">
+            <small style="color: #AEAEAE; font-weight: 600;">Daftar Pengajuan</small>
+        </div>
+        <div class="pl-2">
+            <span @click="pengajuanBarter" class="pengajuan-barter"
+            :class="{active: isActive}">Pengajuan Barter</span>
+            <span @click="pengajuanBarang" class="pengajuan-barang"
+            :class="{active: !isActive}">Pengajuan Barang</span>
+        </div>
       </div>
       <component :is="currentComponent"></component>
     </div>
@@ -21,8 +21,8 @@
 
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
-import DaftarPenawaranBarter from '@/components/DaftarPenawaranBarter.vue';
-import DaftarPenawaranBarang from '@/components/DaftarPenawaranBarang.vue';
+import DaftarPengajuanBarter from '@/components/DaftarPengajuanBarter.vue';
+import DaftarPengajuanBarang from '@/components/DaftarPengajuanBarang.vue';
 import Footer from '@/components/Footer.vue';
 
 export default {
@@ -33,25 +33,80 @@ export default {
   data() {
     return {
       isActive: true,
-      currentComponent: DaftarPenawaranBarter,
+      currentComponent: DaftarPengajuanBarter,
     };
   },
   methods: {
-    penawaranBarter() {
+    pengajuanBarter() {
       this.isActive = true;
-      this.currentComponent = DaftarPenawaranBarter;
+      this.currentComponent = DaftarPengajuanBarter;
     },
-    penawaranBarang() {
+    pengajuanBarang() {
       this.isActive = false;
-      this.currentComponent = DaftarPenawaranBarang;
+      this.currentComponent = DaftarPengajuanBarang;
     },
   },
 };
 </script>
 
 <style>
+.bid-product{
+  margin-top: 7px;
+  margin-bottom: 0px;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bid-price-product{
+  font-size: 22px;
+  font-weight: 500;
+  color: #F99401;
+}
+
+.status-tag{
+  color: white;
+  padding: 3px 10px;
+  font-size: 10px;
+  border-radius: 15px;
+}
+
+.success{
+  background-color: #37C26A;
+}
+
+.fail{
+  background-color: #FF5050;
+}
+
+.pending{
+  background-color: #C5C5C5;
+  color: #5A5A5A;
+}
+
 .no-margin{
   margin: 0px;
+}
+
+.desc-product{
+  font-size: 11px;
+  color: #AEAEAE;
+  margin-top: 15px;
+}
+
+.brand-product{
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0px;
+}
+
+.custom-card{
+  margin-top: 10px;
+  border-radius: 7px;
+  border: 0.5px solid rgba(208, 208, 208, 0.245);
 }
 
 .bid-product{
@@ -69,30 +124,6 @@ export default {
 
 .no-padding{
   padding: 0px;
-}
-
-.date-text{
-  color: rgb(130, 130, 130);
-  font-weight: 500;
-}
-
-.desc-product{
-  font-size: 11px;
-  color: #AEAEAE;
-}
-
-.bid-price-product{
-  font-size: 25px;
-  font-weight: 500;
-  color: #F99401;
-}
-
-.brand-product{
-  font-size: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 0px;
 }
 
 .title-product{
@@ -154,7 +185,7 @@ export default {
     background-color: white;
 }
 
-.penawaran-barter{
+.pengajuan-barter{
     margin-right: 20px;
     padding-bottom: 2px;
     font-size: 14px;
@@ -162,7 +193,7 @@ export default {
     color: #AEAEAE;
 }
 
-.penawaran-barang{
+.pengajuan-barang{
     font-size: 14px;
     padding-bottom: 2px;
     display: inline-block;

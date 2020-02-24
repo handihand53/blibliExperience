@@ -32,7 +32,7 @@
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>
-          <router-link to="/profile" class="alink">
+          <router-link to="/daftar-pengajuan" class="alink">
             <div class="list-menu">
               Daftar Pengajuan
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
@@ -82,6 +82,9 @@
           </router-link>
         </div>
       </div>
+      <div>
+        <button class="logout-button">Keluar</button>
+      </div>
     </div>
     <BottomNavigation />
     <Footer />
@@ -105,6 +108,15 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/font/font.scss";
+
+.logout-button{
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #C5C5C5;
+  color: white;
+  font-weight: 600;
+}
 
 .list-menu{
   margin-bottom: 15px;
