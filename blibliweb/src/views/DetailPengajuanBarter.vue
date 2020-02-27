@@ -1,23 +1,69 @@
 <template>
   <div>
     <HeaderWithCart/>
-    <div>
-      <div>
-        <div class="background-white border-bottom box-shadow">
+    <div class="overlay">
+      <div class="modal-detail show-modal">
+        <div class="p-2 pl-2 detail-barang-text" id="modal-show">
+          <p class="detail-title-product">Detail Pengajuan Barter</p>
+        </div>
+        <div class="custom-detail-card">
           <div class="p-2">
-            <small style="color: #AEAEAE; font-weight: 600;">Daftar Pengajuan</small>
+            <div>
+              <p class="detail-title-product float-left">Samsung A10</p>
+              <p class="detail-tag-product float-right mt-1">Sudah dikonfirmasi</p>
+            </div>
+            <div style="clear: both;">
+              <p class="brand-detail-product">
+                Brand:
+                <span class="blue-brand">Samsung</span>
+              </p>
+            </div>
           </div>
-          <div class="pl-2">
-            <span @click="pengajuanBarter" class="pengajuan-barter"
-            :class="{active: isActive}">Pengajuan Barter</span>
-            <span @click="pengajuanBarang" class="pengajuan-barang"
-            :class="{active: !isActive}"
-            id="pengajuanBarang">Pengajuan Barang</span>
+          <div class="overflow-y">
+            <div class="p-3 center">
+              <img src="@/assets/etc/aqua.png" alt class="detail-image-product p-3" />
+            </div>
+            <div class="pl-3">
+              <span class="uang-text">Uang</span>
+              <span class="price-detail-text">Rp1.000.000</span>
+            </div>
+            <div class="pl-3 mb-2">
+              <span class="uang-text">Bid </span>
+              <span class="price-detail-text ml-2">Rp15.000</span>
+            </div>
+            <div class="about-detail-product">
+              <div class="p-3">
+                <div class="box-shadow mb-2">
+                  <div class="head-tentang">
+                    <p class="text-detail-product">Tentang Produk</p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">
+                      Status Barang :
+                      <span class="tag">Baru</span>
+                    </p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">Lama Pemakaian : 3 Tahun 6 bulan</p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">
+                      Deskripsi barang : Lorem ipsum dolor
+                      sit amet consectetur adipisicing elit. Neque reiciendis eos, doloribus
+                      veniam nobis praesentium nesciunt, voluptatum voluptas corporis ipsam
+                      exercitationem fugit perferendis quisquam ab voluptates voluptate doloremque
+                      quibusdam accusamus.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <component :is="currentComponent"></component>
       </div>
-      <!--  -->
+    </div>
+    <div class="bottom-buy box-shadow">
+      <div>s</div>
     </div>
     <Footer/>
   </div>
@@ -25,8 +71,6 @@
 
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
-import DaftarPengajuanBarter from '@/components/DaftarPengajuanBarter.vue';
-import DaftarPengajuanBarang from '@/components/DaftarPengajuanBarang.vue';
 import Footer from '@/components/Footer.vue';
 
 export default {
@@ -34,41 +78,17 @@ export default {
     HeaderWithCart,
     Footer,
   },
-  data() {
-    return {
-      isActive: true,
-      currentComponent: DaftarPengajuanBarter,
-    };
-  },
-  methods: {
-    pengajuanBarter() {
-      this.isActive = true;
-      this.currentComponent = DaftarPengajuanBarter;
-      window.history.pushState({ page: 1 }, '', '#/daftar-pengajuan?page=pengajuanBarter');
-    },
-    pengajuanBarang() {
-      this.isActive = false;
-      this.currentComponent = DaftarPengajuanBarang;
-      window.history.pushState({ page: 1 }, '', '#/daftar-pengajuan?page=pengajuanBarang');
-    },
-  },
 };
-// console.log(this.$route.query.page);
-// const urlParams = new URLSearchParams(window.location.search);
-// console.log(urlParams);
-// console.log(urlParams.has('page'));
-// const urls = 'http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5';
-// const url = new URL(urls);
-// console.log(url);
-// const page = url.searchParams.get('page');
-// console.log(page);
-// if (page === 'pengajuanBarang') {
-//   document.getElementById('pengajuanBarang').click();
-//   console.log('ada');
-// }
 </script>
 
-<style>
+<style scoped>
+
+.bottom-buy{
+  height: 60px;
+  background-color: white;
+  position: fixed;
+}
+
 .list-detail-tentang{
   padding: 10px;
 }
@@ -133,7 +153,7 @@ p{
 
 .detail-barang-text{
   background-color: white;
-  border-bottom: solid 10px rgb(204, 204, 204);
+  border-bottom: solid 1px rgb(204, 204, 204);
   transition: all 1s;
 }
 
@@ -329,4 +349,5 @@ p{
     border-bottom: 2px #0095DA solid;
     color: #0095DA;
 }
+
 </style>

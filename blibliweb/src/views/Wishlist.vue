@@ -20,7 +20,7 @@
                         <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
                         <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
                         <p class="price-product">Rp3.000</p>
-                        <button class="buy-btn">Beli Sekarang</button>
+                        <button class="buy-btn mt-auto">Beli Sekarang</button>
                     </div>
                 </div>
             </div>

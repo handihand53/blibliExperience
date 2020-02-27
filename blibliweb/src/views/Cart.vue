@@ -5,7 +5,7 @@
     <div class='p-3'>
       <div class='row no-padding no-margin cst-card p-2'>
         <label class="container col-1 no-padding">
-          <input type="checkbox" checked="checked">
+          <input type="checkbox" checked="checked" ref="maincheckbox" @click="checkAll">
           <span class="checkmark"></span>
         </label>
         <label>Pilih Semua Produk</label>
@@ -14,7 +14,8 @@
       <div class='cst-card'>
         <div class='row no-padding no-margin border-bottom pb-2'>
           <label class="container col-1 no-padding">
-            <input type="checkbox" checked="checked">
+            <input type="checkbox" checked="checked" class="check" id="toko1"
+            @click="checkToko('toko1')">
             <span class="checkmark"></span>
           </label>
           <label>Nama Toko</label>
@@ -23,7 +24,7 @@
           <!--  -->
           <div class='col-12 no-margin no-padding row mt-3 border-bottom'>
             <label class="container col-1" style="padding: 0px!important; margin: 0px!important;">
-              <input type="checkbox" checked="checked">
+              <input type="checkbox" checked="checked" class="check toko1">
               <span class="checkmark"></span>
             </label>
             <div class='col-11 row no-margin no-padding mb-2'>
@@ -54,7 +55,7 @@
           </div>
           <div class='col-12 no-margin no-padding row mt-3 border-bottom'>
             <label class="container col-1" style="padding: 0px!important; margin: 0px!important;">
-              <input type="checkbox" checked="checked">
+              <input type="checkbox" checked="checked" class="check toko1">
               <span class="checkmark"></span>
             </label>
             <div class='col-11 row no-margin no-padding mb-2'>
@@ -90,7 +91,8 @@
       <div class='cst-card'>
         <div class='row no-padding no-margin border-bottom pb-2'>
           <label class="container col-1 no-padding">
-            <input type="checkbox" checked="checked">
+            <input type="checkbox" checked="checked" class="check" id="toko2"
+            @click="checkToko('toko2')">
             <span class="checkmark"></span>
           </label>
           <label>Nama Toko</label>
@@ -99,7 +101,7 @@
           <!--  -->
           <div class='col-12 no-margin no-padding row mt-3 border-bottom'>
             <label class="container col-1" style="padding: 0px!important; margin: 0px!important;">
-              <input type="checkbox" checked="checked">
+              <input type="checkbox" checked="checked" class="check toko2">
               <span class="checkmark"></span>
             </label>
             <div class='col-11 row no-margin no-padding mb-2'>
@@ -130,7 +132,7 @@
           </div>
           <div class='col-12 no-margin no-padding row mt-3 border-bottom'>
             <label class="container col-1" style="padding: 0px!important; margin: 0px!important;">
-              <input type="checkbox" checked="checked">
+              <input type="checkbox" checked="checked" class="check toko2">
               <span class="checkmark"></span>
             </label>
             <div class='col-11 row no-margin no-padding mb-2'>
@@ -186,6 +188,18 @@ export default {
   components: {
     PlainHeader,
     Footer,
+  },
+  methods: {
+    checkAll() {
+      for (let i = 0; i < document.getElementsByClassName('check').length; i += 1) {
+        document.getElementsByClassName('check')[i].checked = this.$refs.maincheckbox.checked;
+      }
+    },
+    checkToko(shop) {
+      for (let i = 0; i < document.getElementsByClassName(shop).length; i += 1) {
+        document.getElementsByClassName(shop)[i].checked = document.getElementById(shop).checked;
+      }
+    },
   },
 };
 </script>

@@ -118,6 +118,22 @@ const routes = [
       title: 'Scanner',
     },
   },
+  {
+    path: '/detail-pengajuan-barang',
+    name: 'Detail Pengajuan Barang',
+    component: () => import(/* webpackChunkName: "category" */ '../views/DetailPengajuanBarang.vue'),
+    meta: {
+      title: 'Detail Pengajuan Barang',
+    },
+  },
+  {
+    path: '/detail-pengajuan-barter',
+    name: 'Detail Pengajuan Barter',
+    component: () => import(/* webpackChunkName: "category" */ '../views/DetailPengajuanBarter.vue'),
+    meta: {
+      title: 'Detail Pengajuan Barter',
+    },
+  },
 ];
 
 const router = new VueRouter({

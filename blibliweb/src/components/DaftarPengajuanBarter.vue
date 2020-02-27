@@ -10,7 +10,9 @@
         <span class="status-tag success">Sudah Dikonfirmasi</span>
         <p class="desc-product">Deskripsi: Lorem ipsum dolor, sit amet
           consectetur adipisicing elit.</p>
-        <button class="buy-btn">Lihat Detail</button>
+        <router-link to="/detail-pengajuan-barter">
+          <button class="buy-btn">Lihat Detail</button>
+        </router-link>
       </div>
     </div>
     <div class="custom-card box-shadow p-3 row no-margin">

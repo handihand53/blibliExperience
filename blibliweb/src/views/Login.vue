@@ -7,28 +7,35 @@
         <div class="login-area">
             <p class="login-text">Masuk Ke Akun Kamu</p>
             <div class="form-input">
-              <input type="text" placeholder="Email" class="form-control mb-4">
-                <span @click="showPassword">
-                  <div>
-                    <font-awesome-icon
-                      class="password-option"
-                      :class="{active: !isContentVisible}"
-                      icon="eye-slash"/>
-                    <font-awesome-icon
-                      class="password-option"
-                      :class="{active: isContentVisible}"
-                      icon="eye"/>
-                  </div>
-                </span>
-                <input id="password" type="password" placeholder="Kata Sandi"
-                class="form-control password-field">
-                <button class="btn-masuk">Masuk</button>
-                <p class="sign-information">Belum punya akun ?
-                  <router-link to="/signup">Daftar disini</router-link>
-                </p>
-                <div class="forget-password">
-                  <router-link to="/ww">Lupa kata sandi </router-link>
+              <input type="email" placeholder="Email" class="form-control"
+              v-model="email" @change="emailCheckFormat">
+              <div class="invalid-feedback" :class="{show:emailIsFalse, 'mb-3':emailIsFalse}">
+                {{ emailMsg }}
+              </div>
+              <span @click="showPassword">
+                <div>
+                  <font-awesome-icon
+                    class="password-option"
+                    :class="{active: !isContentVisible}"
+                    icon="eye-slash"/>
+                  <font-awesome-icon
+                    class="password-option"
+                    :class="{active: isContentVisible}"
+                    icon="eye"/>
                 </div>
+              </span>
+              <input v-model="password" id="password" type="password" placeholder="Kata Sandi"
+              class="form-control password-field">
+              <div class="invalid-feedback" :class="{show:passwordIsFalse, 'mb-3':passwordIsFalse}">
+                {{ passwordMsg }}
+              </div>
+              <button @click="login" class="btn-masuk">Masuk</button>
+              <p class="sign-information">Belum punya akun ?
+                <router-link to="/signup">Daftar disini</router-link>
+              </p>
+              <div class="forget-password">
+                <router-link to="/ww">Lupa kata sandi </router-link>
+              </div>
             </div>
         </div>
         <Footer/>
@@ -49,6 +56,12 @@ export default {
   data() {
     return {
       isContentVisible: true,
+      emailIsFalse: false,
+      emailMsg: 'x',
+      email: '',
+      passwordIsFalse: false,
+      passwordMsg: '',
+      password: '',
     };
   },
   methods: {
@@ -61,6 +74,29 @@ export default {
       } else {
         passwordField.setAttribute('type', 'password');
       }
+    },
+    emailCheckFormat() {
+      /* eslint-disable */
+      const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      /* eslint-enable */
+      this.emailIsFalse = !re.test(this.email);
+      this.emailMsg = 'Email anda salah.';
+    },
+    login() {
+      this.checkEmail();
+      this.checkPassword();
+    },
+    checkEmail() {
+      if (this.email === undefined || this.email === '') {
+        this.emailMsg = 'Silahkan isi email anda';
+        this.emailIsFalse = true;
+      }
+    },
+    checkPassword() {
+      if (this.password === undefined || this.password === '') {
+        this.passwordMsg = 'Silahkan isi kata sandi anda';
+        this.passwordIsFalse = true;
+      } else this.passwordIsFalse = false;
     },
   },
 };
@@ -83,6 +119,15 @@ export default {
   font-size: 14px;
   font-weight: 100;
   margin-bottom: 0px;
+}
+
+.invalid-feedback{
+  display: block;
+  visibility: hidden;
+}
+
+.show{
+  visibility: visible;
 }
 
 .forget-password{

@@ -35,7 +35,7 @@
                 <!-- handphone -->
                 <label for="nohp" class="detail-label">
                     Nomor Handphone<span class="red">*</span></label>
-                <input type="text" class="form-control"
+                <input type="number" min="0" class="form-control"
                 placeholder="Nomor Telepon" id="nohp" name="nohp">
                 <small class="text-suggest">Contoh: 082120393939</small><br>
                 <!-- kenis kelamin -->

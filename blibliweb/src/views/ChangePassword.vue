@@ -13,14 +13,14 @@
                     Kata Sandi<span class="red">*</span></label>
                 <input type="password" class="form-control form-input"
                 placeholder="Kata Sandi Lama" id="sandilama" name="sandilama">
-                <label for="sandilama" class="detail-label">
+                <label for="sandibaru" class="detail-label">
                     Kata Sandi Baru<span class="red">*</span></label>
                 <input type="password" class="form-control form-input"
-                placeholder="Kata Sandi Baru" id="sandilama" name="sandilama">
-                <label for="sandilama" class="detail-label">
+                placeholder="Kata Sandi Baru" id="sandibaru" name="sandibaru">
+                <label for="konfirmasisandi" class="detail-label">
                     Konfirmasi Kata Sandi<span class="red">*</span></label>
                 <input type="password" class="form-control form-input"
-                placeholder="Konfirmasi Kata Sandi" id="sandilama" name="sandilama">
+                placeholder="Konfirmasi Kata Sandi" id="konfirmasisandi" name="konfirmasisandi">
                 <div class="right">
                     <span @click="back" class="back-text">Kembali</span>
                     <button class="change-btn">Ubah Kata Sandi</button>
