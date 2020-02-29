@@ -14,6 +14,11 @@
           icon="heart"/>
            Wishlist</p>
       </div>
+      <div class="bg-white mt-3 p-3">
+        <p class="pilih-lokasi">Pilih Lokasi
+          <span v-b-modal.modal-sm class="lokasi float-right">Pilih</span></p>
+        <p class="selected-location">{{ currentLocation }}</p>
+      </div>
       <div class="bg-white mt-3 pb-2">
         <div>
           <p class="metode-text pl-3 pt-3">Metode Pengiriman</p>
@@ -88,6 +93,16 @@
         </div>
       </div>
     </div>
+    <b-modal id="modal-sm" size="sm" title="Pilih Lokasi Bliblimart"  @ok="confirmLocation">
+      <div class="mb-2">Pilih :</div>
+      <select class="form-control" ref="location">
+        <option selected disabled hidden>--Pilih--</option>
+        <option value="bliblimartA">Bliblimart A</option>
+        <option value="bliblimartB">Bliblimart B</option>
+        <option value="bliblimartC">Bliblimart C</option>
+        <option value="bliblimartD">Bliblimart D</option>
+      </select>
+    </b-modal>
     <Footer/>
   </div>
 </template>
@@ -117,15 +132,34 @@ export default {
       this.descActive = false;
       this.detailActive = true;
     },
+    confirmLocation() {
+      this.currentLocation = this.$refs.location.value;
+      console.log(this.$refs.location.value);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.pilih-lokasi{
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.lokasi{
+  font-size: 12px;
+  color: #0088FF;
+  padding-bottom: 0px;
+}
 
 .blibli-icon{
   width: 40px;
   margin: 10px;
+}
+
+.selected-location{
+  font-size: 12px;
+  color: gray;
 }
 
 .buy-btn{

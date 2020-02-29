@@ -2,33 +2,29 @@
   <div>
       <PlainHeader/>
       <div class="p-3">
-        <div @click="changeArrow" class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2">
-         <span>BlibliMart
+        <div class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2">
+         <span>Elektronik
           <font-awesome-icon
             class="float-right f-icon mt-auto mb-auto"
-            :class="{rotate: isRotate}"
             icon="angle-right"/>
          </span>
-         <div class="location-dropdown"
-         :class="{active: isActive}">
-           <ul>
-             <li><router-link to="/bliblimart-location">Lihat semua
-             lokasi BlibliMart</router-link></li>
-             <li>Bandung</li>
-             <li>Jakarta</li>
-             <li>Yogtakarta</li>
-           </ul>
-         </div>
         </div>
         <div class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2">
-          <span>Barter
+          <span>Makanan
           <font-awesome-icon
             class="float-right f-icon mt-auto mb-auto"
             icon="angle-right"/>
           </span>
         </div>
         <div class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2">
-          <span>Cari Barang
+          <span>Minuman
+          <font-awesome-icon
+            class="float-right f-icon mt-auto mb-auto"
+            icon="angle-right"/>
+          </span>
+        </div>
+        <div class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2">
+          <span>Pakaian
           <font-awesome-icon
             class="float-right f-icon mt-auto mb-auto"
             icon="angle-right"/>

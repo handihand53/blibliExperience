@@ -3,7 +3,7 @@
     <Header/>
     <main>
       <div class="p-2 bg-blue sticky-">
-        <b-form-input v-model="text" placeholder="Cari apa hari ini ?"
+        <b-form-input v-model="search" placeholder="Cari apa hari ini ?"
         id="searchbar"></b-form-input>
         <div class="card mt-2">
         <div class="row no-margin">
@@ -71,6 +71,11 @@ export default {
     Header,
     BottomNavigation,
     Footer,
+  },
+  data() {
+    return {
+      search: '',
+    };
   },
 };
 </script>

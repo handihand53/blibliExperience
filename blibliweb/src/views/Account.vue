@@ -20,7 +20,7 @@
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>
-          <router-link to="/profile" class="alink">
+          <router-link to="/daftar-pesanan" class="alink">
             <div class="list-menu">
               Daftar Pesanan
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
@@ -44,19 +44,19 @@
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>
-          <router-link to="/profile" class="alink">
+          <router-link to="/barter" class="alink">
             <div class="list-menu">
               Barter di Blibli
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>
-          <router-link to="/profile" class="alink">
+          <router-link to="/jual" class="alink">
             <div class="list-menu">
               Jual di Blibli
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>
-          <router-link to="/profile" class="alink">
+          <router-link to="/cari-barang" class="alink">
             <div class="list-menu">
               Cari Barang
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
@@ -68,13 +68,13 @@
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>
-          <router-link to="/profile" class="alink">
+          <router-link to="/panduan" class="alink">
             <div class="list-menu">
               Panduan Blibli
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>
-          <router-link to="/profile" class="alink">
+          <router-link to="/hubungi-kami" class="alink">
             <div class="list-menu">
               Hubungi Kami
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>

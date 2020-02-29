@@ -1,58 +1,86 @@
 <template>
   <div>
     <div class="card mt-2 ml-2 mr-2 pt-1 pb-2 pl-2">
-      <div>
-        <span class="category mr-2 active">Blimart</span>
-        <span class="category mr-2 un-active">Barter</span>
-        <span class="category mr-2 un-active">Cari barang</span>
+      <div class="overflow-x">
+        <span class="category mr-2 active">Semua</span>
+        <span class="category mr-2 un-active">Elektronik</span>
+        <span class="category mr-2 un-active">Makanan</span>
+        <span class="category mr-2 un-active">Minuman</span>
+        <span class="category mr-2 un-active">Pakaian</span>
+        <span class="category mr-2 un-active">Lain-lain</span>
       </div>
     </div>
     <div class="content col-12 row no-margin pl-2 pr-2">
-      <div class="cst-card col-6">
-        <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-        <p class="title-product">Botol Minum Aqua Miner...</p>
-        <p class="product-price">Rp.3.000</p>
-      </div>
-      <div class="cst-card col-6">
-        <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-        <p class="title-product">Botol Minum Aqua Miner...</p>
-        <p class="product-price">Rp.3.000</p>
-      </div>
-      <div class="cst-card col-6">
-        <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-        <p class="title-product">Botol Minum Aqua Miner...</p>
-        <p class="product-price">Rp.3.000</p>
-      </div>
-      <div class="cst-card col-6">
-        <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-        <p class="title-product">Botol Minum Aqua Miner...</p>
-        <p class="product-price">Rp.3.000</p>
-      </div>
-      <div class="cst-card col-6">
-        <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-        <p class="title-product">Botol Minum Aqua Miner...</p>
-        <p class="product-price">Rp.3.000</p>
-      </div>
-      <div class="cst-card col-6">
-        <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-        <p class="title-product">Botol Minum Aqua Miner...</p>
-        <p class="product-price">Rp.3.000</p>
-      </div>
-      <div class="cst-card col-6">
-        <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-        <p class="title-product">Botol Minum Aqua Miner...</p>
-        <p class="product-price">Rp.3.000.000.000.0000.000</p>
-      </div>
-      <div class="cst-card col-6">
-        <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-        <p class="title-product">Botol Minum Aqua Miner...</p>
-        <p class="product-price">Rp.3.000</p>
-      </div>
-      <div class="cst-card col-6">
-        <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-        <p class="title-product">Botol Minum Aqua Miner...</p>
-        <p class="product-price">Rp.3.000</p>
-      </div>
+      <router-link to="/detail-product" class="cst-card col-6">
+        <div class="">
+          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
+          <p class="title-product">Botol Minum Aqua Miner...</p>
+          <p class="product-price">Rp.3.000</p>
+        </div>
+      </router-link>
+      <router-link to="/detail-product" class="cst-card col-6">
+        <div class="">
+          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
+          <p class="title-product">Botol Minum Aqua Miner...</p>
+          <p class="product-price">Rp.3.000</p>
+        </div>
+      </router-link>
+      <router-link to="/detail-product" class="cst-card col-6">
+        <div class="">
+          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
+          <p class="title-product">Botol Minum Aqua Miner...</p>
+          <p class="product-price">Rp.3.000</p>
+        </div>
+      </router-link>
+      <router-link to="/detail-product" class="cst-card col-6">
+        <div class="">
+          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
+          <p class="title-product">Botol Minum Aqua Miner...</p>
+          <p class="product-price">Rp.3.000</p>
+        </div>
+      </router-link>
+      <router-link to="/detail-product" class="cst-card col-6">
+        <div class="">
+          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
+          <p class="title-product">Botol Minum Aqua Miner...</p>
+          <p class="product-price">Rp.3.000</p>
+        </div>
+      </router-link>
+      <router-link to="/detail-product" class="cst-card col-6">
+        <div class="">
+          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
+          <p class="title-product">Botol Minum Aqua Miner...</p>
+          <p class="product-price">Rp.3.000</p>
+        </div>
+      </router-link>
+      <router-link to="/detail-product" class="cst-card col-6">
+        <div class="">
+          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
+          <p class="title-product">Botol Minum Aqua Miner...</p>
+          <p class="product-price">Rp.3.000</p>
+        </div>
+      </router-link>
+      <router-link to="/detail-product" class="cst-card col-6">
+        <div class="">
+          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
+          <p class="title-product">Botol Minum Aqua Miner...</p>
+          <p class="product-price">Rp.3.000</p>
+        </div>
+      </router-link>
+      <router-link to="/detail-product" class="cst-card col-6">
+        <div class="">
+          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
+          <p class="title-product">Botol Minum Aqua Miner...</p>
+          <p class="product-price">Rp.3.000</p>
+        </div>
+      </router-link>
+      <router-link to="/detail-product" class="cst-card col-6">
+        <div class="">
+          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
+          <p class="title-product">Botol Minum Aqua Miner...</p>
+          <p class="product-price">Rp.3.000</p>
+        </div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -79,6 +107,19 @@
   background: #e86c00 radial-gradient(circle, transparent 1%, #e86c00 1%)
     center/15000%;
   color: white;
+}
+
+.overflow-x{
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+a:hover{
+  text-decoration: none;
+}
+
+.overflow-x::-webkit-scrollbar {
+  display: none;
 }
 
 .un-active:active {

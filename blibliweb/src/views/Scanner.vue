@@ -29,9 +29,9 @@ export default {
     };
   },
   methods: {
-    logIt(data) {
-      console.log('detected', data);
-    },
+    // logIt(data) {
+    // console.log('detected', data);
+    // },
   },
 };
 </script>

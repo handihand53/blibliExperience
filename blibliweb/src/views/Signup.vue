@@ -209,7 +209,6 @@ export default {
       this.isAllFormFill();
     },
     signUp() {
-      console.log('tertekan');
     },
   },
 };

@@ -51,6 +51,7 @@
                     <button class="change-password-btn">Ubah Kata Sandi</button>
                 </router-link><br>
                 <button class="save-btn">Simpan</button>
+                <full-calendar :events="events"></full-calendar>
             </div>
         </div>
         <Footer/>

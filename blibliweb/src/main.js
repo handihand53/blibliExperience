@@ -28,3 +28,11 @@ new Vue({
   store,
   render: (h) => h(App),
 }).$mount('#app');
+
+Vue.mixin({
+  data() {
+    return {
+      currentLocation: 'Belum ada lokasi yang dipilih',
+    };
+  },
+});
