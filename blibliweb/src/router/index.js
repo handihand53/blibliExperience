@@ -134,6 +134,30 @@ const routes = [
       title: 'Detail Pengajuan Barter',
     },
   },
+  {
+    path: '/scan-qr',
+    name: 'Qr Scanner',
+    component: () => import(/* webpackChunkName: "category" */ '../views/QrScanner.vue'),
+    meta: {
+      title: 'Scan QR',
+    },
+  },
+  {
+    path: '/confirm',
+    name: 'Konfirmasi Pemesanan',
+    component: () => import(/* webpackChunkName: "category" */ '../views/KonfirmasiPemesanan.vue'),
+    meta: {
+      title: 'Konfirmasi Pemesanan',
+    },
+  },
+  {
+    path: '/pay',
+    name: 'Pembayaran',
+    component: () => import(/* webpackChunkName: "category" */ '../views/Payment.vue'),
+    meta: {
+      title: 'Pembayaran',
+    },
+  },
 ];
 
 const router = new VueRouter({

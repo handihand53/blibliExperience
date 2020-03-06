@@ -14,7 +14,7 @@
       <router-link to="/detail-product" class="cst-card col-6">
         <div class="">
           <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <p class="title-product">Botol Minum Aqua Miner...</p>
+          <p class="title-product">Botol Minum Aqua Mineralasdkj lkjashlkjd haskhd askd</p>
           <p class="product-price">Rp.3.000</p>
         </div>
       </router-link>

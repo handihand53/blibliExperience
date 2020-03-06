@@ -6,15 +6,17 @@
         <b-form-input v-model="search" placeholder="Cari apa hari ini ?"
         id="searchbar"></b-form-input>
         <div class="card mt-2">
-        <div class="row no-margin">
-          <div class="p-2 border-right">
-            <img src="..\..\src\assets\icon\scan.png" alt="barcode" class="barcodelogo" />
+        <router-link to="/qr-scanner">
+          <div class="row no-margin">
+            <div class="p-2 border-right">
+              <img src="..\..\src\assets\icon\scan.png" alt="barcode" class="barcodelogo" />
+            </div>
+              <div  class="col-9 p-2">
+                <p class="scan-text">Scan barcode / QR code</p>
+                <p class="scan-text">Beli barang lebih mudah dengan 1x scan</p>
+              </div>
           </div>
-          <div class="col-9 p-2">
-            <p class="scan-text">Scan barcode / QR code</p>
-            <p class="scan-text">Beli barang lebih mudah dengan 1x scan</p>
-          </div>
-        </div>
+        </router-link>
       </div>
       </div>
       <div class="home">
@@ -125,6 +127,10 @@ $break-large: 730px;
 .blilogo {
   width: 100px;
   height: auto;
+}
+
+a{
+  text-decoration: none;
 }
 
 .bg-blue {
