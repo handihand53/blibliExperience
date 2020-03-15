@@ -10,7 +10,7 @@
             <div class="col-4 no-margin no-padding">
                 <img src="@/assets/etc/aqua.png" alt="" class="img-product">
             </div>
-            <div class="col-8 no-margin  no-padding">
+            <div class="col-8 no-margin no-padding">
                 <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
                 <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
                 <p class="desc-product">Deskripsi: Lorem ipsum dolor, sit amet

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="card mt-2 ml-2 mr-2 pt-1 pb-2 pl-2">
+    <div class="card mt-2 ml-2 mr-2 pt-1 pb-2">
       <div class="overflow-x">
-        <span class="category mr-2 active">Semua</span>
+        <span class="category mr-2 ml-2 active">Semua</span>
         <span class="category mr-2 un-active">Elektronik</span>
         <span class="category mr-2 un-active">Makanan</span>
         <span class="category mr-2 un-active">Minuman</span>

@@ -30,18 +30,18 @@
                 </div>
                 <div class="text-card">Blimart</div>
               </div>
-              <div class="col-3">
+              <router-link to="/barter" class="col-3">
                 <div class="center">
                   <img src="@/assets/icon/design.png" class="img-icon" alt />
                 </div>
                 <div class="text-card">Barter</div>
-              </div>
-              <div class="col-3">
+              </router-link>
+              <router-link to="/cari-barang" class="col-3">
                 <div class="center">
                   <img src="@/assets/icon/product.png" class="img-icon" alt />
                 </div>
                 <div class="text-card">Cari Barang</div>
-              </div>
+              </router-link>
               <div class="col-3">
                 <div class="center">
                   <img src="@/assets/icon/map.png" class="img-icon" alt />
