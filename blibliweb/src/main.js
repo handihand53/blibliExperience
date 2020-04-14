@@ -3,21 +3,30 @@ import BootstrapVue from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import PrettyInput from 'pretty-checkbox-vue/input';
-import PrettyCheck from 'pretty-checkbox-vue/check';
-import PrettyRadio from 'pretty-checkbox-vue/radio';
-import App from './App.vue';
+import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
+import { Icon } from 'leaflet';
 import './registerServiceWorker';
 import router from './router';
 import store from './store';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import 'leaflet/dist/leaflet.css';
+import App from './App.vue';
 
+// eslint-disable-next-line no-underscore-dangle
+delete Icon.Default.prototype._getIconUrl;
 
-Vue.component('p-input', PrettyInput);
-Vue.component('p-check', PrettyCheck);
-Vue.component('p-radio', PrettyRadio);
-
+Icon.Default.mergeOptions({
+  // eslint-disable-next-line global-require
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  // eslint-disable-next-line global-require
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  // eslint-disable-next-line global-require
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
+Vue.component('l-map', LMap);
+Vue.component('l-tile-layer', LTileLayer);
+Vue.component('l-marker', LMarker);
 Vue.use(BootstrapVue);
 library.add(fas);
 Vue.component('font-awesome-icon', FontAwesomeIcon);

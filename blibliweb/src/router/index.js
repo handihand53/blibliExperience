@@ -119,6 +119,14 @@ const routes = [
     },
   },
   {
+    path: '/scan/detail-barang',
+    name: 'Detail Barang',
+    component: () => import(/* webpackChunkName: "category" */ '../views/DetailScan.vue'),
+    meta: {
+      title: 'Detail Barang',
+    },
+  },
+  {
     path: '/detail-pengajuan-barang',
     name: 'Detail Pengajuan Barang',
     component: () => import(/* webpackChunkName: "category" */ '../views/DetailPengajuanBarang.vue'),
@@ -204,6 +212,46 @@ const routes = [
     component: () => import(/* webpackChunkName: "category" */ '../views/DetailCariBarang.vue'),
     meta: {
       title: 'Detail Cari Barang',
+    },
+  },
+  {
+    path: '/cari-barang/ajukan',
+    name: 'Ajukan Cari Barang',
+    component: () => import(/* webpackChunkName: "category" */ '../views/AjukanCariBarang.vue'),
+    meta: {
+      title: 'Ajukan Cari Barang',
+    },
+  },
+  {
+    path: '/cari-barang/konfirmasi',
+    name: 'Konfirmasi Cari Barang',
+    component: () => import(/* webpackChunkName: "category" */ '../views/KonfirmasiPengajuanCariBarang.vue'),
+    meta: {
+      title: 'Konfirmasi Cari Barang',
+    },
+  },
+  {
+    path: '/location',
+    name: 'Lokasi Blibli mart',
+    component: () => import(/* webpackChunkName: "category" */ '../views/Location.vue'),
+    meta: {
+      title: 'Lokasi Blibli mart',
+    },
+  },
+  {
+    path: '/merchant',
+    name: 'Merchant Blibli mart',
+    component: () => import(/* webpackChunkName: "category" */ '../views/merchant/Merchant.vue'),
+    meta: {
+      title: 'Merchant Blibli mart',
+    },
+  },
+  {
+    path: '/merchant/login',
+    name: 'Login Merchant Blibli mart',
+    component: () => import(/* webpackChunkName: "category" */ '../views/merchant/Login.vue'),
+    meta: {
+      title: 'Login Merchant Blibli mart',
     },
   },
 ];

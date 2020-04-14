@@ -82,8 +82,26 @@
         </div>
       </router-link>
     </div>
+    <div>{{ info.data.time.updated }}</div>
   </div>
 </template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      info: null,
+    };
+  },
+  mounted() {
+    axios
+      .get('https://api.coindesk.com/v1/bpi/currentprice.json')
+      .then((response) => { this.info = response; });
+  },
+};
+</script>
 
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,500,700&display=swap" rel="stylesheet');

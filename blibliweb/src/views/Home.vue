@@ -42,12 +42,12 @@
                 </div>
                 <div class="text-card">Cari Barang</div>
               </router-link>
-              <div class="col-3">
+              <router-link to="/location" class="col-3">
                 <div class="center">
                   <img src="@/assets/icon/map.png" class="img-icon" alt />
                 </div>
                 <div class="text-card">Lokasi Blimart</div>
-              </div>
+              </router-link>
             </div>
           </div>
         </div>

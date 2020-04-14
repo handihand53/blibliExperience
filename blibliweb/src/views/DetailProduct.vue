@@ -57,31 +57,31 @@
             </div>
         </div>
       </div>
-       <div class="p-3">
-         <div class="bg-white mt-1">
-           <div class="header-desc col-12 row no-margin no-padding">
-             <div @click="description"
-             class="col-6 no-margin no-padding center"
-             :class="{active: descActive}">
-               <p class="desc-box" :class="{'color-white': descActive}">Deskripsi</p>
-             </div>
-             <div @click="detail"
-             class="col-6 no-margin no-padding center"
-             :class="{active: detailActive}">
-               <p class="desc-box" :class="{'color-white': detailActive}">Detail Barang</p>
-             </div>
-           </div>
-           <div class="desc p-2">
-              <p class="title-product2">Aqua Air Mineral [300 mL/pcs]</p>
-              <p class="desc-product">
-              Aqua Air Mineral [300 mL/pcs] adalah air mineral dalam kemasan yang segar.
-              Dibuat dari sumber mata air pilihan yang diproduksi menggunakan teknologi
-              modern untuk mempertahankan rasa alami dan kesegarannya. Dikemas secara higienis
-              untuk menjaga kualitasnya, nikmati segala kebaikan alam dalam setiap tetesnya.
-              </p>
-           </div>
-         </div>
-       </div>
+      <div class="p-3">
+        <div class="bg-white mt-1">
+          <div class="header-desc col-12 row no-margin no-padding">
+            <div @click="description"
+            class="col-6 no-margin no-padding center"
+            :class="{active: descActive}">
+              <p class="desc-box" :class="{'color-white': descActive}">Deskripsi</p>
+            </div>
+            <div @click="detail"
+            class="col-6 no-margin no-padding center"
+            :class="{active: detailActive}">
+              <p class="desc-box" :class="{'color-white': detailActive}">Detail Barang</p>
+            </div>
+          </div>
+          <div class="desc p-2">
+            <p class="title-product2">Aqua Air Mineral [300 mL/pcs]</p>
+            <p class="desc-product">
+            Aqua Air Mineral [300 mL/pcs] adalah air mineral dalam kemasan yang segar.
+            Dibuat dari sumber mata air pilihan yang diproduksi menggunakan teknologi
+            modern untuk mempertahankan rasa alami dan kesegarannya. Dikemas secara higienis
+            untuk menjaga kualitasnya, nikmati segala kebaikan alam dalam setiap tetesnya.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="bottom-nav">
       <div class="row no-margin no-padding">
