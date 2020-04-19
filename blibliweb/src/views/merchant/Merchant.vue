@@ -66,7 +66,9 @@
     <div class="mt-4">
       <div class="bg-buka-toko p-2 pl-4 pr-4 column">
         <p class="no-margin center open-label pb-1">Tunggu Apa lagi?<br/>Buka Toko sekarang</p>
-        <button class="border-0 shadow rounded btn btn-orange">DAFTAR SEBAGAI PENJUAL</button>
+        <router-link to="/merchant/signup">
+          <button class="border-0 shadow rounded btn btn-orange">DAFTAR SEBAGAI PENJUAL</button>
+        </router-link>
       </div>
     </div>
     <Footer/>

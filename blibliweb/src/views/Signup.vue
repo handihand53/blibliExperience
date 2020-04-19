@@ -12,7 +12,7 @@
               <div class="invalid-feedback" :class="{show:nameIsFalse, 'mb-3':nameIsFalse}">
                 {{ nameMsg }}
               </div>
-              <input type="text" placeholder="Masukkan Email" class="form-control mt-3"
+              <input type="email" placeholder="Masukkan Email" class="form-control mt-3"
               v-model="email" @change="emailCheckFormat">
               <div class="invalid-feedback" :class="{show:emailIsFalse}">
                 {{ emailMsg }}

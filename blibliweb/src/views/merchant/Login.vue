@@ -10,7 +10,7 @@
           <p class="card-title">Masuk ke Akun Merchant</p>
           <label class="input-label" for="email">Email</label>
           <input v-model="email" @change="emailCheckFormat"
-          type="text" name="email" id="email" placeholder="Masukkan Email"
+          type="email" name="email" id="email" placeholder="Masukkan Email"
           class="form-control">
           <div class="invalid-feedback" :class="{show:emailIsFalse}">
             {{ emailMsg }}

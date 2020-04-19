@@ -21,7 +21,7 @@
     <div class="content col-12 row no-margin pl-2 pr-2">
       <router-link to="/barter/detail" class="cst-card col-6">
         <div class="">
-          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
+          <img src="@/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
           <span class="tag-label-baru">Baru</span>
           <p class="title-product">Botol Minum Aqua Mineralasdkj lkjashlkjd haskhd askd</p>
           <p class="product-price">Rp.3.000</p>
@@ -29,7 +29,7 @@
       </router-link>
       <router-link to="/barter/detail" class="cst-card col-6">
         <div class="">
-          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
+          <img src="@/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
           <span class="tag-label-baru">Baru</span>
           <p class="title-product">Botol Minum Aqua Mineralasdkj lkjashlkjd haskhd askd</p>
           <p class="product-price">Rp.3.000</p>
@@ -37,7 +37,7 @@
       </router-link>
       <router-link to="/barter/detail" class="cst-card col-6">
         <div class="">
-          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
+          <img src="@/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
           <span class="tag-label-bekas">Bekas</span>
           <p class="title-product">Botol Minum Aqua Mineralasdkj lkjashlkjd haskhd askd</p>
           <p class="product-price">Rp.3.000</p>

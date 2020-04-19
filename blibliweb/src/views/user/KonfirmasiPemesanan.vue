@@ -17,7 +17,7 @@
         <p class="shop-name pl-3 pb-3 pt-1">Nama Toko</p>
         <div class="col-12 row no-margin no-padding">
           <div class="pl-3 col-4 no-padding">
-            <img src="../../src/assets/etc/aqua.png" alt="aqua"
+            <img src="@/assets/etc/aqua.png" alt="aqua"
             class="img-product ml-auto mr-auto" >
           </div>
           <div class="col-8 no-padding pr-3">
@@ -31,7 +31,7 @@
         <p class="border-bottom pl-3 pb-3 pt-1">Nama Toko</p>
         <div class="col-12 row no-margin no-padding">
           <div class="pl-3 col-4 no-padding">
-            <img src="../../src/assets/etc/aqua.png" alt="aqua"
+            <img src="@/assets/etc/aqua.png" alt="aqua"
             class="img-product ml-auto mr-auto" >
           </div>
           <div class="col-8 no-padding pr-3">
