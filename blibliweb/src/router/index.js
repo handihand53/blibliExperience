@@ -255,11 +255,75 @@ const routes = [
     },
   },
   {
-    path: '/merchant/signup',
+    path: '/merchant/signup/:steps',
     name: 'Daftar Merchant Blibli mart',
     component: () => import(/* webpackChunkName: "category" */ '../views/merchant/Signup.vue'),
     meta: {
       title: 'Daftar Merchant Blibli mart',
+    },
+  },
+  {
+    path: '/merchant/menu-utama',
+    name: 'Menu Utama Merchant Blibli mart',
+    component: () => import(/* webpackChunkName: "category" */ '../views/merchant/MenuUtama.vue'),
+    meta: {
+      title: 'Menu Utama Merchant Blibli mart',
+    },
+  },
+  {
+    path: '/merchant/list-barang',
+    name: 'List Barang Merchant Blibli mart',
+    component: () => import(/* webpackChunkName: "category" */ '../views/merchant/ListBarang.vue'),
+    meta: {
+      title: 'List Barang Merchant Blibli mart',
+    },
+  },
+  {
+    path: '/merchant/jual-barang',
+    name: 'Jual Barang Merchant Blibli mart',
+    component: () => import(/* webpackChunkName: "category" */ '../views/merchant/JualBarang.vue'),
+    meta: {
+      title: 'Jual Barang Merchant Blibli mart',
+    },
+  },
+  {
+    path: '/merchant/pemberitahuan',
+    name: 'Pemberitahuan Merchant Blibli mart',
+    component: () => import(/* webpackChunkName: "category" */ '../views/merchant/PemberitahuanPembelian.vue'),
+    meta: {
+      title: 'Pemberitahuan Merchant Blibli mart',
+    },
+  },
+  {
+    path: '/merchant/pemberitahuan/detail-pesanan',
+    name: 'Detail Pesanan Masuk Blibli mart',
+    component: () => import(/* webpackChunkName: "category" */ '../views/merchant/DetailPesananMasuk.vue'),
+    meta: {
+      title: 'Detail Pesanan Masuk Blibli mart',
+    },
+  },
+  {
+    path: '/merchant/pemberitahuan/detail-riwayat',
+    name: 'Detail Riwayat Masuk Blibli mart',
+    component: () => import(/* webpackChunkName: "category" */ '../views/merchant/DetailRiwayat.vue'),
+    meta: {
+      title: 'Detail Riwayat Masuk Blibli mart',
+    },
+  },
+  {
+    path: '/merchant/informasi-market',
+    name: 'Informasi Market Blibli mart',
+    component: () => import(/* webpackChunkName: "category" */ '../views/merchant/InformasiMarket.vue'),
+    meta: {
+      title: 'Informasi Market Blibli mart',
+    },
+  },
+  {
+    path: '/merchant/informasi-market/ubah-kata-sandi',
+    name: 'Ubah Kata Sandi Market Blibli mart',
+    component: () => import(/* webpackChunkName: "category" */ '../views/merchant/UbahKataSandi.vue'),
+    meta: {
+      title: 'Ubah Kata Sandi Market Blibli mart',
     },
   },
 ];
