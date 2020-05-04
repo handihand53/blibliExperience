@@ -21,7 +21,7 @@
         <label for="toko">Nama Toko<span class="red">*</span></label>
         <b-form-input type="text" class="form-control" id="toko"
         placeholder="Masukkan nama toko anda" :state="namaState"
-        v-model="namaToko" trim @change="checkAll"></b-form-input>
+        v-model="namaToko" trim @input="checkAll"></b-form-input>
         <b-form-invalid-feedback id="input-live-feedback">
           {{ namaTokoErrorMsg }}
         </b-form-invalid-feedback>
@@ -41,29 +41,33 @@
           {{ alamatErrorMsg }}
         </b-form-invalid-feedback>
         <label for="provinsi" class="mt-2">Provinsi<span class="red">*</span></label>
-        <b-form-select v-model="provinsi" :options="provinsis" id="provinsi"></b-form-select>
+        <b-form-select v-model="provinsi" :options="provinsis" id="provinsi"
+        @change="checkAll"></b-form-select>
         <label for="kabupaten" class="mt-2">Kabupaten<span class="red">*</span></label>
-        <b-form-select v-model="kabupaten" :options="kabupatens" id="kabupaten"></b-form-select>
+        <b-form-select v-model="kabupaten" :options="kabupatens" id="kabupaten"
+        @change="checkAll"></b-form-select>
         <label for="kota" class="mt-2">Kota<span class="red">*</span></label>
-        <b-form-select v-model="kota" :options="kotas" id="kota"></b-form-select>
-        <label for="kecamatan" class="mt-2">Kecamatan<span class="red" id="kecamatan">*</span>
+        <b-form-select v-model="kota" :options="kotas" id="kota" @change="checkAll"></b-form-select>
+        <label for="kecamatan" class="mt-2">Kecamatan<span class="red">*</span>
         </label>
-        <b-form-select v-model="kecamatan" :options="kecamatans" ></b-form-select>
-        <label for="kelurahan" class="mt-2">Kelurahan<span class="red" id="kelurahan">*</span>
+        <b-form-select v-model="kecamatan" :options="kecamatans" id="kecamatan"
+        @change="checkAll"></b-form-select>
+        <label for="kelurahan" class="mt-2">Kelurahan<span class="red">*</span>
         </label>
-        <b-form-select v-model="kelurahan" :options="kelurahans" ></b-form-select>
+        <b-form-select v-model="kelurahan" :options="kelurahans" id="kelurahan"
+        @change="checkAll"></b-form-select>
         <div class="row no-gutters">
           <div class="col-5 mr-3">
             <label for="rt" class="mt-2">RT<span class="red">*</span></label>
             <b-form-input type="text" id="rt"
             v-model="rt" placeholder="RT"
-            @input="checkAll" :state="rt"></b-form-input>
+            @input="checkAll" :state="rtState"></b-form-input>
           </div>
           <div class="col-5">
             <label for="rw" class="mt-2">RW<span class="red">*</span></label>
             <b-form-input type="text" id="rw"
             v-model="rw" placeholder="RW"
-            @input="checkAll" :state="rw"></b-form-input>
+            @input="checkAll" :state="rwState"></b-form-input>
           </div>
         </div>
         <button @click="next" class="next-btn mt-3"
@@ -92,32 +96,43 @@ export default {
       kelurahan: null,
       provinsis: [
         { value: null, text: 'Provinsi' },
+        { value: 'pro', text: 'test' },
       ],
       kabupatens: [
         { value: null, text: 'Kabupaten' },
+        { value: 'pro', text: 'test' },
       ],
       kotas: [
         { value: null, text: 'Kota' },
+        { value: 'pro', text: 'test' },
       ],
       kecamatans: [
         { value: null, text: 'Kecamatan' },
+        { value: 'pro', text: 'test' },
       ],
       kelurahans: [
         { value: null, text: 'Kelurahan' },
+        { value: 'pro', text: 'test' },
       ],
+      rt: '',
+      rtState: null,
+      rw: '',
+      rwState: null,
       btnState: false,
     };
   },
   methods: {
     checkAll() {
       if (
-        this.email !== ''
-        && this.password !== ''
-        && this.password2 !== ''
-        && this.nama !== ''
-        && this.ktp !== ''
-        && this.notlp !== ''
-        && this.tgl !== ''
+        this.namaToko !== ''
+        && this.deksripsi !== ''
+        && this.provinsi !== null
+        && this.kabupaten !== null
+        && this.kota !== null
+        && this.kecamatan !== null
+        && this.kelurahan !== null
+        && this.rt !== ''
+        && this.rw !== ''
       ) {
         this.btnState = true;
         this.$refs.btn.disabled = false;

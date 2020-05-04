@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import tahap1 from '@/store/signupDataMerchant.js';
 
 export default {
   data() {
@@ -91,7 +92,7 @@ export default {
       nama: '',
       notlp: '',
       tgl: '',
-      [ photo ]: array,
+      photo: [],
       btnState: false,
     };
   },
@@ -144,9 +145,13 @@ export default {
       }
     },
     next() {
-      // console.log('tekan');
+      this.tahap1 = true;
+      this.$router.push('langkah-2');
+      console.log('sad');
+      console.log(this.tahap1);
     },
     processFile(event) {
+      /* eslint-disable */
       this.photo = event.target.files[0];
     },
   },
