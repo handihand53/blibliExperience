@@ -11,94 +11,45 @@
       </div>
     </div>
     <div class="content col-12 row no-margin pl-2 pr-2">
-      <router-link to="/detail-product" class="cst-card col-6">
+      <router-link to="/detail-product" class="cst-card col-6" :v-for="item in items.data.data">
         <div class="">
-          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
+          <img v-bind:src="item.imgUrl[0]" alt="aqua" class="img-product ml-auto mr-auto" />
           <p class="title-product">Botol Minum Aqua Mineralasdkj lkjashlkjd haskhd askd</p>
           <p class="product-price">Rp.3.000</p>
         </div>
       </router-link>
-      <router-link to="/detail-product" class="cst-card col-6">
-        <div class="">
-          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <p class="title-product">Botol Minum Aqua Miner...</p>
-          <p class="product-price">Rp.3.000</p>
-        </div>
-      </router-link>
-      <router-link to="/detail-product" class="cst-card col-6">
-        <div class="">
-          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <p class="title-product">Botol Minum Aqua Miner...</p>
-          <p class="product-price">Rp.3.000</p>
-        </div>
-      </router-link>
-      <router-link to="/detail-product" class="cst-card col-6">
-        <div class="">
-          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <p class="title-product">Botol Minum Aqua Miner...</p>
-          <p class="product-price">Rp.3.000</p>
-        </div>
-      </router-link>
-      <router-link to="/detail-product" class="cst-card col-6">
-        <div class="">
-          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <p class="title-product">Botol Minum Aqua Miner...</p>
-          <p class="product-price">Rp.3.000</p>
-        </div>
-      </router-link>
-      <router-link to="/detail-product" class="cst-card col-6">
-        <div class="">
-          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <p class="title-product">Botol Minum Aqua Miner...</p>
-          <p class="product-price">Rp.3.000</p>
-        </div>
-      </router-link>
-      <router-link to="/detail-product" class="cst-card col-6">
-        <div class="">
-          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <p class="title-product">Botol Minum Aqua Miner...</p>
-          <p class="product-price">Rp.3.000</p>
-        </div>
-      </router-link>
-      <router-link to="/detail-product" class="cst-card col-6">
-        <div class="">
-          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <p class="title-product">Botol Minum Aqua Miner...</p>
-          <p class="product-price">Rp.3.000</p>
-        </div>
-      </router-link>
-      <router-link to="/detail-product" class="cst-card col-6">
-        <div class="">
-          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <p class="title-product">Botol Minum Aqua Miner...</p>
-          <p class="product-price">Rp.3.000</p>
-        </div>
-      </router-link>
-      <router-link to="/detail-product" class="cst-card col-6">
-        <div class="">
-          <img src="../../src/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <p class="title-product">Botol Minum Aqua Miner...</p>
-          <p class="product-price">Rp.3.000</p>
-        </div>
-      </router-link>
     </div>
-    <div>{{ info.data.time.updated }}</div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { mapGetters } from 'vuex';
 
 export default {
   data() {
     return {
-      info: null,
+      items: null,
     };
+  },
+  created() {
+    this.getProducts();
+  },
+  computed: {
+    ...mapGetters([
+      'productList',
+    ]),
+    ArticleDetails() {
+      return this.productList.data.find((arc) => arc.id === this.$route.params.arcid);
+    },
   },
   mounted() {
     axios
-      .get('https://api.coindesk.com/v1/bpi/currentprice.json')
-      .then((response) => { this.info = response; });
+      .get('http://www.mocky.io/v2/5ebd20b931000062005b10c0')
+      .then((response) => {
+        this.items = response.data;
+        console.log(response.data);
+      });
   },
 };
 </script>
@@ -205,3 +156,4 @@ p {
   margin: 0px !important;
 }
 </style>
+ 
