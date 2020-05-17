@@ -11,11 +11,15 @@
       </div>
     </div>
     <div class="content col-12 row no-margin pl-2 pr-2">
-      <router-link to="/detail-product" class="cst-card col-6" :v-for="item in items.data.data">
+      <router-link to="/detail-product" class="cst-card col-6" v-for="product in productList.data"
+      v-bind:key="product.id">
         <div class="">
-          <img v-bind:src="item.imgUrl[0]" alt="aqua" class="img-product ml-auto mr-auto" />
-          <p class="title-product">Botol Minum Aqua Mineralasdkj lkjashlkjd haskhd askd</p>
-          <p class="product-price">Rp.3.000</p>
+          <img :src="product.imgUrl[0]" :alt=product.productName
+          class="img-product ml-auto mr-auto" />
+          <p class="title-product">{{product.productName}}</p>
+          <p class="product-price" title=product.productPrice>
+            Rp.{{formatPrice(product.productPrice)}}
+          </p>
         </div>
       </router-link>
     </div>
@@ -23,15 +27,9 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  data() {
-    return {
-      items: null,
-    };
-  },
   created() {
     this.getProducts();
   },
@@ -39,17 +37,18 @@ export default {
     ...mapGetters([
       'productList',
     ]),
-    ArticleDetails() {
-      return this.productList.data.find((arc) => arc.id === this.$route.params.arcid);
+    ProductDetails() {
+      return this.productList;
     },
   },
-  mounted() {
-    axios
-      .get('http://www.mocky.io/v2/5ebd20b931000062005b10c0')
-      .then((response) => {
-        this.items = response.data;
-        console.log(response.data);
-      });
+  methods: {
+    ...mapActions([
+      'getProducts',
+    ]),
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
   },
 };
 </script>
@@ -130,8 +129,8 @@ a:hover{
 }
 
 .img-product {
-  width: 120px;
-  height: 120px;
+  width: auto;
+  max-height: 120px;
   display: block;
 }
 
@@ -156,4 +155,3 @@ p {
   margin: 0px !important;
 }
 </style>
- 
