@@ -326,6 +326,14 @@ const routes = [
       title: 'Ubah Kata Sandi Market Blibli mart',
     },
   },
+  {
+    path: '*',
+    name: 'Not Found',
+    component: () => import(/* webpackChunkName: "category" */ '../views/NotFound.vue'),
+    meta: {
+      title: 'Halaman tidak ditemukan',
+    },
+  },
 ];
 
 const router = new VueRouter({

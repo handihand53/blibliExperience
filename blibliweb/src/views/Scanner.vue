@@ -4,10 +4,10 @@
       <v-quagga :onDetected="logIt" :readerSize="readerSize"
       :readerTypes="['ean_reader']"></v-quagga>
     </div>
-    <!-- <div id="interactive" class="viewport scanner">
+    <div id="interactive" class="viewport scanner">
       <video autoplay="true" preload="auto" src="" muted="true" playsinline="true"></video>
       <canvas class="drawingBuffer" width="640" height="480"></canvas>
-    </div> -->
+    </div>
     <div>s</div>
   </div>
 </template>

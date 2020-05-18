@@ -1,23 +1,26 @@
 <template>
   <div>
-    <div class="card mt-2 ml-2 mr-2 pt-1 pb-2">
-      <div class="overflow-x">
-        <span class="category mr-2 ml-2 active">Semua</span>
-        <span class="category mr-2 un-active">Elektronik</span>
-        <span class="category mr-2 un-active">Makanan</span>
-        <span class="category mr-2 un-active">Minuman</span>
-        <span class="category mr-2 un-active">Pakaian</span>
-        <span class="category mr-2 un-active">Lain-lain</span>
+    <div class='card mt-2 ml-2 mr-2 pt-1 pb-1'>
+      <div class='overflow-x'>
+        <span class='category mr-2 ml-2'
+        :class="{'un-active':true, active: !true}"
+        @click="getProductByCategoryName('')">Semua</span>
+        <span class='category mr-2'
+        :class="{'un-active':category.categoryName, active: !category.categoryName}"
+        v-for='category in categoryList.data' v-bind:key='category.categoryId'
+        @click='getProductByCategoryName(category.categoryName)' :ref='category.categoryName'
+        >{{category.categoryName}}</span>
       </div>
     </div>
-    <div class="content col-12 row no-margin pl-2 pr-2">
-      <router-link to="/detail-product" class="cst-card col-6" v-for="product in productList.data"
-      v-bind:key="product.id">
-        <div class="">
-          <img :src="product.imgUrl[0]" :alt=product.productName
-          class="img-product ml-auto mr-auto" />
-          <p class="title-product">{{product.productName}}</p>
-          <p class="product-price" title=product.productPrice>
+    <div class='content col-12 row no-margin pl-2 pr-2'>
+      <router-link to='/detail-product' class='cst-card col-6'
+      v-for='product in this.products'
+      v-bind:key='product.id'>
+        <div class=''>
+          <img :src='product.imgUrl[0]' :alt='product.productName'
+          class='img-product ml-auto mr-auto' />
+          <p class='title-product'>{{product.productName}}</p>
+          <p class='product-price' title=product.productPrice>
             Rp.{{formatPrice(product.productPrice)}}
           </p>
         </div>
@@ -28,34 +31,86 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import axios from 'axios';
 
 export default {
+  data() {
+    return {
+      catParam: '',
+      products: [
+        {
+          id: 'kkjs-1231',
+          barcode: '9878654679854',
+          productName: 'Aqua 330ML',
+          productPrice: 2500,
+          imgUrl: [
+            './assets/etc/aqu.png',
+          ],
+          category: 'Minuman',
+          createdAt: 12322020564654,
+          status: 'Baru',
+          tag: 'Blimart',
+        },
+      ],
+    };
+  },
   created() {
     this.getProducts();
+    this.getCategory();
   },
   computed: {
     ...mapGetters([
       'productList',
+      'categoryList',
     ]),
     ProductDetails() {
-      return this.productList;
+      if (this.catParam === '') {
+        return this.productList.data;
+      }
+      return this.productList.data.filter((ele) => ele.category === this.catParam);
+    },
+    CategoriesDetails() {
+      return this.categoryList;
     },
   },
   methods: {
     ...mapActions([
       'getProducts',
+      'getCategory',
     ]),
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     },
+    getProductByCategoryName(category) {
+      this.catParam = category;
+    },
+    scroll() {
+      window.
+      window.onscroll = () => {
+        const bottomOfWindow = document.documentElement.scrollTop
+        + window.innerHeight > document.documentElement.offsetHeight - 1;
+        if (bottomOfWindow) {
+          axios
+            .get('http://www.mocky.io/v2/5ec18a432f0000417a4c88c2?mocky-delay=50ms')
+            .then((response) => {
+              this.products.push(response.data.data[3]);
+              this.products.push(response.data.data[3]);
+              this.products.push(response.data.data[3]);
+              this.products.push(response.data.data[3]);
+            });
+        }
+      };
+    },
+  },
+  mounted() {
+    this.scroll();
   },
 };
 </script>
 
-<style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,500,700&display=swap" rel="stylesheet');
-@import "../style/font/font.scss";
+<style lang='scss' scoped>
+@import '../style/font/font.scss';
 
 .category {
   font-size: 13px;
@@ -106,7 +161,7 @@ a:hover{
 }
 
 .product-price {
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;

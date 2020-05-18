@@ -8,29 +8,28 @@ Vue.use(Vuex);
 // eslint-disable-next-line import/no-mutable-exports
 let store = [];
 
-const MOCKYIO = 'http://www.mocky.io/v2/5ebd20b931000062005b10c0';
+const MOCKYIO = 'http://www.mocky.io/v2/5ec229a42f0000014ac34f73';
 export const state = {
-  products: [],
+  category: [],
 };
 
 const mutations = {
-  setProducts(state, value) {
-    state.products = value;
+  setCategory(state, value) {
+    state.category = value;
   },
 };
 
 const actions = {
-  getProducts({ commit }) {
-    console.log('getData');
+  getCategory({ commit }) {
     axios
       .get(MOCKYIO)
-      .then((response) => commit('setProducts', response.data));
+      .then((response) => commit('setcategory', response.data));
   },
 };
 
 const getters = {
-  productList(state) {
-    return state.products;
+  categoryList(state) {
+    return state.category;
   },
 };
 
