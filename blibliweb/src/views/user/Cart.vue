@@ -24,7 +24,8 @@
           <!--  -->
           <div class='col-12 no-margin no-padding row mt-3 border-bottom'>
             <label class="container col-1" style="padding: 0px!important; margin: 0px!important;">
-              <input type="checkbox" checked="checked" class="check toko1">
+              <input type="checkbox" checked="checked" class="check toko1"
+              @click="checkItem('toko1')">
               <span class="checkmark"></span>
             </label>
             <div class='col-11 row no-margin no-padding mb-2'>
@@ -55,7 +56,8 @@
           </div>
           <div class='col-12 no-margin no-padding row mt-3 border-bottom'>
             <label class="container col-1" style="padding: 0px!important; margin: 0px!important;">
-              <input type="checkbox" checked="checked" class="check toko1">
+              <input type="checkbox" checked="checked" class="check toko1"
+              @click="checkItem('toko1')">
               <span class="checkmark"></span>
             </label>
             <div class='col-11 row no-margin no-padding mb-2'>
@@ -101,7 +103,8 @@
           <!--  -->
           <div class='col-12 no-margin no-padding row mt-3 border-bottom'>
             <label class="container col-1" style="padding: 0px!important; margin: 0px!important;">
-              <input type="checkbox" checked="checked" class="check toko2">
+              <input type="checkbox" checked="checked" class="check toko2"
+              @click="checkItem('toko2')">
               <span class="checkmark"></span>
             </label>
             <div class='col-11 row no-margin no-padding mb-2'>
@@ -132,7 +135,8 @@
           </div>
           <div class='col-12 no-margin no-padding row mt-3 border-bottom'>
             <label class="container col-1" style="padding: 0px!important; margin: 0px!important;">
-              <input type="checkbox" checked="checked" class="check toko2">
+              <input type="checkbox" checked="checked" class="check toko2"
+              @click="checkItem('toko2')">
               <span class="checkmark"></span>
             </label>
             <div class='col-11 row no-margin no-padding mb-2'>
@@ -172,10 +176,18 @@
         <p class="text-price">Rp3.000</p>
       </div>
       <div class="col-6 right no-padding">
-        <button class="btn-checkout">Checkout</button>
+        <button @click="checkOut" class="btn-checkout">Checkout</button>
       </div>
     </div>
     <Footer />
+    <div class="overlay-loading d-flex align-items-center"
+    :class="{hide: !isLoading}">
+      <b-spinner
+      type="grow"
+      variant="primary"
+      class="ml-auto mr-auto spinner"
+      ></b-spinner>
+    </div>
   </div>
 </template>
 
@@ -189,6 +201,14 @@ export default {
     PlainHeader,
     Footer,
   },
+  data() {
+    return {
+      isLoading: false,
+    };
+  },
+  created() {
+    this.scrollToTop();
+  },
   methods: {
     checkAll() {
       for (let i = 0; i < document.getElementsByClassName('check').length; i += 1) {
@@ -199,6 +219,33 @@ export default {
       for (let i = 0; i < document.getElementsByClassName(shop).length; i += 1) {
         document.getElementsByClassName(shop)[i].checked = document.getElementById(shop).checked;
       }
+    },
+    checkItem(shop) {
+      let xTrue = 0;
+      let xFalse = 0;
+      for (let i = 0; i < document.getElementsByClassName(shop).length; i += 1) {
+        if (document.getElementsByClassName(shop)[i].checked) {
+          xTrue += 1;
+        } else {
+          xFalse += 1;
+        }
+      }
+
+      if (xTrue === document.getElementsByClassName(shop).length) {
+        document.getElementById(shop).checked = true;
+      }
+
+      if (xFalse === document.getElementsByClassName(shop).length) {
+        document.getElementById(shop).checked = false;
+      }
+    },
+    scrollToTop() {
+      window.scrollTo(0, 0);
+    },
+    checkOut() {
+      // add logic checkout here
+      this.isLoading = true;
+      setTimeout(() => this.$router.push('/confirm'), 1000);
     },
   },
 };
@@ -249,6 +296,15 @@ export default {
   margin: 0px;
 }
 
+.hide{
+  display: none!important;
+}
+
+.spinner{
+  width: 50px;
+  height: 50px;
+}
+
 .text-price{
   font-size: 18px;
   padding: 0px;
@@ -256,6 +312,17 @@ export default {
   color: #ff7600;
   font-weight: 600;
 }
+
+.overlay-loading{
+  z-index: 200;
+  background-color: #0000006a;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+
 
 .title-product {
   font-size: 13px;

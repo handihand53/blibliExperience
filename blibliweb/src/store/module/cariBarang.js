@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const PRODUCT_API = 'http://www.mocky.io/v2/5eca77563000005b00a6cfdf?mocky-delay=500ms';
-const CATEGORY_API = 'http://www.mocky.io/v2/5eca1b683000007900a6cf07?mocky-delay=500ms';
+const PRODUCT_API = 'http://www.mocky.io/v2/5eca77563000005b00a6cfdf';
+const CATEGORY_API = 'http://www.mocky.io/v2/5eca1b683000007900a6cf07';
 
 const cariBarang = {
   namespaced: true,

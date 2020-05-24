@@ -98,7 +98,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .tag-label-baru {
   background-color: #0095DA;
   color: white;

@@ -58,7 +58,7 @@
           <label for="gerai">Bayar digerai</label>
           <p class="ml-5 desc-detail-pay">Alfa Group / Indomaret / Pos Indonesia</p>
            <div class="ml-5 pt-1" :class="{'none': isGerai}">
-            <p class="label-text">Pilih Kartu</p>
+            <p class="label-text">Pilih gerai pembayaran</p>
             <select name="" id="" class="form-control mt-1 mb-1">
               <option hidden selected disabled>--- Pilih Opsi Pembayaran ---</option>
               <option value="">Alfamart</option>
@@ -78,7 +78,7 @@
           <label for="elektronik">Uang Elektronik</label>
           <p class="ml-5 desc-detail-pay">Link aja, Sakuku, Ovo, Gopay</p>
           <div class="ml-5 pt-1" :class="{'none': isElektronik}">
-            <p class="label-text">Pilih Kartu</p>
+            <p class="label-text">Pilih jenis uang elektronik</p>
             <select name="" id="" class="form-control mt-1 mb-1">
               <option hidden selected disabled>--- Pilih Opsi Pembayaran ---</option>
               <option value="">Link aja</option>
@@ -107,9 +107,17 @@
           <p class="price">Rp3.000</p>
         </div>
         <div class="col-5 no-padding right" style="padding: 0;">
-          <button class="btn-checkout">Lanjut</button>
+          <button @click="pay" class="btn-checkout">Lanjut</button>
         </div>
       </div>
+    </div>
+    <div class="overlay-loading d-flex align-items-center"
+    :class="{hide: !isLoading}">
+      <b-spinner
+      variant="primary"
+      type="grow"
+      class="ml-auto mr-auto spinner"
+      ></b-spinner>
     </div>
   </div>
 </template>
@@ -127,6 +135,7 @@ export default {
       isElektronik: true,
       isDebit: true,
       isVirtual: false,
+      isLoading: false,
     };
   },
   methods: {
@@ -153,6 +162,11 @@ export default {
         this.isDebit = true;
       }
     },
+    pay() {
+      // add logic checkout here
+      this.isLoading = true;
+      setTimeout(() => this.$router.push('/detailPayment'), 1000);
+    },
   },
 };
 </script>
@@ -160,6 +174,25 @@ export default {
 <style scoped>
 .right{
   text-align: right;
+}
+
+.hide{
+  display: none!important;
+}
+
+.spinner{
+  width: 50px;
+  height: 50px;
+}
+
+.overlay-loading{
+  z-index: 200;
+  background-color: #0000006a;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
 }
 
 .none{

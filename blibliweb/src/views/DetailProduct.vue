@@ -10,7 +10,8 @@
         <p class="price-text">Harga <span class="price">
           Rp{{ formatPrice(ProductDetails.productPrice) }}</span></p>
         <hr>
-        <p class="wishlist-text">
+        <p @click="addToWishList"
+          class="wishlist-text">
           <font-awesome-icon
           class="f-icon"
           icon="heart"/>
@@ -140,15 +141,27 @@
     </div>
     <div class="bottom-nav">
       <div class="row no-margin no-padding">
-        <div class="buy-btn">
+        <div class="buy-btn" @click="buyItem">
           BELI SEKARANG
         </div>
-        <div class="icon center">
+        <div class="icon center" @click="addToBag">
           <img src="@/assets/logo/blibli_wht_logoonly.png" alt="" class="blibli-icon">
         </div>
       </div>
     </div>
-    <b-modal id="modal-sm" size="sm" title="Pilih Lokasi Bliblimart"  @ok="confirmLocation">
+    <div class="fixed-alert text-center pl-3 pr-3">
+      <b-alert
+        :show="dismissCountDown"
+        dismissible
+        variant="dark"
+        @dismissed="dismissCountDown=0"
+        @dismiss-count-down="countDownChanged"
+      >
+        {{alertMsg}}
+      </b-alert>
+    </div>
+    <b-modal id="modal-sm" size="sm" centered
+    title="Pilih Lokasi Bliblimart"  @ok="confirmLocation">
       <div class="mb-2">Pilih :</div>
       <select class="form-control" ref="location">
         <option selected disabled hidden>--Pilih--</option>
@@ -159,6 +172,13 @@
       </select>
     </b-modal>
     <Footer/>
+    <div class="overlay-loading d-flex align-items-center"
+    :class="{hide: !isLoading}">
+      <b-spinner
+      variant="dark"
+      class="ml-auto mr-auto spinner"
+      ></b-spinner>
+    </div>
   </div>
 </template>
 
@@ -182,6 +202,10 @@ export default {
       descActive: true,
       detailActive: false,
       selected: '',
+      dismissSecs: 3,
+      dismissCountDown: 0,
+      alertMsg: '',
+      isLoading: false,
     };
   },
   computed: {
@@ -220,6 +244,24 @@ export default {
     scrollToTop() {
       window.scrollTo(0, 0);
     },
+    // Untuk notifikasi ketika user menekan 'beli sekarang'
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
+    },
+    buyItem() {
+      // logic beli item
+      // post axios
+      this.isLoading = true;
+      setTimeout(() => this.$router.push('/cart'), 1000);
+    },
+    addToBag() {
+      this.alertMsg = 'Produk berhasil ditambahkan';
+      this.dismissCountDown = this.dismissSecs;
+    },
+    addToWishList() {
+      this.alertMsg = 'Berhasil masuk wishlist';
+      this.dismissCountDown = this.dismissSecs;
+    },
   },
 };
 </script>
@@ -239,6 +281,11 @@ export default {
   right: -66px;
 }
 
+.spinner{
+  width: 50px;
+  height: 50px;
+}
+
 .display-none{
   display: none;
 }
@@ -247,6 +294,10 @@ export default {
   font-size: 12px;
   color: #0088FF;
   padding-bottom: 0px;
+}
+
+.hide{
+  display: none!important;
 }
 
 .blibli-icon{
@@ -282,6 +333,15 @@ export default {
 tr > td{
   font-size: 14px;
   border: none!important;
+}
+
+.fixed-alert{
+  z-index: 100;
+  position: fixed;
+  bottom: 15px;
+  margin: 5% auto; /* Will not center vertically and won't work in IE6/7. */
+  left: 0;
+  right: 0;
 }
 
 .stock-item > td {
@@ -549,6 +609,16 @@ hr{
   height: 8px;
   border-radius: 100%;
   background: #2196F3;
+}
+
+.overlay-loading{
+  z-index: 200;
+  background-color: #0000006a;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
 }
 
 </style>

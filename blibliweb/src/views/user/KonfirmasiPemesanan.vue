@@ -65,9 +65,17 @@
           <p class="price">Rp3.000</p>
         </div>
         <div class="col-5 no-padding right">
-          <button class="btn-checkout">Lanjut</button>
+          <button @click="confirmProduct" class="btn-checkout">Lanjut</button>
         </div>
       </div>
+    </div>
+    <div class="overlay-loading d-flex align-items-center"
+    :class="{hide: !isLoading}">
+      <b-spinner
+      variant="primary"
+      type="grow"
+      class="ml-auto mr-auto spinner"
+      ></b-spinner>
     </div>
   </div>
 </template>
@@ -78,6 +86,18 @@ import ConfirmHeader from '@/components/ConfirmHeader.vue';
 export default {
   components: {
     ConfirmHeader,
+  },
+  data() {
+    return {
+      isLoading: false,
+    };
+  },
+  methods: {
+    confirmProduct() {
+      // add logic checkout here
+      this.isLoading = true;
+      setTimeout(() => this.$router.push('/pay'), 1000);
+    },
   },
 };
 </script>
@@ -117,6 +137,25 @@ export default {
   display: block;
   float: right;
   transition: all 0.7s;
+}
+
+.hide{
+  display: none!important;
+}
+
+.spinner{
+  width: 50px;
+  height: 50px;
+}
+
+.overlay-loading{
+  z-index: 200;
+  background-color: #0000006a;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
 }
 
 .btn-checkout:hover {
