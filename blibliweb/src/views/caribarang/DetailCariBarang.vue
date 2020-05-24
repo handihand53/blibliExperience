@@ -4,7 +4,7 @@
     <div class="mt-2 bg-white p-2 pl-3 pr-3">
       <div class="d-flex justify-content-between">
         <p class="detail-title-product">{{ProductDetail.productName}}</p>
-        <p class="tag mt-1">{{ProductDetail.status}}</p>
+        <p class="tag mt-1 align-self-center">{{ProductDetail.status}}</p>
       </div>
       <div>
         <p class="brand-detail-product">
@@ -12,11 +12,11 @@
           <span class="blue-brand">{{ProductDetail.brand}}</span>
         </p>
       </div>
-      <div class="p-3 center">
-        <img :src=ProductDetail.imgUrl[0] alt class="detail-image-product p-3" />
+      <div class="p-3 d-flex justify-content-center">
+        <img :src=ProductDetail.imgUrl[0] alt class="ml-auto mr-auto detail-image-product"/>
       </div>
        <div class="pb-2">
-        <table class="table no-margin">
+        <table class="table border-0 table-striped no-margin">
           <tr>
             <td class="sub-text border-top-none">Harga awal</td>
             <td colspan="2" class="price-detail-text border-top-none">
@@ -31,9 +31,8 @@
             <td class="price-detail-text">Rp{{formatPrice(ProductDetail.currentBid)}}</td>
           </tr>
         </table>
-        <p class="count-people border-top-none pl-2"
-        v-if="history">
-         {{ProductDetail.history.length}} Orang sudah
+        <p class="count-people justify-content-center d-flex border-top-none pl-2">
+         {{ProductDetail.historyBid.length}} Orang sudah
             melakukan penawaran</p>
       </div>
     </div>
@@ -46,9 +45,11 @@
     </div>
     <div class="mt-3 bg-white p-3">
       <p class="riwayat-text">Riwayat Penawaran</p>
-      <p class="riwayat-list" title="Handi Hermawan">Handi menawar dengan harga
-        <span class="bid-price">Rp13.300.000</span></p>
-      <p class="lainnya-text">Lihat Lainnya</p>
+      <p class="riwayat-list" title="Handi Hermawan"
+      v-for='history in this.ProductDetail.historyBid'
+      v-bind:key='history.id'>{{history.name}} menawarkan harga
+        <span class="bid-price">Rp{{formatPrice(history.bidding)}}</span></p>
+      <p class="lainnya-text">Riwayat hanya menampilkan 3 penawar teratas</p>
     </div>
     <div class="about-detail-product">
       <div class="p-3">
@@ -64,14 +65,13 @@
               </p>
             </div>
             <div class="list-detail-tentang">
-              <p class="text-detail-product">Lama Pemakaian : -</p>
+              <p class="text-detail-product">Lama Pemakaian : {{ProductDetail.lamaPemakaian}}</p>
             </div>
             <div class="list-detail-tentang">
               <p class="text-detail-product">
                 Deskripsi barang : {{ProductDetail.description}}
               </p>
-              <hr>
-              <h5 class="fs-14">Detail Barang</h5>
+              <h5 class="fs-14 bt-top">Detail Barang</h5>
               <table class="table table-striped border-0 m-0 p-0">
                 <tr class="content-table">
                   <td>Kelengkapan paket</td>
@@ -95,9 +95,36 @@
         </div>
       </div>
     </div>
-    <div class="bottom-tawar box-shadow">
+    <div v-b-modal.modal1 @click="setAmount" class="bottom-tawar box-shadow">
       <div class="text-uppercase">Tawarkan Harga</div>
     </div>
+
+    <b-modal id="modal1"
+    v-model="show"
+    title="Tawarkan harga"
+    centered
+    hide-footer>
+      <b-input-group class="mt-3">
+        <b-form-input
+        type="number"
+        v-model="this.amount"
+        disabled>
+        </b-form-input>
+        <b-input-group-append>
+          <b-button variant="primary"
+          class="btn btn-add"
+          @click="addBid">+</b-button>
+          <b-button variant="dark"
+          @click="minBid"> - </b-button>
+        </b-input-group-append>
+      </b-input-group>
+      <p class="text-left mt-2 fs-12">
+        Minmal Bid tertinggi <span class="blue-text">
+          Rp.{{this.formatPrice(this.ProductDetail.currentBid - this.ProductDetail.bid)}}
+        </span>
+      </p>
+      <button class="rounded orange-button">Tawarkan</button>
+    </b-modal>
     <Footer/>
   </div>
 </template>
@@ -120,7 +147,9 @@ export default {
   data() {
     return {
       history: null,
-      product: this.ProductDetail,
+      boxTwo: '',
+      amount: 0,
+      show: false,
     };
   },
   computed: {
@@ -146,6 +175,19 @@ export default {
     scrollToTop() {
       window.scrollTo(0, 0);
     },
+    setAmount() {
+      this.amount = this.ProductDetail.currentBid - this.ProductDetail.bid;
+    },
+    addBid() {
+      if (this.amount + this.ProductDetail.bid < this.ProductDetail.currentBid) {
+        this.amount += this.ProductDetail.bid;
+      }
+    },
+    minBid() {
+      if (this.amount - this.ProductDetail.bid > 0) {
+        this.amount -= this.ProductDetail.bid;
+      }
+    },
   },
 };
 </script>
@@ -158,6 +200,11 @@ export default {
 .text-detail-product{
   font-size: 12px;
   text-align: justify;
+}
+
+.btn-add{
+  background-color: #0095DA;
+  border: 1px #0095DA solid;
 }
 
 .bottom-tawar{
@@ -173,6 +220,16 @@ export default {
   background-color: #ff7f0f;
 }
 
+.orange-button{
+  padding: 10px;
+  background-color: #e86c00;
+  color: white;
+  width: 100%;
+  margin-top: 10px;
+  font-weight: bold;
+  border: none;
+}
+
 .bottom-tawar:hover {
   background: #e86c00 radial-gradient(circle, transparent 1%, #e86c00 1%)
     center/15000%;
@@ -185,11 +242,26 @@ export default {
   transition: background 0s;
 }
 
+.fs-12{
+  font-size: 12px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .list-detail-tentang{
   padding-left: 10px;
   padding-right: 10px;
   padding-top: 5px;
 }
+ .bt-top{
+   padding-top: 15px;
+   margin-top: 15px;
+   border-top: #0095DA 2px solid;
+ }
 
 .text-detail-product{
   font-size: 12px;
@@ -252,6 +324,11 @@ export default {
 
 .detail-name{
   color: #0077FF;
+}
+
+.blue-text{
+  color: #0077FF;
+  font-weight: bold;
 }
 
 .profile-text{
@@ -331,6 +408,7 @@ p{
 
 .detail-image-product{
   max-width: 320px;
+  max-height: 450px;
 }
 
 .fs-14,

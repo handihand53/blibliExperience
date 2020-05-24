@@ -31,7 +31,7 @@
             <span class="tag-label-baru">{{product.status}}</span>
             <p class="title-product">{{product.productName}}</p>
             <p class="price-product">Rp.{{formatPrice(product.productPrice)}}</p>
-            <p class="penawaran">0 Penawaran</p>
+            <p class="penawaran">{{product.historyBid.length}} Penawaran</p>
             <p class="mt-2 bid"><span class="color-blue">Bid</span> dimulai dari
             <span class="color-blue">Rp.{{formatPrice(product.bid)}}</span></p>
             <router-link :to='"/cari-barang/detail/"+product.id'>

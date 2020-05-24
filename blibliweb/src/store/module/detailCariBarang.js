@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const PRODUCT_API = 'http://www.mocky.io/v2/5eca4e153000005b00a6cf58?mocky-delay=500ms';
+const PRODUCT_API = 'http://www.mocky.io/v2/5eca8c1f3000009300a6d023';
 
 const detailCariBarang = {
   namespaced: true,
