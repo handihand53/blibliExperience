@@ -55,7 +55,7 @@ const routes = [
     },
   },
   {
-    path: '/detail-product',
+    path: '/detail-product/:id',
     name: 'DetailProduct',
     component: () => import(/* webpackChunkName: "category" */ '../views/DetailProduct.vue'),
     meta: {
@@ -207,7 +207,7 @@ const routes = [
     },
   },
   {
-    path: '/cari-barang/detail',
+    path: '/cari-barang/detail/:id',
     name: 'Detail Cari Barang',
     component: () => import(/* webpackChunkName: "category" */ '../views/caribarang/DetailCariBarang.vue'),
     meta: {

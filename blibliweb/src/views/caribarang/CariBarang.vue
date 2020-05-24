@@ -3,71 +3,43 @@
     <HeaderWithCart/>
     <div class="p-2">
       <p class="text-center mt-1 mb-1">Cari Barang</p>
-      <img src="@/assets/etc/dummy.jpg" alt="" class="barter-label-img">
+      <img src="@/assets/etc/cari_barang.jpg" alt="" class="img-fluid">
     </div>
     <label class="label-page pl-2">Kategori yang kamu suka</label>
     <div class="card ml-2 mr-2 pt-1 pb-2">
       <div class="overflow-x">
-        <span class="category mr-2 ml-2 active">Semua</span>
-        <span class="category mr-2 un-active">Elektronik</span>
-        <span class="category mr-2 un-active">Makanan</span>
-        <span class="category mr-2 un-active">Minuman</span>
-        <span class="category mr-2 un-active">Pakaian</span>
-        <span class="category mr-2 un-active">Lain-lain</span>
+        <span class="category mr-2 ml-2 active"
+        @click='getProductByCategoryName("")'>Semua</span>
+        <span class='category mr-2'
+        :class="{'un-active':category.categoryName, active: !category.categoryName}"
+        v-for='category in CategoriesDetails.data' v-bind:key='category.categoryId'
+        @click='getProductByCategoryName(category.categoryName)' :ref='category.categoryName'
+        >{{category.categoryName}}</span>
       </div>
     </div>
     <label class="label-page pl-2 pt-2">Barang ini lagi di cari-cari nih</label>
-    <div class="content col-12 row no-margin pl-2 pr-2">
-      <!--  -->
-      <div class="card pl-3 pr-3 pb-3 col-12 mb-3">
+    <div
+    class="content col-12 row no-margin pl-2 pr-2"
+    v-for='product in this.ProductDetails' v-bind:key='product.id'>
+      <div class="card pl-2 pr-2 pb-3 col-12 mb-3">
         <div class="row no-margin">
-          <div class="col-4 no-margin no-padding pt-3">
-            <img src="@/assets/etc/aqua.png" alt="" class="img-product">
+          <div class="col-4 pr-2 no-margin no-padding pt-3
+          d-flex align-items-center">
+            <img :src=product.imgUrl[0] alt="" class="img-product ml-auto mr-auto">
           </div>
           <div class="col-8 no-margin no-padding pt-2">
-            <span class="tag-label-baru">Baru</span>
-            <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-            <p class="price-product">Rp.18.000.000</p>
+            <span class="tag-label-baru">{{product.status}}</span>
+            <p class="title-product">{{product.productName}}</p>
+            <p class="price-product">Rp.{{formatPrice(product.productPrice)}}</p>
             <p class="penawaran">0 Penawaran</p>
             <p class="mt-2 bid"><span class="color-blue">Bid</span> dimulai dari
-            <span class="color-blue">Rp.100.000</span></p>
-            <button class="buy-btn">Lihat Detail</button>
+            <span class="color-blue">Rp.{{formatPrice(product.bid)}}</span></p>
+            <router-link :to='"/cari-barang/detail/"+product.id'>
+              <button class="buy-btn">Lihat Detail</button>
+            </router-link>
           </div>
         </div>
       </div>
-      <div class="card pl-3 pr-3 pb-3 col-12 mb-3">
-        <div class="row no-margin">
-          <div class="col-4 no-margin no-padding pt-3">
-            <img src="@/assets/etc/aqua.png" alt="" class="img-product">
-          </div>
-          <div class="col-8 no-margin no-padding pt-2">
-            <span class="tag-label-baru">Baru</span>
-            <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-            <p class="price-product">Rp.18.000.000</p>
-            <p class="penawaran">0 Penawaran</p>
-            <p class="mt-2 bid"><span class="color-blue">Bid</span> dimulai dari
-            <span class="color-blue">Rp.100.000</span></p>
-            <button class="buy-btn">Lihat Detail</button>
-          </div>
-        </div>
-      </div>
-      <div class="card pl-3 pr-3 pb-3 col-12 mb-3">
-        <div class="row no-margin">
-          <div class="col-4 no-margin no-padding pt-3">
-            <img src="@/assets/etc/aqua.png" alt="" class="img-product">
-          </div>
-          <div class="col-8 no-margin no-padding pt-2">
-            <span class="tag-label-baru">Baru</span>
-            <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-            <p class="price-product">Rp.18.000.000</p>
-            <p class="penawaran">0 Penawaran</p>
-            <p class="mt-2 bid"><span class="color-blue">Bid</span> dimulai dari
-            <span class="color-blue">Rp.100.000</span></p>
-            <button class="buy-btn">Lihat Detail</button>
-          </div>
-        </div>
-      </div>
-      <!--  -->
     </div>
     <Footer/>
   </div>
@@ -76,11 +48,52 @@
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
     HeaderWithCart,
     Footer,
+  },
+  data() {
+    return {
+      catParam: '',
+    };
+  },
+  created() {
+    const store = this.$store;
+    store.dispatch('_cariBarang/getProducts');
+    store.dispatch('_cariBarang/getCategory');
+  },
+  computed: {
+    ...mapGetters([
+      '_cariBarang/productList',
+      '_cariBarang/categoryList',
+    ]),
+    ProductDetails() {
+      const store = this.$store;
+      if (this.catParam === '') {
+        return store.getters['_cariBarang/productList'].data;
+      }
+      return store.getters['_cariBarang/productList'].data.filter((ele) => ele.category === this.catParam);
+    },
+    CategoriesDetails() {
+      const store = this.$store;
+      return store.getters['_cariBarang/categoryList'];
+    },
+  },
+  methods: {
+    ...mapActions([
+      '_cariBarang/getProducts',
+      '_cariBarang/getCategory',
+    ]),
+    getProductByCategoryName(category) {
+      this.catParam = category;
+    },
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
   },
 };
 </script>
@@ -173,8 +186,8 @@ export default {
 }
 
 .img-product {
-  width: 110px;
-  height: 110px;
+  max-width: 100px;
+  max-height: 120px;
   display: block;
 }
 
@@ -188,6 +201,7 @@ export default {
   height: 100px;
   border-radius: 5px;
   border: rgba(0, 0, 0, 0.125) 1px solid;
+
 }
 
 .barter-step-label-img{

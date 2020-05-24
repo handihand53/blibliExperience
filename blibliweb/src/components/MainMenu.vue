@@ -7,22 +7,26 @@
         @click="getProductByCategoryName('')">Semua</span>
         <span class='category mr-2'
         :class="{'un-active':category.categoryName, active: !category.categoryName}"
-        v-for='category in categoryList.data' v-bind:key='category.categoryId'
+        v-for='category in CategoriesDetails.data' v-bind:key='category.categoryId'
         @click='getProductByCategoryName(category.categoryName)' :ref='category.categoryName'
         >{{category.categoryName}}</span>
       </div>
     </div>
     <div class='content col-12 row no-margin pl-2 pr-2'>
-      <router-link to='/detail-product' class='cst-card col-6'
-      v-for='product in this.products'
+      <router-link :to='"/detail-product/"+product.id'  class='cst-card col-6'
+      v-for='product in this.ProductDetails'
       v-bind:key='product.id'>
-        <div class=''>
-          <img :src='product.imgUrl[0]' :alt='product.productName'
-          class='img-product ml-auto mr-auto' />
-          <p class='title-product'>{{product.productName}}</p>
-          <p class='product-price' title=product.productPrice>
-            Rp.{{formatPrice(product.productPrice)}}
-          </p>
+        <div class='align-items-start'>
+          <div class="cont d-flex align-items-center">
+            <img :src='product.imgUrl[0]' :alt='product.productName'
+            class='img-product ml-auto mr-auto'/>
+          </div>
+          <div class="mt-auto">
+            <p class='title-product'>{{product.productName}}</p>
+            <p class='product-price' title=product.productPrice>
+              Rp.{{formatPrice(product.productPrice)}}
+            </p>
+          </div>
         </div>
       </router-link>
     </div>
@@ -51,32 +55,52 @@ export default {
           status: 'Baru',
           tag: 'Blimart',
         },
+        {
+          id: 'kkjs-128981',
+          barcode: '9878654679854',
+          productName: 'Aqua 330ML',
+          productPrice: 2500,
+          imgUrl: [
+            './assets/etc/aqu.png',
+          ],
+          category: 'Minuman',
+          createdAt: 12322020564654,
+          status: 'Baru',
+          tag: 'Blimart',
+        },
       ],
     };
   },
   created() {
-    this.getProducts();
-    this.getCategory();
+    // this.$store.commit('productData/increment'); ==> mutation
+    // console.log(this.$store.state.productData.count); ==> state
+    // console.log(this.$store.getters['productData/doubleCount']); ==> getters
+    // this.$store.dispatch('productData/incrementIfOdd'); ==> action
+    const store = this.$store;
+    store.dispatch('productData/getProducts');
+    store.dispatch('productData/getCategory');
   },
   computed: {
     ...mapGetters([
-      'productList',
-      'categoryList',
+      'productData/productList',
+      'productData/categoryList',
     ]),
     ProductDetails() {
+      const store = this.$store;
       if (this.catParam === '') {
-        return this.productList.data;
+        return store.getters['productData/productList'].data;
       }
-      return this.productList.data.filter((ele) => ele.category === this.catParam);
+      return store.getters['productData/productList'].data.filter((ele) => ele.category === this.catParam);
     },
     CategoriesDetails() {
-      return this.categoryList;
+      const store = this.$store;
+      return store.getters['productData/categoryList'];
     },
   },
   methods: {
     ...mapActions([
-      'getProducts',
-      'getCategory',
+      'productData/getProducts',
+      'productData/getCategory',
     ]),
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
@@ -86,7 +110,6 @@ export default {
       this.catParam = category;
     },
     scroll() {
-      window.
       window.onscroll = () => {
         const bottomOfWindow = document.documentElement.scrollTop
         + window.innerHeight > document.documentElement.offsetHeight - 1;
@@ -94,10 +117,10 @@ export default {
           axios
             .get('http://www.mocky.io/v2/5ec18a432f0000417a4c88c2?mocky-delay=50ms')
             .then((response) => {
-              this.products.push(response.data.data[3]);
-              this.products.push(response.data.data[3]);
-              this.products.push(response.data.data[3]);
-              this.products.push(response.data.data[3]);
+              this.products.push(response.data.data[5]);
+              this.products.push(response.data.data[6]);
+              this.products.push(response.data.data[7]);
+              this.products.push(response.data.data[8]);
             });
         }
       };
@@ -179,12 +202,16 @@ a:hover{
   padding: 7px;
 }
 
+.cont{
+  min-height: 120px;
+}
+
 .cst-card:nth-child(even) {
   margin-left: 5px;
 }
 
 .img-product {
-  width: auto;
+  max-width: 120px;
   max-height: 120px;
   display: block;
 }

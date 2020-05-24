@@ -6,7 +6,7 @@
         <b-form-input v-model="search" placeholder="Cari apa hari ini ?"
         id="searchbar"></b-form-input>
         <div class="card mt-2">
-        <router-link to="/qr-scanner">
+        <router-link to="/scan-qr">
           <div class="row no-margin">
             <div class="p-2 border-right">
               <img src="..\..\src\assets\icon\scan.png" alt="barcode" class="barcodelogo" />
@@ -159,7 +159,7 @@ a{
 
 .sticky- {
   position: sticky;
-  top: 0;
+  top: -1px;
   z-index: 100;
 }
 

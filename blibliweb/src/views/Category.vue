@@ -2,33 +2,14 @@
   <div>
       <PlainHeader/>
       <div class="p-3">
-        <div class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2">
-         <span>Elektronik
+        <div class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2"
+        v-for='category in CategoriesDetails.data'
+        v-bind:key='category.categoryId'>
+         <span>{{category.categoryName}}
           <font-awesome-icon
             class="float-right f-icon mt-auto mb-auto"
             icon="angle-right"/>
          </span>
-        </div>
-        <div class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2">
-          <span>Makanan
-          <font-awesome-icon
-            class="float-right f-icon mt-auto mb-auto"
-            icon="angle-right"/>
-          </span>
-        </div>
-        <div class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2">
-          <span>Minuman
-          <font-awesome-icon
-            class="float-right f-icon mt-auto mb-auto"
-            icon="angle-right"/>
-          </span>
-        </div>
-        <div class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2">
-          <span>Pakaian
-          <font-awesome-icon
-            class="float-right f-icon mt-auto mb-auto"
-            icon="angle-right"/>
-          </span>
         </div>
       </div>
       <BottomNavigation/>
@@ -40,6 +21,7 @@
 import PlainHeader from '@/components/PlainHeader.vue';
 import Footer from '@/components/Footer.vue';
 import BottomNavigation from '@/components/BottomNavigation.vue';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Category',
@@ -48,13 +30,29 @@ export default {
     Footer,
     BottomNavigation,
   },
+  created() {
+    const store = this.$store;
+    store.dispatch('productData/getCategory');
+  },
   data() {
     return {
       isRotate: false,
       isActive: false,
     };
   },
+  computed: {
+    ...mapGetters([
+      'productData/categoryList',
+    ]),
+    CategoriesDetails() {
+      const store = this.$store;
+      return store.getters['productData/categoryList'];
+    },
+  },
   methods: {
+    ...mapActions([
+      'productData/getCategory',
+    ]),
     changeArrow() {
       this.isRotate = !this.isRotate;
       this.isActive = this.isRotate;

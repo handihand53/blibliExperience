@@ -1,56 +1,31 @@
 /* eslint-disable no-shadow */
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axios from 'axios';
+import mainMenu from './module/mainMenu';
+import detailProduct from './module/detailProduct';
+import cariBarang from './module/cariBarang';
+import detailCariBarang from './module/detailCariBarang';
 
 Vue.use(Vuex);
 
 // eslint-disable-next-line import/no-mutable-exports
 let store = [];
 
-const PRODUCT_API = 'http://www.mocky.io/v2/5ec18a432f0000417a4c88c2?mocky-delay=50ms';
-const CATEGORY_API = 'http://www.mocky.io/v2/5ec229a42f0000014ac34f73?mocky-delay=50ms';
-export const state = {
-  products: [],
-  categories: [],
-};
-
-const mutations = {
-  setProducts(state, value) {
-    state.products = value;
-  },
-  setCategories(state, value) {
-    state.categories = value;
-  },
-};
-
-const actions = {
-  getProducts({ commit }) {
-    axios
-      .get(PRODUCT_API)
-      .then((response) => commit('setProducts', response.data));
-  },
-  getCategory({ commit }) {
-    axios
-      .get(CATEGORY_API)
-      .then((response) => commit('setCategories', response.data));
-  },
-};
-
-const getters = {
-  productList(state) {
-    return state.products;
-  },
-  categoryList(state) {
-    return state.categories;
-  },
-};
-
 store = new Vuex.Store({
-  state,
-  mutations,
-  actions,
-  getters,
+  modules: {
+    modules: {
+      // eslint-disable-next-line object-shorthand
+      productData: mainMenu,
+      items: detailProduct,
+      _cariBarang: cariBarang,
+      _detailCariBarang: detailCariBarang,
+    },
+  },
 });
+
+store.registerModule('productData', mainMenu);
+store.registerModule('items', detailProduct);
+store.registerModule('_cariBarang', cariBarang);
+store.registerModule('_detailCariBarang', detailCariBarang);
 
 export default store;
