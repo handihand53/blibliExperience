@@ -52,7 +52,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .syarat{
   font-size: 12px;
   line-height: 2px;

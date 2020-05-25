@@ -106,7 +106,7 @@ $break-large: 730px;
 
 .img-icon {
   margin-top: 15px;
-  width: 35px;
+  width: 35px!important;
 }
 
 .center {

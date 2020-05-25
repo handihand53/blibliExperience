@@ -49,7 +49,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .no-margin{
   margin: 0px;
 }

@@ -5,6 +5,7 @@ import mainMenu from './module/mainMenu';
 import detailProduct from './module/detailProduct';
 import cariBarang from './module/cariBarang';
 import detailCariBarang from './module/detailCariBarang';
+import barter from './module/barter';
 
 Vue.use(Vuex);
 
@@ -19,6 +20,7 @@ store = new Vuex.Store({
       items: detailProduct,
       _cariBarang: cariBarang,
       _detailCariBarang: detailCariBarang,
+      _barter: barter,
     },
   },
 });
@@ -27,5 +29,6 @@ store.registerModule('productData', mainMenu);
 store.registerModule('items', detailProduct);
 store.registerModule('_cariBarang', cariBarang);
 store.registerModule('_detailCariBarang', detailCariBarang);
+store.registerModule('_barter', barter);
 
 export default store;

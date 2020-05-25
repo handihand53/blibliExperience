@@ -68,7 +68,7 @@ export default {
 // }
 </script>
 
-<style>
+<style scoped>
 .list-detail-tentang{
   padding: 10px;
 }

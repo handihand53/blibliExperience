@@ -2,19 +2,25 @@
   <div>
     <HeaderWithCart/>
     <div class="p-2">
-      <p class="text-center mt-1 mb-1">Blibli Barter</p>
-      <img src="@/assets/etc/dummy.jpg" alt="" class="barter-label-img mb-3">
-      <img src="@/assets/etc/dummy.jpg" alt="" class="barter-step-label-img">
+      <div class="card shadow p-2 mb-1 rounded-0">
+        <span class="mt-1"><b>Blibli Barter </b>
+        <small class="ml-2 font-weight-normal">tukar barang hp, TV, dan lainnya
+          </small></span>
+      </div>
+      <img src="@/assets/icon/bliblibarter.png" alt="" class="img-fluid mb-3">
+      <hr class="m-0 p-0">
+      <img src="@/assets/icon/barter.jpg" alt="" class="img-fluid">
     </div>
     <label class="label-page pl-2">Kategori yang kamu suka</label>
     <div class="card ml-2 mr-2 pt-1 pb-2">
       <div class="overflow-x">
-        <span class="category mr-2 ml-2 active">Semua</span>
-        <span class="category mr-2 un-active">Elektronik</span>
-        <span class="category mr-2 un-active">Makanan</span>
-        <span class="category mr-2 un-active">Minuman</span>
-        <span class="category mr-2 un-active">Pakaian</span>
-        <span class="category mr-2 un-active">Lain-lain</span>
+        <span class="category mr-2 ml-2 active"
+        @click='getProductByCategoryName("")'>Semua</span>
+        <span class='category mr-2'
+        :class="{'un-active':category.categoryName, active: !category.categoryName}"
+        v-for='category in CategoriesDetails.data' v-bind:key='category.categoryId'
+        @click='getProductByCategoryName(category.categoryName)' :ref='category.categoryName'
+        >{{category.categoryName}}</span>
       </div>
     </div>
     <label class="label-page pl-2 pt-2">Barang ini menunggu buat kamu tukar loh</label>
@@ -51,16 +57,46 @@
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
     HeaderWithCart,
     Footer,
   },
+  data() {
+    return {
+      catParam: '',
+    };
+  },
+  created() {
+    const store = this.$store;
+    // store.dispatch('_cariBarang/getProducts');
+    store.dispatch('_barter/getCategory');
+  },
+  computed: {
+    ...mapGetters([
+      // '_cariBarang/productList',
+      '_barter/categoryList',
+    ]),
+    CategoriesDetails() {
+      const store = this.$store;
+      return store.getters['_barter/categoryList'];
+    },
+  },
+  methods: {
+    ...mapActions([
+      // '_cariBarang/getProducts',
+      '_barter/getCategory',
+    ]),
+    getProductByCategoryName(category) {
+      this.catParam = category;
+    },
+  },
 };
 </script>
 
-<style>
+<style scoped>
 .tag-label-baru {
   background-color: #0095DA;
   color: white;

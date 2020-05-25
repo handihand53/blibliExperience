@@ -4,7 +4,9 @@
     <div class="mt-2 bg-white p-2 pl-3 pr-3">
       <div class="d-flex justify-content-between">
         <p class="detail-title-product">{{ProductDetail.productName}}</p>
-        <p class="tag mt-1 align-self-center">{{ProductDetail.status}}</p>
+        <p class="tag mt-1 align-self-center" v-if="ProductDetail.status === 'Baru'"
+        >{{ProductDetail.status}}</p>
+        <p class="tag-bekas mt-1 align-self-center" v-else>{{ProductDetail.status}}</p>
       </div>
       <div>
         <p class="brand-detail-product">
@@ -27,7 +29,7 @@
             <td colspan="2" class="price-detail-text">Rp{{formatPrice(ProductDetail.bid)}}</td>
           </tr>
           <tr>
-            <td class="sub-text">Penawaran Tertinggi</td>
+            <td class="sub-text">Penawaran Terendah</td>
             <td class="price-detail-text">Rp{{formatPrice(ProductDetail.currentBid)}}</td>
           </tr>
         </table>
@@ -61,7 +63,9 @@
             <div class="list-detail-tentang">
               <p class="text-detail-product">
                 Status Barang :
-                <span class="tag">Baru</span>
+                <span class="tag" v-if="ProductDetail.status === 'Baru'">
+                  {{ProductDetail.status}}</span>
+                <span class="tag-bekas" v-else>{{ProductDetail.status}}</span>
               </p>
             </div>
             <div class="list-detail-tentang">
@@ -192,7 +196,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .margin-bot{
   margin-bottom: 65px;
 }
@@ -388,6 +392,14 @@ p{
   background-color: white;
 }
 
+.tag-bekas{
+  background-color: #FF7600;
+  color: white;
+  font-size: 10px;
+  padding: 2px 10px;
+  border-radius: 10px;
+}
+
 .tag{
   background-color: #0095DA;
   color: white;
@@ -408,7 +420,7 @@ p{
 
 .detail-image-product{
   max-width: 320px;
-  max-height: 450px;
+  max-height: 370px;
 }
 
 .fs-14,

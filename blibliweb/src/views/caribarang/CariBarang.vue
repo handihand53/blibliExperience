@@ -1,10 +1,12 @@
 <template>
   <div>
     <HeaderWithCart/>
-    <div class="p-2">
-      <p class="text-center mt-1 mb-1">Cari Barang</p>
-      <img src="@/assets/etc/cari_barang.jpg" alt="" class="img-fluid">
+    <div class="card p-2 m-2">
+      <h6 class="mt-1 mb-1">Cari Barang</h6>
     </div>
+    <!-- <div class="p-2">
+      <img src="@/assets/etc/cari_barang.jpg" alt="" class="img-fluid">
+    </div> -->
     <label class="label-page pl-2">Kategori yang kamu suka</label>
     <div class="card ml-2 mr-2 pt-1 pb-2">
       <div class="overflow-x">
@@ -28,7 +30,10 @@
             <img :src=product.imgUrl[0] alt="" class="img-product ml-auto mr-auto">
           </div>
           <div class="col-8 no-margin no-padding pt-2">
-            <span class="tag-label-baru">{{product.status}}</span>
+            <span class="tag-label-baru" v-if="product.status === 'Baru'">
+              {{product.status}}</span>
+            <span class="tag-label-bekas" v-else>
+              {{product.status}}</span>
             <p class="title-product">{{product.productName}}</p>
             <p class="price-product">Rp.{{formatPrice(product.productPrice)}}</p>
             <p class="penawaran">{{product.historyBid.length}} Penawaran</p>
@@ -106,6 +111,7 @@ export default {
   padding: 2px 15px;
   border-radius: 10px;
 }
+
 
 .bid{
   font-size: 14px;

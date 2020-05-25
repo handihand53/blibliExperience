@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import tahap1 from '@/store/signupDataMerchant.js';
+// import tahap1 from '@/store/signupDataMerchant.js';
 
 export default {
   data() {
@@ -158,7 +158,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .red{
   color: red;
 }

@@ -90,7 +90,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .brand{
   color: #0088FF;
 }

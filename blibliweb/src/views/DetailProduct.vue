@@ -6,7 +6,39 @@
         <p class="title-product">{{ ProductDetails.productName }}</p>
         <p class="brand-product">Brand:
           <span class="brand">{{ ProductDetails.brand }}</span></p>
-        <img :src="ProductDetails.imgUrl[0]" alt="" class="product-img">
+          <b-carousel
+            id="carousel-1"
+            v-model="slide"
+            :interval="0"
+            indicators
+            class="product-img"
+            background="transparent"
+            style="text-shadow: 1px 1px 2px #333;"
+            @sliding-start="onSlideStart"
+            @sliding-end="onSlideEnd"
+          >
+            <!-- Text slides with image -->
+            <b-carousel-slide
+              :img-src=ProductDetails.imgUrl[0]
+            ></b-carousel-slide>
+             <b-carousel-slide
+              :img-src=ProductDetails.imgUrl[0]
+            ></b-carousel-slide>
+             <b-carousel-slide
+              :img-src=ProductDetails.imgUrl[0]
+            ></b-carousel-slide>
+          </b-carousel>
+        <div class="row m-0 p-0 mt-4">
+          <img :src="ProductDetails.imgUrl[0]"
+          @click="moveSlider(0)"
+          alt="" class="img-preview">
+          <img :src="ProductDetails.imgUrl[0]"
+          @click="moveSlider(1)"
+          alt="" class="img-preview">
+          <img :src="ProductDetails.imgUrl[0]"
+          @click="moveSlider(2)"
+          alt="" class="img-preview">
+        </div>
         <p class="price-text">Harga <span class="price">
           Rp{{ formatPrice(ProductDetails.productPrice) }}</span></p>
         <hr>
@@ -199,6 +231,7 @@ export default {
   },
   data() {
     return {
+      slide: 0,
       descActive: true,
       detailActive: false,
       selected: '',
@@ -261,6 +294,9 @@ export default {
     addToWishList() {
       this.alertMsg = 'Berhasil masuk wishlist';
       this.dismissCountDown = this.dismissSecs;
+    },
+    moveSlider(idx) {
+      this.slide = idx;
     },
   },
 };
@@ -328,6 +364,13 @@ export default {
 .selected-location{
   font-size: 12px;
   color: gray;
+}
+
+.img-preview{
+  width: 60px;
+  border: 0.8px gray solid;
+  padding: 5px;
+  margin-right: 10px;
 }
 
 tr > td{
@@ -426,12 +469,6 @@ tr.content-table:nth-child(odd){
   color: white;
 }
 
-.active{
-  cursor: pointer;
-  color: white;
-  border-bottom: 5px #FC9B2D solid;
-}
-
 .blimart-icon{
   display: inline-block;
   width: 85px;
@@ -507,7 +544,7 @@ hr{
 }
 
 .product-img{
-  width: 173px;
+  width: 100%;
   margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
