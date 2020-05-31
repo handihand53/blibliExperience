@@ -7,6 +7,7 @@
             <div v-on:click="back" class="left-arrow">
               <font-awesome-icon icon="chevron-left" />
             </div>
+            {{ this.$attrs.title }}
             <div v-on:click="dropdown" class="burger-button">
               <font-awesome-icon class="toggle-dropdown"
               :class="{rotate: isRotate}" icon="ellipsis-v" />

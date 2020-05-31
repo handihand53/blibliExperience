@@ -82,7 +82,6 @@ export default {
 </script>
 
 <style scoped>
-
 .bottom-buy{
   height: 60px;
   background-color: white;

@@ -38,7 +38,9 @@
       ></b-form-textarea>
     </div>
     <div class="p-3">
-      <b-button class="col-12" variant="outline-primary">Ubah Kata Sandi</b-button>
+      <router-link to="./informasi-market/ubah-kata-sandi">
+        <b-button class="col-12" variant="outline-primary">Ubah Kata Sandi</b-button>
+      </router-link>
       <b-button class="col-12 simpan-btn mt-3" variant="warning">Simpan</b-button>
     </div>
     <Footer/>

@@ -14,7 +14,8 @@
         <p class="name-text">0821203585645</p>
       </div>
       <div class="cst-card mt-3 pt-2">
-        <p class="shop-name pl-3 pb-3 pt-1">Nama Toko</p>
+        <p class="border-bottom shop-name pl-3 pb-3 pt-1">Nama
+          ssadTokas dkoasjd oajsd jas;joasjd oo</p>
         <div class="col-12 row no-margin no-padding">
           <div class="pl-3 col-4 no-padding">
             <img src="@/assets/etc/aqua.png" alt="aqua"
@@ -28,7 +29,7 @@
         </div>
       </div>
       <div class="cst-card mt-3 pt-2">
-        <p class="border-bottom pl-3 pb-3 pt-1">Nama Toko</p>
+        <p class=" shop-name border-bottom pl-3 pb-3 pt-1">Nama Toko</p>
         <div class="col-12 row no-margin no-padding">
           <div class="pl-3 col-4 no-padding">
             <img src="@/assets/etc/aqua.png" alt="aqua"

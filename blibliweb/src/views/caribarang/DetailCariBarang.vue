@@ -15,7 +15,38 @@
         </p>
       </div>
       <div class="p-3 d-flex justify-content-center">
-        <img :src=ProductDetail.imgUrl[0] alt class="ml-auto mr-auto detail-image-product"/>
+         <b-carousel
+            id="carousel-1"
+            v-model="slide"
+            :interval="0"
+            indicators
+            background="transparent"
+            style="text-shadow: 1px 1px 2px #333;"
+            @sliding-start="onSlideStart"
+            @sliding-end="onSlideEnd"
+          >
+            <!-- Text slides with image -->
+            <b-carousel-slide
+              :img-src=ProductDetail.imgUrl[0]
+            ></b-carousel-slide>
+             <b-carousel-slide
+              :img-src=ProductDetail.imgUrl[0]
+            ></b-carousel-slide>
+             <b-carousel-slide
+              :img-src=ProductDetail.imgUrl[0]
+            ></b-carousel-slide>
+          </b-carousel>
+      </div>
+      <div class="row m-0 p-0 mt-4">
+        <img :src="ProductDetail.imgUrl[0]"
+        @click="moveSlider(0)"
+        alt="" class="img-preview">
+        <img :src="ProductDetail.imgUrl[0]"
+        @click="moveSlider(1)"
+        alt="" class="img-preview">
+        <img :src="ProductDetail.imgUrl[0]"
+        @click="moveSlider(2)"
+        alt="" class="img-preview">
       </div>
        <div class="pb-2">
         <table class="table border-0 table-striped no-margin">
@@ -154,6 +185,9 @@ export default {
       boxTwo: '',
       amount: 0,
       show: false,
+      slide: 0,
+      dismissSecs: 3,
+      dismissCountDown: 0,
     };
   },
   computed: {
@@ -192,6 +226,9 @@ export default {
         this.amount -= this.ProductDetail.bid;
       }
     },
+    moveSlider(idx) {
+      this.slide = idx;
+    },
   },
 };
 </script>
@@ -212,6 +249,7 @@ export default {
 }
 
 .bottom-tawar{
+  z-index: 100;
   position: fixed;
   bottom: 0;
   height: 60px;
@@ -359,6 +397,13 @@ tr.content-table:nth-child(odd){
 .price-detail-text{
   color: #FF7600;
   font-size: 18px;
+}
+
+.img-preview{
+  width: 60px;
+  border: 0.8px gray solid;
+  padding: 5px;
+  margin-right: 10px;
 }
 
 .sub-text{

@@ -53,6 +53,14 @@
         ref='btn' disabled>Selanjutnya</button>
       </div>
     </div>
+    <div class="overlay-loading d-flex align-items-center"
+    :class="{hide: !isLoading}">
+      <b-spinner
+      type="grow"
+      variant="primary"
+      class="ml-auto mr-auto spinner"
+      ></b-spinner>
+    </div>
   </div>
 </template>
 
@@ -61,6 +69,7 @@
 export default {
   data() {
     return {
+      isLoading: false,
       namaPemilik: 'Handi Hermawan',
       namaToko: 'Blitoko',
       alamat: 'Jawa Barat, Kota Tasikmalaya Mangkubumi Linggajaya RT 001 RW 006',
@@ -84,7 +93,8 @@ export default {
       }
     },
     next() {
-      console.log('tekan');
+      this.isLoading = true;
+      setTimeout(() => this.$router.push('/merchant/menu-utama'), 1000);
     },
   },
 };
@@ -101,6 +111,25 @@ export default {
 
 .no-margin{
   margin: 0px;
+}
+
+.overlay-loading{
+  z-index: 200;
+  background-color: #0000006a;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+
+.hide{
+  display: none!important;
+}
+
+.spinner{
+  width: 50px;
+  height: 50px;
 }
 
 .password-hint{

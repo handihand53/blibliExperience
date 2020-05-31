@@ -1,16 +1,20 @@
 <template>
   <div>
-    <HeaderWithCart/>
-    <div class="card p-2 m-2">
+    <HeaderWithCart title="Cari Barang"/>
+    <!-- <div class="card p-2 m-2">
       <h6 class="mt-1 mb-1">Cari Barang</h6>
-    </div>
-    <!-- <div class="p-2">
-      <img src="@/assets/etc/cari_barang.jpg" alt="" class="img-fluid">
     </div> -->
+    <div>
+      <img src="@/assets/spanduk/blibligratisongkir.jpg"
+      class="img-fluid w-100 d-block mb-2" alt="">
+    </div>
+    <div class="p-1">
+      <img src="@/assets/icon/bliblicaribarang.png" alt="" class="img-fluid">
+    </div>
     <label class="label-page pl-2">Kategori yang kamu suka</label>
     <div class="card ml-2 mr-2 pt-1 pb-2">
       <div class="overflow-x">
-        <span class="category mr-2 ml-2 active"
+        <span class="category mr-2 ml-2 un-active"
         @click='getProductByCategoryName("")'>Semua</span>
         <span class='category mr-2'
         :class="{'un-active':category.categoryName, active: !category.categoryName}"

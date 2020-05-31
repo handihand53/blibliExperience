@@ -24,24 +24,18 @@ export default {
   },
   data() {
     return {
-      currentComponent: MerchantSignUpStep3,
+      currentComponent: MerchantSignUpStep1,
     };
   },
   watch: {
     $route() {
-      if (this.$route.params.steps === 'langkah-2' && this.tahap1) {
+      if (this.$route.params.steps === 'langkah-2') {
         this.currentComponent = MerchantSignUpStep2;
-        console.log('a');
-      } else if (this.$route.params.steps === 'langkah-1') {
-        this.currentComponent = MerchantSignUpStep1;
-        console.log('b');
-      } else if (!this.tahap1) {
-        console.log(this.tahap1);
+      } else if (this.$route.params.steps === 'langkah-3') {
+        this.currentComponent = MerchantSignUpStep3;
+      } else {
         this.$router.push('langkah-1');
-        console.log('c');
       }
-      console.log(this.tahap1);
-      console.log(this.$route.params.steps);
     },
   },
   created() {

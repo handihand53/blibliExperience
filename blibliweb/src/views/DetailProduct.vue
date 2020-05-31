@@ -128,12 +128,12 @@
           <div class="header-desc col-12 row no-margin no-padding">
             <div @click="description"
             class="col-6 no-margin no-padding center"
-            :class="{active: descActive}">
+            :class="{botActive: descActive}">
               <p class="desc-box" :class="{'color-white': descActive}">Deskripsi</p>
             </div>
             <div @click="detail"
             class="col-6 no-margin no-padding center"
-            :class="{active: detailActive}">
+            :class="{botActive: detailActive}">
               <p class="desc-box" :class="{'color-white': detailActive}">Detail Barang</p>
             </div>
           </div>
@@ -448,6 +448,10 @@ tr.content-table:nth-child(odd){
   bottom: 0;
   display: block;
   width: 100%;
+}
+
+.botActive{
+  border-bottom: #F99401 4px solid;
 }
 
 .desc-product{

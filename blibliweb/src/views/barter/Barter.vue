@@ -1,15 +1,15 @@
 <template>
   <div>
-    <HeaderWithCart/>
+    <HeaderWithCart title="Blibli Barter"/>
     <div class="p-2">
-      <div class="card shadow p-2 mb-1 rounded-0">
+      <!-- <div class="card shadow p-2 mb-1 rounded-0">
         <span class="mt-1"><b>Blibli Barter </b>
         <small class="ml-2 font-weight-normal">tukar barang hp, TV, dan lainnya
           </small></span>
-      </div>
-      <img src="@/assets/icon/bliblibarter.png" alt="" class="img-fluid mb-3">
-      <hr class="m-0 p-0">
+      </div> -->
       <img src="@/assets/icon/barter.jpg" alt="" class="img-fluid">
+      <hr class="m-0 p-0 mb-3">
+      <img src="@/assets/icon/bliblibarter.png" alt="" class="img-fluid mb-3">
     </div>
     <label class="label-page pl-2">Kategori yang kamu suka</label>
     <div class="card ml-2 mr-2 pt-1 pb-2">

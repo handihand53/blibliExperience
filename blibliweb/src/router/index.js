@@ -327,6 +327,14 @@ const routes = [
     },
   },
   {
+    path: '/hubungi-kami',
+    name: 'Hubungi kami | Blibli',
+    component: () => import(/* webpackChunkName: "category" */ '../views/HubungiKami.vue'),
+    meta: {
+      title: 'Hubungi kami | Blibli',
+    },
+  },
+  {
     path: '*',
     name: 'Not Found',
     component: () => import(/* webpackChunkName: "category" */ '../views/NotFound.vue'),

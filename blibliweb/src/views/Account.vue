@@ -6,7 +6,8 @@
         <div class="">
           <img src="@/assets/logo/signature.png" class="logo mr-3" alt="">
         </div>
-        <div class="">
+        <div class=" align-self-end">
+          <h6 style="font-weight: 700">Informasi Akun anda</h6>
           <p class="text-name">Handi Hermawan</p>
           <p class="tag-member">Member</p>
           <label class="text-date">Sejak Nov 2010</label>
@@ -65,12 +66,6 @@
           <router-link to="/post-product" class="alink">
             <div class="list-menu">
               Posting Produk
-              <font-awesome-icon icon="chevron-right" class="right-arrow"/>
-            </div>
-          </router-link>
-          <router-link to="/panduan" class="alink">
-            <div class="list-menu">
-              Panduan Blibli
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>
@@ -144,6 +139,11 @@ export default {
 
 .tag-member{
   font-weight: 600;
+}
+
+.text-date{
+  padding: 0px;
+  margin: 0px;
 }
 
 .logo{
