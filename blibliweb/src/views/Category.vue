@@ -2,37 +2,14 @@
   <div>
       <PlainHeader/>
       <div class="p-3">
-        <div @click="changeArrow" class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2">
-         <span>BlibliMart
+        <div class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2"
+        v-for='category in CategoriesDetails.data'
+        v-bind:key='category.categoryId'>
+         <span>{{category.categoryName}}
           <font-awesome-icon
             class="float-right f-icon mt-auto mb-auto"
-            :class="{rotate: isRotate}"
             icon="angle-right"/>
          </span>
-         <div class="location-dropdown"
-         :class="{active: isActive}">
-           <ul>
-             <li><router-link to="/bliblimart-location">Lihat semua
-             lokasi BlibliMart</router-link></li>
-             <li>Bandung</li>
-             <li>Jakarta</li>
-             <li>Yogtakarta</li>
-           </ul>
-         </div>
-        </div>
-        <div class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2">
-          <span>Barter
-          <font-awesome-icon
-            class="float-right f-icon mt-auto mb-auto"
-            icon="angle-right"/>
-          </span>
-        </div>
-        <div class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2">
-          <span>Cari Barang
-          <font-awesome-icon
-            class="float-right f-icon mt-auto mb-auto"
-            icon="angle-right"/>
-          </span>
         </div>
       </div>
       <BottomNavigation/>
@@ -44,6 +21,7 @@
 import PlainHeader from '@/components/PlainHeader.vue';
 import Footer from '@/components/Footer.vue';
 import BottomNavigation from '@/components/BottomNavigation.vue';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Category',
@@ -52,13 +30,29 @@ export default {
     Footer,
     BottomNavigation,
   },
+  created() {
+    const store = this.$store;
+    store.dispatch('productData/getCategory');
+  },
   data() {
     return {
       isRotate: false,
       isActive: false,
     };
   },
+  computed: {
+    ...mapGetters([
+      'productData/categoryList',
+    ]),
+    CategoriesDetails() {
+      const store = this.$store;
+      return store.getters['productData/categoryList'];
+    },
+  },
   methods: {
+    ...mapActions([
+      'productData/getCategory',
+    ]),
     changeArrow() {
       this.isRotate = !this.isRotate;
       this.isActive = this.isRotate;

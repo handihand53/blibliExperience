@@ -3,18 +3,20 @@
     <Header/>
     <main>
       <div class="p-2 bg-blue sticky-">
-        <b-form-input v-model="text" placeholder="Cari apa hari ini ?"
+        <b-form-input v-model="search" placeholder="Cari apa hari ini ?"
         id="searchbar"></b-form-input>
         <div class="card mt-2">
-        <div class="row no-margin">
-          <div class="p-2 border-right">
-            <img src="..\..\src\assets\icon\scan.png" alt="barcode" class="barcodelogo" />
+        <router-link to="/scan-qr">
+          <div class="row no-margin">
+            <div class="p-2 border-right">
+              <img src="..\..\src\assets\icon\scan.png" alt="barcode" class="barcodelogo" />
+            </div>
+              <div  class="col-9 p-2">
+                <p class="scan-text">Scan barcode / QR code</p>
+                <p class="scan-text">Beli barang lebih mudah dengan 1x scan</p>
+              </div>
           </div>
-          <div class="col-9 p-2">
-            <p class="scan-text">Scan barcode / QR code</p>
-            <p class="scan-text">Beli barang lebih mudah dengan 1x scan</p>
-          </div>
-        </div>
+        </router-link>
       </div>
       </div>
       <div class="home">
@@ -28,24 +30,24 @@
                 </div>
                 <div class="text-card">Blimart</div>
               </div>
-              <div class="col-3">
+              <router-link to="/barter" class="col-3">
                 <div class="center">
                   <img src="@/assets/icon/design.png" class="img-icon" alt />
                 </div>
                 <div class="text-card">Barter</div>
-              </div>
-              <div class="col-3">
+              </router-link>
+              <router-link to="/cari-barang" class="col-3">
                 <div class="center">
                   <img src="@/assets/icon/product.png" class="img-icon" alt />
                 </div>
                 <div class="text-card">Cari Barang</div>
-              </div>
-              <div class="col-3">
+              </router-link>
+              <router-link to="/location" class="col-3">
                 <div class="center">
                   <img src="@/assets/icon/map.png" class="img-icon" alt />
                 </div>
                 <div class="text-card">Lokasi Blimart</div>
-              </div>
+              </router-link>
             </div>
           </div>
         </div>
@@ -71,6 +73,11 @@ export default {
     Header,
     BottomNavigation,
     Footer,
+  },
+  data() {
+    return {
+      search: '',
+    };
   },
 };
 </script>
@@ -99,7 +106,7 @@ $break-large: 730px;
 
 .img-icon {
   margin-top: 15px;
-  width: 35px;
+  width: 35px!important;
 }
 
 .center {
@@ -120,6 +127,10 @@ $break-large: 730px;
 .blilogo {
   width: 100px;
   height: auto;
+}
+
+a{
+  text-decoration: none;
 }
 
 .bg-blue {
@@ -148,7 +159,7 @@ $break-large: 730px;
 
 .sticky- {
   position: sticky;
-  top: 0;
+  top: -1px;
   z-index: 100;
 }
 
