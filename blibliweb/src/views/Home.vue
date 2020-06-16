@@ -6,7 +6,7 @@
         <b-form-input v-model="search" placeholder="Cari apa hari ini ?"
         id="searchbar"></b-form-input>
         <div class="card mt-2">
-          <router-link to="/scan-qr">
+          <router-link to="/scan">
             <div class="row no-margin">
               <div class="p-2 border-right">
                 <img src="..\..\src\assets\icon\scan.png" alt="barcode" class="barcodelogo" />
@@ -60,11 +60,11 @@
                 </div>
                 <div class="text-card">Barter</div>
               </router-link>
-              <router-link to="/cari-barang" class="col-3">
+              <router-link to="/lelang" class="col-3">
                 <div class="center">
                   <img src="@/assets/icon/product.png" class="img-icon" alt />
                 </div>
-                <div class="text-card">Cari Barang</div>
+                <div class="text-card">Lelang</div>
               </router-link>
               <router-link to="/location" class="col-3">
                 <div class="center">
@@ -84,7 +84,7 @@
     <Footer />
     <div class="overlay-x-y" :class="{hide:isHide}">
       <button @click="hide" class="btn-x">X</button>
-      <img src="@/assets/spanduk/blibligratisongkir.jpg"
+      <img src="@/assets/spanduk/dirumahaja.jpg"
       class="d-flex align-items-center img-display" alt=""
       >
     </div>
@@ -168,6 +168,7 @@ $break-large: 730px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 200px;
+  border-radius: 10px;
 }
 
 .hide{

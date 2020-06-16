@@ -23,7 +23,7 @@
             <div class="pl-3 pb-2">
               <table>
                 <tr>
-                  <td class="uang-text">Harga </td>
+                  <td class="uang-text">Estimasi Harga</td>
                   <td class="price-detail-text pl-4">Rp15.000</td>
                 </tr>
                 <tr>

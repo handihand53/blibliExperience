@@ -1,64 +1,53 @@
 <template>
   <div>
-    <div class="m-0 p-0">
-      <div class="flip-h">
-        <v-quagga :onDetected="logIt" class="col-3 m-0 p-0" :readerSize="readerSize"
-        :readerTypes="['ean_reader']"></v-quagga>
+    <HeaderWithCart/>
+    <component :is="currentComponent"></component>
+    <div class="fixed-white">
+     <div class="row p-0 m-0 d-flex align-items-center mt-1
+      shadow p-2">
+        <font-awesome-icon
+        class="m-2"
+        @click="filterPage = false"
+        icon="chevron-left"/>
+        <p class="font-weight-bold m-auto">Scanner</p>
+      </div>
+      <div class="p-2">
+        <p class="p-0 m-0 my-2">Pilih lokasi</p>
+        <b-form-select v-model="selected" :options="options"></b-form-select>
+        <p class="p-0 m-0 my-2">Pilih metode scan</p>
+        <b-button block variant="primary">Scan Barcode</b-button>
+        <b-button block variant="primary">Scan QrCode</b-button>
       </div>
     </div>
-    <!-- <div id="interactive" class="viewport scanner">
-      <video autoplay="true" preload="auto" src="" muted="true" playsinline="true"></video>
-      <canvas class="drawingBuffer" width="640" height="480"></canvas>
-    </div> -->
   </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import VueQuagga from 'vue-quaggajs';
-
-Vue.use(VueQuagga);
+import HeaderWithCart from '@/components/HeaderWithCart.vue';
+import Barcode from '@/components/Barcode.vue';
+import Qrcode from '@/components/Qrcode.vue';
 
 export default {
-  name: 'VueBarcodeTest',
+  components: {
+    HeaderWithCart,
+    Barcode,
+    Qrcode,
+  },
   data() {
     return {
-      readerSize: {
-        width: 100,
-        height: 100,
-      },
-      detecteds: [],
+      currentComponent: null,
     };
-  },
-  methods: {
-    logIt(data) {
-      console.log('detected', data);
-    },
   },
 };
 </script>
 
 <style scoped>
-.flip-h{
-  -moz-transform: scale(-1, 1);
-  -webkit-transform: scale(-1, 1);
-  -o-transform: scale(-1, 1);
-  -ms-transform: scale(-1, 1);
-  transform: scale(-1, 1);
-}
-
-.viewport video{
-  width: 100vw!important;
-  height: 100vh!important;
-}
-
-canvas{
-  -moz-transform: scale(-1, 1);
-  -webkit-transform: scale(-1, 1);
-  -o-transform: scale(-1, 1);
-  -ms-transform: scale(-1, 1);
-  transform: scale(-1, 1);
+.fixed-white{
+  position: fixed;
   width: 100vw;
   height: 100vh;
+  background-color: white;
+  top: 0;
+  left: 0;
 }
 </style>

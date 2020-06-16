@@ -143,14 +143,6 @@ const routes = [
     },
   },
   {
-    path: '/scan-qr',
-    name: 'Qr Scanner',
-    component: () => import(/* webpackChunkName: "category" */ '../views/QrScanner.vue'),
-    meta: {
-      title: 'Scan QR',
-    },
-  },
-  {
     path: '/confirm',
     name: 'Konfirmasi Pemesanan',
     component: () => import(/* webpackChunkName: "category" */ '../views/user/KonfirmasiPemesanan.vue'),
@@ -199,15 +191,15 @@ const routes = [
     },
   },
   {
-    path: '/cari-barang',
-    name: 'Cari Barang',
+    path: '/lelang',
+    name: 'Lelang',
     component: () => import(/* webpackChunkName: "category" */ '../views/caribarang/CariBarang.vue'),
     meta: {
       title: 'Cari Barang',
     },
   },
   {
-    path: '/cari-barang/detail/:id',
+    path: '/lelang/detail/:id',
     name: 'Detail Cari Barang',
     component: () => import(/* webpackChunkName: "category" */ '../views/caribarang/DetailCariBarang.vue'),
     meta: {
@@ -215,7 +207,7 @@ const routes = [
     },
   },
   {
-    path: '/cari-barang/ajukan',
+    path: '/lelang/ajukan',
     name: 'Ajukan Cari Barang',
     component: () => import(/* webpackChunkName: "category" */ '../views/caribarang/AjukanCariBarang.vue'),
     meta: {
@@ -223,7 +215,7 @@ const routes = [
     },
   },
   {
-    path: '/cari-barang/konfirmasi',
+    path: '/lelang/konfirmasi',
     name: 'Konfirmasi Cari Barang',
     component: () => import(/* webpackChunkName: "category" */ '../views/caribarang/KonfirmasiPengajuanCariBarang.vue'),
     meta: {
@@ -332,6 +324,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "category" */ '../views/HubungiKami.vue'),
     meta: {
       title: 'Hubungi kami | Blibli',
+    },
+  },
+  {
+    path: '/c/:name',
+    name: 'Categori Page',
+    component: () => import(/* webpackChunkName: "category" */ '../views/CategoryPage.vue'),
+    meta: {
+      title: 'Kategori',
     },
   },
   {

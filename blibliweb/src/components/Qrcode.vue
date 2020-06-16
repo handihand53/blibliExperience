@@ -1,6 +1,5 @@
 <template>
   <div>
-    <HeaderWithCart/>
     <div>
       <!-- <b class="decode-result">Last result: <b>{{ result }}</b></p> -->
       <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit">
@@ -26,7 +25,6 @@
 </template>
 
 <script>
-import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import { QrcodeStream } from 'vue-qrcode-reader';
 // import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
 
@@ -60,7 +58,6 @@ import { QrcodeStream } from 'vue-qrcode-reader';
 export default {
   components: {
     QrcodeStream,
-    HeaderWithCart,
   },
   data() {
     return {

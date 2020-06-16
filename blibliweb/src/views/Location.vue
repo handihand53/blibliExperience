@@ -106,10 +106,10 @@ export default {
         },
       );
       this.tileLayer.addTo(this.map);
-      // this.map.locate({ setView: true });
-      // L.control.scale().addTo(this.map);
-      // this.map.setZoom(13);
-      // this.map.on('locationfound', this.onLocationFound);
+      this.map.locate({ setView: true });
+      L.control.scale().addTo(this.map);
+      this.map.setZoom(13);
+      this.map.on('locationfound', this.onLocationFound);
     },
     initLayers() {
       // const myIcon = L.icon({

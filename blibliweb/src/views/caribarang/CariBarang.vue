@@ -1,9 +1,6 @@
 <template>
   <div>
-    <HeaderWithCart title="Cari Barang"/>
-    <!-- <div class="card p-2 m-2">
-      <h6 class="mt-1 mb-1">Cari Barang</h6>
-    </div> -->
+    <HeaderWithCart title="Lelang"/>
     <div>
       <img src="@/assets/spanduk/blibligratisongkir.jpg"
       class="img-fluid w-100 d-block mb-2" alt="">
@@ -43,7 +40,7 @@
             <p class="penawaran">{{product.historyBid.length}} Penawaran</p>
             <p class="mt-2 bid"><span class="color-blue">Bid</span> dimulai dari
             <span class="color-blue">Rp.{{formatPrice(product.bid)}}</span></p>
-            <router-link :to='"/cari-barang/detail/"+product.id'>
+            <router-link :to='"/lelang/detail/"+product.id'>
               <button class="buy-btn">Lihat Detail</button>
             </router-link>
           </div>

@@ -14,8 +14,6 @@
             class="product-img"
             background="transparent"
             style="text-shadow: 1px 1px 2px #333;"
-            @sliding-start="onSlideStart"
-            @sliding-end="onSlideEnd"
           >
             <!-- Text slides with image -->
             <b-carousel-slide
@@ -51,7 +49,7 @@
       </div>
       <div class="bg-white mt-3 p-3">
         <p class="pilih-lokasi">Pilih Lokasi
-          <span v-b-modal.modal-sm class="lokasi float-right">Pilih</span></p>
+          <span ref="lokasi" v-b-modal.modal-sm class="lokasi float-right">Pilih</span></p>
         <p class="selected-location">{{ currentLocation }}</p>
       </div>
       <div class="bg-white mt-3 pb-2">
@@ -228,6 +226,7 @@ export default {
     const store = this.$store;
     store.dispatch('items/getItem');
     this.scrollToTop();
+    this.$refs.lokasi.click();
   },
   data() {
     return {
@@ -235,7 +234,7 @@ export default {
       descActive: true,
       detailActive: false,
       selected: '',
-      dismissSecs: 3,
+      dismissSecs: 2,
       dismissCountDown: 0,
       alertMsg: '',
       isLoading: false,
@@ -268,7 +267,6 @@ export default {
     },
     confirmLocation() {
       this.currentLocation = this.$refs.location.value;
-      console.log(this.$refs.location.value);
     },
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
@@ -298,6 +296,9 @@ export default {
     moveSlider(idx) {
       this.slide = idx;
     },
+  },
+  mounted() {
+    this.$refs.lokasi.click();
   },
 };
 </script>

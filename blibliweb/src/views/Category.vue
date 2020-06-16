@@ -5,11 +5,15 @@
         <div class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2"
         v-for='category in CategoriesDetails.data'
         v-bind:key='category.categoryId'>
-         <span>{{category.categoryName}}
-          <font-awesome-icon
-            class="float-right f-icon mt-auto mb-auto"
-            icon="angle-right"/>
-         </span>
+         <router-link :to='"/c/"+category.categoryName'>
+          <div>
+            <span>{{category.categoryName}}
+              <font-awesome-icon
+                class="float-right f-icon mt-auto mb-auto"
+                icon="angle-right"/>
+            </span>
+          </div>
+         </router-link>
         </div>
       </div>
       <BottomNavigation/>
@@ -62,6 +66,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+a{
+  color: black;
+}
+
+a:hover{
+  text-decoration: none;
+}
 
 .location-dropdown{
   max-height: 0px;
