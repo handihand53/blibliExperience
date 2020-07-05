@@ -10,7 +10,7 @@
                     <span @click="barter" class="barter"
                     :class="{active: isActive}">Barter</span>
                     <span @click="cariBarang" class="cari-barang"
-                    :class="{active: !isActive}">Cari Barang</span>
+                    :class="{active: !isActive}">Lelang</span>
                 </div>
             </div>
           <component :is="currentComponent"></component>

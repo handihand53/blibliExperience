@@ -3,15 +3,15 @@
     <HeaderWithCart/>
     <div>
       <div class="background-white border-bottom box-shadow">
-          <div class="p-2">
-              <small style="color: #AEAEAE; font-weight: 600;">Daftar Penawaran</small>
-          </div>
-          <div class="pl-2">
-              <span @click="penawaranBarter" class="penawaran-barter"
-              :class="{active: isActive}">Penawaran Barter</span>
-              <span @click="penawaranBarang" class="penawaran-barang"
-              :class="{active: !isActive}">Penawaran Barang</span>
-          </div>
+        <div class="p-2">
+          <small style="color: #AEAEAE; font-weight: 600;">Daftar Penawaran</small>
+        </div>
+        <div class="pl-2">
+          <span @click="penawaranBarter" class="penawaran-barter"
+          :class="{active: isActive}">Barter</span>
+          <span @click="penawaranBarang" class="penawaran-barang"
+          :class="{active: !isActive}">Lelang</span>
+        </div>
       </div>
       <component :is="currentComponent"></component>
     </div>

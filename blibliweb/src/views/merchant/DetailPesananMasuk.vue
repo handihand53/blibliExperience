@@ -57,8 +57,17 @@
         <p class="text-price">Rp3.000</p>
       </div>
       <div class="col-6 right p-0">
-        <button class="btn-checkout">Proses</button>
+        <button class="btn-checkout"
+        @click="proses">Proses</button>
       </div>
+    </div>
+    <div class="overlay-loading d-flex align-items-center"
+    :class="{hide: !isLoading}">
+      <b-spinner
+      type="grow"
+      variant="primary"
+      class="ml-auto mr-auto spinner"
+      ></b-spinner>
     </div>
   </div>
 </template>
@@ -70,10 +79,22 @@ export default {
   components: {
     PlainHeaderMarket,
   },
+  data() {
+    return {
+      isLoading: false,
+    };
+  },
+  methods: {
+    proses() {
+      // add logic checkout here
+      this.isLoading = true;
+      setTimeout(() => this.$router.push('/merchant/transaksi-berhasil'), 1000);
+    },
+  },
 };
 </script>
 
-<style>
+<style scoped>
 .bottom-navigation{
   position: fixed;
   bottom: 0;
@@ -81,6 +102,20 @@ export default {
   background-color: white;
   width: 100%;
   box-shadow: 0px 0px 13px -7px rgba(0, 0, 0, 0.75);
+}
+
+.hide{
+  display: none!important;
+}
+
+.overlay-loading{
+  z-index: 200;
+  background-color: #0000006a;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
 }
 
 .bg-gray{

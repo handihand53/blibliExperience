@@ -3,7 +3,7 @@
     <CariBarangHeader/>
     <div class="p-3">
       <p class="ringkasan-title"><font-awesome-icon class="mr-2" icon="exchange-alt"/>
-      Ringkasan Pengajuan</p>
+      Ringkasan Lelang</p>
       <div class="card mt-3 p-2 pl-3 pr-3">
         <p>Produk yang sedang anda cari</p>
         <div class="row no-margin pt-3 border-bottom pb-2">

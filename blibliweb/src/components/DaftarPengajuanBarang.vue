@@ -7,7 +7,7 @@
       <div class="col-8 no-margin  no-padding">
         <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
         <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-        <span class="status-tag success">Sudah Dikonfirmasi</span>
+        <!-- <span class="status-tag success">Sudah Dikonfirmasi</span> -->
         <p class="bid-product">Bid:
             <span class="bid-price-product">Rp13.000.000</span></p>
         <router-link to="/detail-pengajuan-barang">
@@ -22,7 +22,7 @@
       <div class="col-8 no-margin  no-padding">
         <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
         <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-        <span class="status-tag pending">Menunggu Konfirmasi</span>
+        <!-- <span class="status-tag pending">Menunggu Konfirmasi</span> -->
         <p class="bid-product">Bid:
             <span class="bid-price-product">Rp13.000.000</span></p>
         <button class="buy-btn">Lihat Detail</button>
@@ -35,7 +35,7 @@
       <div class="col-8 no-margin  no-padding">
         <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
         <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-        <span class="status-tag fail">Ditolak</span>
+        <!-- <span class="status-tag fail">Ditolak</span> -->
         <p class="bid-product">Bid:
             <span class="bid-price-product">Rp13.000.000</span></p>
         <button class="buy-btn">Lihat Detail</button>
@@ -174,7 +174,7 @@ p{
 }
 
 .bid-product{
-  margin-top: 7px;
+  margin-top: 2px;
   margin-bottom: 0px;
   font-size: 12px;
   white-space: nowrap;
@@ -239,15 +239,6 @@ p{
   margin-top: 10px!important;
   border-radius: 7px;
   border: 0.5px solid rgba(208, 208, 208, 0.245);
-}
-
-.bid-product{
-  margin-top: 7px;
-  margin-bottom: 0px;
-  font-size: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .box-shadow{

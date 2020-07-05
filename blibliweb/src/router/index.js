@@ -103,6 +103,23 @@ const routes = [
     },
   },
   {
+    path: '/daftar-penawaran/detail-lelang',
+    name: 'Detail Penawaran Lelang',
+    component: () => import(/* webpackChunkName: "category" */ '../views/user/DetailPenawaranBarang.vue'),
+    meta: {
+      title: 'Detail Penawaran Lelang',
+    },
+  },
+  {
+    path: '/daftar-penawaran/detail-barter',
+    name: 'Detail Penawaran Barter',
+    component: () => import(/* webpackChunkName: "category" */ '../views/user/DetailPenawaranBarter.vue'),
+    meta: {
+      title: 'Detail Penawaran detail-barter',
+      name: 'Detail Penawaran Barter',
+    },
+  },
+  {
     path: '/daftar-pengajuan',
     name: 'Daftar Pengajuan',
     component: () => import(/* webpackChunkName: "category" */ '../views/user/DaftarPengajuan.vue'),
@@ -132,6 +149,22 @@ const routes = [
     component: () => import(/* webpackChunkName: "category" */ '../views/user/DetailPengajuanBarang.vue'),
     meta: {
       title: 'Detail Pengajuan Barang',
+    },
+  },
+  {
+    path: '/detail-pengajuan-barter',
+    name: 'Detail Pengajuan Barter',
+    component: () => import(/* webpackChunkName: "category" */ '../views/user/DetailPengajuanBarter.vue'),
+    meta: {
+      title: 'Detail Pengajuan Barter',
+    },
+  },
+  {
+    path: '/detail-pengajuan-barter/:id',
+    name: 'Detail Pengajuan Barang Barter',
+    component: () => import(/* webpackChunkName: "category" */ '../views/user/DetailBarter.vue'),
+    meta: {
+      title: 'Detail Pengajuan Barang Barter',
     },
   },
   {
@@ -195,31 +228,31 @@ const routes = [
     name: 'Lelang',
     component: () => import(/* webpackChunkName: "category" */ '../views/caribarang/CariBarang.vue'),
     meta: {
-      title: 'Cari Barang',
+      title: 'Lelang',
     },
   },
   {
     path: '/lelang/detail/:id',
-    name: 'Detail Cari Barang',
+    name: 'Detail Lelang',
     component: () => import(/* webpackChunkName: "category" */ '../views/caribarang/DetailCariBarang.vue'),
     meta: {
-      title: 'Detail Cari Barang',
+      title: 'Detail Lelang',
     },
   },
   {
     path: '/lelang/ajukan',
-    name: 'Ajukan Cari Barang',
+    name: 'Ajukan Lelang',
     component: () => import(/* webpackChunkName: "category" */ '../views/caribarang/AjukanCariBarang.vue'),
     meta: {
-      title: 'Ajukan Cari Barang',
+      title: 'Ajukan Lelang',
     },
   },
   {
     path: '/lelang/konfirmasi',
-    name: 'Konfirmasi Cari Barang',
+    name: 'Konfirmasi lelang',
     component: () => import(/* webpackChunkName: "category" */ '../views/caribarang/KonfirmasiPengajuanCariBarang.vue'),
     meta: {
-      title: 'Konfirmasi Cari Barang',
+      title: 'Konfirmasi lelang',
     },
   },
   {
@@ -332,6 +365,78 @@ const routes = [
     component: () => import(/* webpackChunkName: "category" */ '../views/CategoryPage.vue'),
     meta: {
       title: 'Kategori',
+    },
+  },
+  {
+    path: '/daftar-pesanan',
+    name: 'Daftar Pesanan Page',
+    component: () => import(/* webpackChunkName: "category" */ '../views/DaftarPesanan.vue'),
+    meta: {
+      title: 'Daftar Pesanan',
+    },
+  },
+  {
+    path: '/daftar-pesanan/detail',
+    name: 'Detail Daftar Pesanan Page',
+    component: () => import(/* webpackChunkName: "category" */ '../views/DetailDaftarPesanan.vue'),
+    meta: {
+      title: 'Detail Daftar Pesanan',
+    },
+  },
+  {
+    path: '/admin',
+    name: 'Admin Page',
+    component: () => import(/* webpackChunkName: "category" */ '../views/admin/Admin.vue'),
+    meta: {
+      title: 'Admin',
+    },
+  },
+  {
+    path: '/barter/pengajuan/berhasil',
+    name: 'Pengajuan Berhasil Page',
+    component: () => import(/* webpackChunkName: "category" */ '../views/barter/Berhasil.vue'),
+    meta: {
+      title: 'Pengajuan Berhasil',
+    },
+  },
+  {
+    path: '/admin/tambah-barang',
+    name: 'Tambah Barang Page',
+    component: () => import(/* webpackChunkName: "category" */ '../views/admin/TambahBarang.vue'),
+    meta: {
+      title: 'Tambah Barang',
+    },
+  },
+  {
+    path: '/admin/konfirmasi-barter',
+    name: 'List Konfirmasi Barter Page',
+    component: () => import(/* webpackChunkName: "category" */ '../views/admin/ListKonfirmasiBarter.vue'),
+    meta: {
+      title: 'List Konfirmasi Barter',
+    },
+  },
+  {
+    path: '/admin/konfirmasi-barter/detail',
+    name: 'Detail Konfirmasi Barter Page',
+    component: () => import(/* webpackChunkName: "category" */ '../views/admin/KonfirmasiBarter.vue'),
+    meta: {
+      title: 'Detail Konfirmasi Barter',
+    },
+  },
+  {
+    path: '/admin/list-barang',
+    name: 'List Barang Page',
+    component: () => import(/* webpackChunkName: "category" */ '../views/admin/ListBarang.vue'),
+    meta: {
+      title: 'List Barang',
+    },
+  },
+  {
+    path: '/merchant/transaksi-berhasil',
+    name: 'Berhasil',
+    component: () => import(/* webpackChunkName: "category" */ '../views/merchant/TransaksiBerhasil.vue'),
+    meta: {
+      title: 'Berhasil!',
     },
   },
   {

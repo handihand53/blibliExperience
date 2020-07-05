@@ -21,20 +21,23 @@
         <p>Form Pengajuan Harga</p>
         <label for="bidnumber" class="label-text">Harga yang ditawarkan<span class="red">*</span>
         </label>
-        <input type="number" class="form-control mb-2" step="100000" min="100000" id="bidnumber">
-        <label for="bidnumber" class="label-text">Deskripsi<span class="red">*</span>
-        </label>
-        <textarea name="" id="" cols="20" rows="5" class="form-control"></textarea>
+        <input type="number" class="form-control mb-2" step="100000" min="100000" id="bidnumber"
+        disabled v-model="this.amount">
+        <!-- <label for="bidnumber" class="label-text">Deskripsi<span class="red">*</span>
+        </!-->
+        <!-- <textarea name="" id="" cols="20" rows="5" class="form-control"></textarea>
         <small class="syarat"><i><span class="red">*</span>
-        Pastikan deskripsi barang sesuai dengan kondisi yang diajukan</i></small>
-        <br>
+        Pastikan deskripsi barang sesuai dengan kondisi yang diajukan</i></small> -->
+        <!-- <br> -->
         <div class="d-flex align-items-center">
-          <input type="checkbox" class="checkbox-input mr-2" id="sk-check">
+          <input type="checkbox" class="checkbox-input mr-2" v-model="check"
+          id="sk-check">
           <label for="sk-check" class="snk">Dengan ini saya menyatakan setuju dengan S&K yang
             berlaku di blibli.com
           </label>
         </div>
-        <button class="mt-2 btn-ajukan">AJUKAN</button>
+        <button class="mt-2 btn-ajukan"
+        :disabled="!this.check" @click="ajukan">AJUKAN</button>
       </div>
     <Footer/>
   </div>
@@ -48,6 +51,19 @@ export default {
   components: {
     HeaderWithCart,
     Footer,
+  },
+  created() {
+  },
+  data() {
+    return {
+      check: false,
+      amount: window.localStorage.getItem('price'),
+    };
+  },
+  methods: {
+    ajukan() {
+      this.$router.push('konfirmasi');
+    },
   },
 };
 </script>

@@ -26,20 +26,7 @@
                   <td class="uang-text">Estimasi Harga</td>
                   <td class="price-detail-text pl-4">Rp15.000</td>
                 </tr>
-                <tr>
-                  <td class="uang-text">Barter Referensi</td>
-                  <td class="price-detail-text pl-4">Samsung Note 10</td>
-                </tr>
               </table>
-            </div>
-            <div class="profile-pemilik pt-3">
-              <div class="pt-2 pb-2 bg-white pl-3 pr-3">
-                <p class="profile-text">Profile Pemilik Barang</p>
-                <p class="name-text">Nama : <span class="detail-name">Handi Hermawan</span></p>
-                <p class="address-text">Alamat : <span class="detail-address">Jl.
-                  Juadi No.29, Kotabaru, Kec. Gondokusuman, Kota Yogyakarta,
-                  Daerah Istimewa Yogyakarta 55224</span></p>
-              </div>
             </div>
             <div class="about-detail-product">
               <div class="p-3">
@@ -72,16 +59,8 @@
         </div>
       </div>
     </div>
-    <div @click="ajukanBarter" class="bottom-ajukan box-shadow">
-      <div class="text-uppercase">ajukan barter</div>
-    </div>
-    <div class="overlay-loading d-flex align-items-center"
-    :class="{hide: !isLoading}">
-      <b-spinner
-      type="grow"
-      variant="primary"
-      class="ml-auto mr-auto spinner"
-      ></b-spinner>
+    <div class="bottom-ajukan box-shadow">
+      <div class="text-uppercase">Lakukan barter</div>
     </div>
     <Footer/>
   </div>
@@ -95,18 +74,6 @@ export default {
   components: {
     HeaderWithCart,
     Footer,
-  },
-  data() {
-    return {
-      isLoading: false,
-    };
-  },
-  methods: {
-    ajukanBarter() {
-      // add logic checkout here
-      this.isLoading = true;
-      setTimeout(() => this.$router.push('/barter/pengajuan'), 1000);
-    },
   },
 };
 </script>
@@ -124,25 +91,6 @@ export default {
 .address-text{
   font-size: 13px;
   text-align: justify;
-}
-
-.hide{
-  display: none!important;
-}
-
-.spinner{
-  width: 50px;
-  height: 50px;
-}
-
-.overlay-loading{
-  z-index: 200;
-  background-color: #0000006a;
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
 }
 
 .detail-name{

@@ -23,15 +23,8 @@
                 <!-- tanggal -->
                 <label for="day" class="detail-label">
                     Tanggal Lahir<span class="red">*</span></label>
-                <select name="date" id="day" class="form-control form-input">
-                    <option value="" selected disabled hidden>--- HARI ---</option>
-                </select>
-                <select name="month" id="month" class="form-control form-input">
-                    <option value="" selected disabled hidden>--- BULAN ---</option>
-                </select>
-                <select name="year" id="year" class="form-control form-input">
-                    <option value="" selected disabled hidden>--- TAHUN ---</option>
-                </select>
+                <input type="date" class="form-control form-input"
+                placeholder="" id="date" name="date">
                 <!-- handphone -->
                 <label for="nohp" class="detail-label">
                     Nomor Handphone<span class="red">*</span></label>

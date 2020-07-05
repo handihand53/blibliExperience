@@ -13,9 +13,12 @@
             <div class="col-8 no-margin no-padding">
                 <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
                 <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
+                <span class="status-tag success">Sudah Dikonfirmasi</span>
                 <p class="desc-product">Deskripsi: Lorem ipsum dolor, sit amet
                   consectetur adipisicing elit.</p>
-                <button class="buy-btn">Lihat Detail</button>
+                <router-link to="/daftar-penawaran/detail-barter">
+                  <button class="buy-btn">Lihat Detail</button>
+                </router-link>
             </div>
           </div>
         </div>
@@ -34,9 +37,12 @@
             <div class="col-8 no-margin  no-padding">
                 <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
                 <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
+                <span class="status-tag success">Sudah Dikonfirmasi</span>
                 <p class="desc-product">Deskripsi: Lorem ipsum dolor, sit amet
                   consectetur adipisicing elit.</p>
-                <button class="buy-btn">Lihat Detail</button>
+                <router-link to="/daftar-penawaran/detail-barter">
+                  <button class="buy-btn">Lihat Detail</button>
+                </router-link>
             </div>
           </div>
         </div>
@@ -75,6 +81,7 @@
 .desc-product{
   font-size: 11px;
   color: #AEAEAE;
+  margin-bottom: 5px;
 }
 
 .bid-price-product{
@@ -97,6 +104,26 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 0px;
+}
+
+.status-tag{
+  color: white;
+  padding: 3px 10px;
+  font-size: 10px;
+  border-radius: 15px;
+}
+
+.success{
+  background-color: #37C26A;
+}
+
+.fail{
+  background-color: #FF5050;
+}
+
+.pending{
+  background-color: #C5C5C5;
+  color: #5A5A5A;
 }
 
 .buy-btn{

@@ -11,8 +11,8 @@
         <div class="card p-3 border-0 shadow-sm">
           <p class="f-12 font-600 center no-border">Bergabung bersama ribuan brand ternama
             dan temukan jutaan konsumen setiap hari</p>
-            <router-link to="./merchant/signup/langkah-1">
-              <button class="border-0 shadow rounded btn btn-orange">Daftar Sekarang</button>
+            <router-link to="/merchant/login">
+              <button class="border-0 shadow rounded btn btn-orange">Masuk Sekarang</button>
             </router-link>
         </div>
       </div>
@@ -68,8 +68,8 @@
     <div class="mt-4">
       <div class="bg-buka-toko p-2 pl-4 pr-4 column">
         <p class="no-margin center open-label pb-1">Tunggu Apa lagi?<br/>Buka Toko sekarang</p>
-        <router-link to="/merchant/signup/langkah-1">
-          <button class="border-0 shadow rounded btn btn-orange">DAFTAR SEBAGAI PENJUAL</button>
+        <router-link to="/merchant/login">
+          <button class="border-0 shadow rounded btn btn-orange">Masuk Sekarang</button>
         </router-link>
       </div>
     </div>
@@ -89,7 +89,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .img-icon{
   width: auto;
   height: 52px;

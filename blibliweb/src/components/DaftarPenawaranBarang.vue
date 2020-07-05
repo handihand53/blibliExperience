@@ -16,7 +16,9 @@
                   <p class="brand-product">Penawar: <span class="brand">Handi Hermawan</span></p>
                   <p class="bid-product">Bid:
                     <span class="bid-price-product">Rp13.000.000</span></p>
-                  <button class="buy-btn">Lihat Detail</button>
+                  <router-link to="/daftar-penawaran/detail-lelang">
+                    <button class="buy-btn">Lihat Detail</button>
+                  </router-link>
               </div>
             </div>
           </div>

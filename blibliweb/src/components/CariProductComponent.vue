@@ -45,6 +45,10 @@
             Kelengkapan Paket<span class="red">*</span></label>
         <input type="text" class="form-control form-input"
         placeholder="Contoh: dus, buku panduan, kabel" id="kelengkapan" name="kelengkapan">
+        <label for="date" class="detail-label">
+            Batas Akhir Lelang<span class="red">*</span></label>
+        <input type="date" class="form-control form-input"
+        placeholder="" id="date" name="date">
         <label for="deskripsi" class="detail-label">
             Deskripsi<span class="red">*</span></label>
         <textarea class="form-control form-input"

@@ -39,12 +39,6 @@
         </div>
       </div>
     </div>
-    <div class="mt-4">
-      <div class="bg-buka-toko p-2 pl-4 pr-4 column">
-        <p class="no-margin center open-label pb-1">Belum punya akun?<br/>Ayo daftar sekarang</p>
-        <button class="border-0 shadow rounded btn btn-orange">DAFTAR SEBAGAI PENJUAL</button>
-      </div>
-    </div>
     <div class="pt-4">
       <p class="f-12 center mb-3">Kenapa harus berjualan di Blibli.com ?</p>
       <div class="bg">
@@ -134,7 +128,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import "../../style/font/font.scss";
 
 .btn-orange {

@@ -3,7 +3,7 @@
     <div class="p-2">
       <div class="card shadow-sm border-0 rounded-0">
         <div class="p-2 bg-gray-card">
-          <p class="m-0 text-title-card">Tanggal pemesanan : 04 Febuari 2019</p>
+          <p class="m-0 text-title-card">History pemesanan : 04 Febuari 2019</p>
         </div>
         <div class="p-2">
          <div class="d-flex">
@@ -20,7 +20,9 @@
               <img src="@/assets/etc/product.png" alt="" class="img-preview border">
             </div>
             <div class="col-5 column ml-auto no-gutters">
-              <b-button class="pl-5 pr-5" variant="outline-primary">Lihat</b-button>
+              <router-link to="./pemberitahuan/detail-riwayat">
+                <b-button class="pl-5 pr-5" variant="outline-primary">Lihat</b-button>
+              </router-link>
             </div>
           </div>
         </div>

@@ -158,7 +158,8 @@
           Rp.{{this.formatPrice(this.ProductDetail.currentBid - this.ProductDetail.bid)}}
         </span>
       </p>
-      <button class="rounded orange-button">Tawarkan</button>
+      <button class="rounded orange-button"
+      @click="tawarkan">Tawarkan</button>
     </b-modal>
     <Footer/>
   </div>
@@ -228,6 +229,10 @@ export default {
     },
     moveSlider(idx) {
       this.slide = idx;
+    },
+    tawarkan() {
+      window.localStorage.setItem('price', this.amount);
+      this.$router.push('/lelang/ajukan');
     },
   },
 };
@@ -413,10 +418,6 @@ tr.content-table:nth-child(odd){
 
 .border-top-none{
   border-top: none !important;
-}
-
-.table td{
-  /* border-top */
 }
 
 .bg-gray{

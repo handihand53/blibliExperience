@@ -8,47 +8,17 @@
       <label for="nama-barang">Nama Barang<span class="red">*</span></label>
       <b-form-input type="text" class="form-control" id="nama-barang"
       placeholder="Nama Barang"
-      v-model="namaBarang" trim @change="checkAll"></b-form-input>
-      <label for="brand">Brand<span class="red">*</span></label>
-      <b-form-input type="text" class="form-control" id="brand"
-      placeholder="Brand"
-      v-model="brand" trim @change="checkAll"></b-form-input>
-      <label for="harga">Harga (Rp)<span class="red">*</span></label>
-      <b-form-input type="number" min="0" class="form-control" id="harga"
-      placeholder="Harga" v-model="harga" trim @change="checkAll"></b-form-input>
-      <label for="kategori">Kategori<span class="red">*</span></label>
-      <b-form-select v-model="kategori" :options="kategoris" id="kategori"
-      @change="checkAll"></b-form-select>
-      <label for="beratBarang">Berat Barang<span class="red">*</span></label>
-      <b-form-input type="number" min="0" class="form-control" id="beratBarang"
-      placeholder="Contoh: 12 kg" v-model="beratBarang" trim @change="checkAll"></b-form-input>
-      <label for="dimensiBarang">Dimensi Barang<span class="red">*</span></label>
-      <b-form-input type="text" class="form-control" id="dimensiBarang"
-      placeholder="Contoh: 12cm x 12cm x 15cm" v-model="dimensiBarang"
-      trim @change="checkAll"></b-form-input>
-      <label for="kelengkapanBarang">Kelengkapan Barang<span class="red">*</span></label>
-      <b-form-input type="text" class="form-control" id="kelengkapanBarang"
-      placeholder="Kardus, buku petunjuk, kabel" v-model="kelengkapanBarang"
-      trim @change="checkAll"></b-form-input>
-      <label for="deskripsi">Deskripsi<span class="red">*</span></label>
-      <b-form-textarea
-        id="deskripsi"
-        v-model="deskripsi"
-        placeholder="Enter something..."
-        rows="3"
-        max-rows="6"
-        trim
-        @change="checkAll"
-      ></b-form-textarea>
-      <label for="foto" class="mt-2">Upload Foto Produk<span class="red">*</span></label>
-      <div class="input-group">
-        <div class="custom-file">
-            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-            <input @change="processFile($event)" type="file" class="custom-file-input"
-            id="inputGroupFile01"
-            aria-describedby="inputGroupFileAddon01">
-        </div>
-      </div>
+      v-model="namaBarang" trim @keyup="checkAll"></b-form-input>
+
+      <label for="nama-barang">Stok<span class="red">*</span></label>
+      <b-form-input type="number" min="0" class="form-control" id="nama-barang"
+      placeholder="Nama Barang"
+      v-model="stok" trim @keyup="checkAll"></b-form-input>
+      <label for="nama-barang">Harga<span class="red">*</span></label>
+      <b-input-group prepend="Rp.">
+        <b-form-input min="0" type="number" v-model="harga"
+        @keyup="checkAll"></b-form-input>
+      </b-input-group>
       <button @click="post" class="next-btn mt-4"
       :class="{'disable': !btnState, 'active-btn': btnState}"
       ref='btn' disabled>Jual Barang</button>
@@ -72,31 +42,20 @@ export default {
   data() {
     return {
       namaBarang: '',
-      brand: '',
       harga: '',
-      beratBarang: '',
-      dimensiBarang: '',
-      kelengkapanBarang: '',
-      deskripsi: '',
-      kategori: null,
-      kategoris: [
-        { value: null, text: 'Kategori' },
-        { value: 'pro', text: 'test' },
-      ],
+      stok: '',
       btnState: false,
     };
   },
   methods: {
     checkAll() {
+      console.log(this.namaBarang);
+      console.log(this.harga);
+      console.log(this.stock);
       if (
         this.namaBarang !== ''
-        && this.brand !== ''
         && this.harga !== ''
-        && this.beratBarang !== ''
-        && this.dimensiBarang !== ''
-        && this.kelengkapanBarang !== ''
-        && this.deskripsi !== ''
-        && this.kategori !== null
+        && this.stock !== ''
       ) {
         this.btnState = true;
         this.$refs.btn.disabled = false;
@@ -112,7 +71,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .red{
   color: red;
 }

@@ -35,14 +35,17 @@
               <div class='col-8 no-padding'>
                 <p class='title-product'>Botol Minum Aqua Mineral 300Ml</p>
                 <p class='product-price'>Rp.3.000</p>
+                <p class="location">Bliblimart A</p>
                 <p class="total-product">Jumlah</p>
                 <div class="col-12 row no-margin no-padding">
-                  <div class="no-margin no-padding col-6">
-                    <button class="stock-btn">-</button>
-                    <span class="stock-product">1</span>
-                    <button class="stock-btn">+</button>
+                  <div class="no-margin no-padding col-8">
+                    <button @click="minAmount(0)"
+                    class="stock-btn">-</button>
+                    <span class="stock-product">{{ this.amount[0] }}</span>
+                    <button @click="addAmount(0)"
+                    class="stock-btn">+</button>
                   </div>
-                  <div class="col-6 no-margin no-padding p-1">
+                  <div class="col-4 no-margin no-padding p-1">
                       <font-awesome-icon
                       class="float-right f-icon mt-auto mb-auto"
                       icon="trash"/>
@@ -67,14 +70,17 @@
               <div class='col-8 no-padding'>
                 <p class='title-product'>Botol Minum Aqua Mineral 300Ml</p>
                 <p class='product-price'>Rp.3.000</p>
+                <p class="location">Bliblimart A</p>
                 <p class="total-product">Jumlah</p>
                 <div class="col-12 row no-margin no-padding">
-                  <div class="no-margin no-padding col-6">
-                    <button class="stock-btn">-</button>
-                    <span class="stock-product">1</span>
-                    <button class="stock-btn">+</button>
+                  <div class="no-margin no-padding col-8">
+                    <button class="stock-btn"
+                    @click="minAmount(1)">-</button>
+                    <span class="stock-product">{{ this.amount[1] }}</span>
+                    <button class="stock-btn"
+                    @click="addAmount(1)">+</button>
                   </div>
-                  <div class="col-6 no-margin no-padding p-1">
+                  <div class="col-4 no-margin no-padding p-1">
                       <font-awesome-icon
                       class="float-right f-icon mt-auto mb-auto"
                       icon="trash"/>
@@ -114,14 +120,17 @@
               <div class='col-8 no-padding'>
                 <p class='title-product'>Botol Minum Aqua Mineral 300Ml</p>
                 <p class='product-price'>Rp.3.000</p>
+                <p class="location">Bliblimart A</p>
                 <p class="total-product">Jumlah</p>
                 <div class="col-12 row no-margin no-padding">
-                  <div class="no-margin no-padding col-6">
-                    <button class="stock-btn">-</button>
-                    <span class="stock-product">1</span>
-                    <button class="stock-btn">+</button>
+                  <div class="no-margin no-padding col-8">
+                    <button class="stock-btn"
+                    @click="minAmount(2)">-</button>
+                    <span class="stock-product">{{ this.amount[2] }}</span>
+                    <button class="stock-btn"
+                    @click="addAmount(2)">+</button>
                   </div>
-                  <div class="col-6 no-margin no-padding p-1">
+                  <div class="col-4 no-margin no-padding p-1">
                       <font-awesome-icon
                       class="float-right f-icon mt-auto mb-auto"
                       icon="trash"/>
@@ -146,14 +155,17 @@
               <div class='col-8 no-padding'>
                 <p class='title-product'>Botol Minum Aqua Mineral 300Ml</p>
                 <p class='product-price'>Rp.3.000</p>
+                <p class="location">Bliblimart A</p>
                 <p class="total-product">Jumlah</p>
                 <div class="col-12 row no-margin no-padding">
-                  <div class="no-margin no-padding col-6">
-                    <button class="stock-btn">-</button>
-                    <span class="stock-product">1</span>
-                    <button class="stock-btn">+</button>
+                  <div class="no-margin no-padding col-8">
+                    <button @click="minAmount(3)"
+                    class="stock-btn">-</button>
+                    <span class="stock-product">{{ this.amount[3] }}</span>
+                    <button @click="addAmount(3)"
+                    class="stock-btn">+</button>
                   </div>
-                  <div class="col-6 no-margin no-padding p-1">
+                  <div class="col-4 no-margin no-padding p-1">
                       <font-awesome-icon
                       class="float-right f-icon mt-auto mb-auto"
                       icon="trash"/>
@@ -204,6 +216,12 @@ export default {
   data() {
     return {
       isLoading: false,
+      amount: [
+        1,
+        1,
+        1,
+        1,
+      ],
     };
   },
   created() {
@@ -230,11 +248,9 @@ export default {
           xFalse += 1;
         }
       }
-
       if (xTrue === document.getElementsByClassName(shop).length) {
         document.getElementById(shop).checked = true;
       }
-
       if (xFalse === document.getElementsByClassName(shop).length) {
         document.getElementById(shop).checked = false;
       }
@@ -246,6 +262,16 @@ export default {
       // add logic checkout here
       this.isLoading = true;
       setTimeout(() => this.$router.push('/confirm'), 1000);
+    },
+    addAmount(idx) {
+      // add logic change amount here
+      this.amount.splice(idx, 1, this.amount[idx] += 1);
+    },
+    minAmount(idx) {
+      // add logic change amount here
+      if (this.amount[idx] - 1 > 0) {
+        this.amount.splice(idx, 1, this.amount[idx] -= 1);
+      }
     },
   },
 };
@@ -336,8 +362,9 @@ export default {
 }
 
 .total-product{
-    font-size: 12px;
-    color: #808080;
+  margin-bottom: 0px;
+  font-size: 12px;
+  color: #808080;
 }
 
 .stock-product{
@@ -421,6 +448,13 @@ label {
 
 img {
   max-width: 88px;
+}
+
+.location{
+  font-size: 12px;
+  margin-bottom: 0px;
+  color: rgb(0, 140, 255);
+  font-weight: 600;
 }
 
 /* The container */

@@ -6,8 +6,9 @@
     </div>
     <div class="p-2">
       <div class="card rounded-0 border shadow-sm">
-        <div class="p-2 bg-gray-card">
+        <div class="p-2 bg-gray-card d-flex justify-content-between">
           <p class="m-0 text-title-card">Tanggal pemesanan : 04 Febuari 2019</p>
+          <font-awesome-icon icon="check-circle" class="ml-auto check-icon"/>
         </div>
         <div class="">
           <div class="p-2">
@@ -68,7 +69,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .bottom-navigation{
   position: fixed;
   bottom: 0;
@@ -169,5 +170,10 @@ hr{
 
 .text-gray{
   color: rgb(121, 121, 121);
+}
+
+.check-icon{
+  color: #0095DA;
+  font-size: 18px;
 }
 </style>

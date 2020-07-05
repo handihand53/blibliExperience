@@ -1,13 +1,16 @@
 <template>
-  <div class="mb-5">
+  <div>
     <HeaderWithCart/>
-    <div class="overlay bg-gray">
-      <div class="modal-detail show-modal pt-3">
+    <div class="overlay">
+      <div class="modal-detail show-modal">
+        <div class="p-2 pl-2 detail-barang-text" id="modal-show">
+          <p class="detail-title-product">Detail Penawaran Barang</p>
+        </div>
         <div class="custom-detail-card">
-          <div class="p-2 pl-3 pr-3">
+          <div class="p-2">
             <div>
               <p class="detail-title-product float-left">Samsung A10</p>
-              <p class="tag float-right mt-1">Baru</p>
+              <p class="detail-tag-product float-right mt-1">Sudah dikonfirmasi</p>
             </div>
             <div style="clear: both;">
               <p class="brand-detail-product">
@@ -20,26 +23,14 @@
             <div class="p-3 center">
               <img src="@/assets/etc/aqua.png" alt class="detail-image-product p-3" />
             </div>
-            <div class="pl-3 pb-2">
-              <table>
-                <tr>
-                  <td class="uang-text">Estimasi Harga</td>
-                  <td class="price-detail-text pl-4">Rp15.000</td>
-                </tr>
-                <tr>
-                  <td class="uang-text">Barter Referensi</td>
-                  <td class="price-detail-text pl-4">Samsung Note 10</td>
-                </tr>
-              </table>
+            <div class="pl-3 mb-2">
+              <span class="uang-text">Bid awal</span>
+              <span class="price-detail-text ml-2">Rp13.000.000</span>
             </div>
-            <div class="profile-pemilik pt-3">
-              <div class="pt-2 pb-2 bg-white pl-3 pr-3">
-                <p class="profile-text">Profile Pemilik Barang</p>
-                <p class="name-text">Nama : <span class="detail-name">Handi Hermawan</span></p>
-                <p class="address-text">Alamat : <span class="detail-address">Jl.
-                  Juadi No.29, Kotabaru, Kec. Gondokusuman, Kota Yogyakarta,
-                  Daerah Istimewa Yogyakarta 55224</span></p>
-              </div>
+            <hr class="m-0">
+            <div class="pl-3 mb-2">
+              <span class="uang-text">Bid anda</span>
+              <span class="price-detail-text ml-2">Rp13.000.000</span>
             </div>
             <div class="about-detail-product">
               <div class="p-3">
@@ -72,16 +63,8 @@
         </div>
       </div>
     </div>
-    <div @click="ajukanBarter" class="bottom-ajukan box-shadow">
-      <div class="text-uppercase">ajukan barter</div>
-    </div>
-    <div class="overlay-loading d-flex align-items-center"
-    :class="{hide: !isLoading}">
-      <b-spinner
-      type="grow"
-      variant="primary"
-      class="ml-auto mr-auto spinner"
-      ></b-spinner>
+    <div class="bottom-buy box-shadow">
+      <div>s</div>
     </div>
     <Footer/>
   </div>
@@ -98,63 +81,27 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
+      isExpand: [
+        false,
+        false,
+      ],
     };
   },
   methods: {
-    ajukanBarter() {
-      // add logic checkout here
-      this.isLoading = true;
-      setTimeout(() => this.$router.push('/barter/pengajuan'), 1000);
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
+    expand(idx) {
+      this.isExpand.splice(idx, 1, !this.isExpand[idx]);
     },
   },
 };
 </script>
 
 <style scoped>
-.name-text{
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.detail-address{
-  color: #808080;
-}
-
-.address-text{
-  font-size: 13px;
-  text-align: justify;
-}
-
-.hide{
-  display: none!important;
-}
-
-.spinner{
-  width: 50px;
-  height: 50px;
-}
-
-.overlay-loading{
-  z-index: 200;
-  background-color: #0000006a;
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-}
-
-.detail-name{
-  color: #0077FF;
-}
-
-.profile-text{
-  font-weight: 600;
-}
-
-.profile-pemilik{
-  background-color: #F3F3F3;
+.hideIcon{
+  display: none;
 }
 
 .bottom-buy{
@@ -167,19 +114,6 @@ export default {
   padding: 10px;
 }
 
-.bottom-ajukan{
-  position: fixed;
-  bottom: 0;
-  height: 60px;
-  width: 100%;
-  text-align: center;
-  padding-top: 17px;
-  font-weight: 600;
-  color: white;
-  cursor: pointer;
-  background-color: #ff7f0f;
-}
-
 .text-detail-product{
   font-size: 12px;
   text-align: justify;
@@ -187,10 +121,6 @@ export default {
 
 .list-detail-tentang:nth-child(odd){
   background-color: rgb(224, 224, 224);
-}
-
-.bg-gray{
-    background-color: #f1f0f0;
 }
 
 .head-tentang{
@@ -203,6 +133,12 @@ p{
   margin-bottom: 0px;
 }
 
+.custom-card{
+  margin-top: 10px!important;
+  border-radius: 7px;
+  border: 0.5px solid rgba(208, 208, 208, 0.245);
+}
+
 .float-left{
   float: left;
 }
@@ -213,6 +149,15 @@ p{
 
 .about-detail-product{
   background-color: #F3F3F3;
+}
+
+.blue{
+  color: #0088FF;
+}
+
+tr td{
+  padding: 0px;
+  margin: 0px;
 }
 
 .detail-image-product{
@@ -239,7 +184,7 @@ p{
 
 .price-detail-text{
   color: #FF7600;
-  font-size: 20px;
+  font-size: 25px;
 }
 
 .detail-barang-text{
@@ -269,10 +214,10 @@ p{
 }
 
 .detail-tag-product{
-  font-size: 11px;
-  background-color: #FF7600;
+  font-size: 10px;
+  background-color: #37C26A;
   color: white;
-  padding: 2px 15px;
+  padding: 2px 7px;
   border-radius: 10px;
   margin-bottom: 0px;
 }

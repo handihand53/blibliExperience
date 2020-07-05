@@ -7,7 +7,7 @@
       <div class="col-8 no-margin  no-padding">
         <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
         <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-        <span class="status-tag success">Sudah Dikonfirmasi</span>
+        <!-- <span class="status-tag success">Sudah Dikonfirmasi</span> -->
         <p class="desc-product">Deskripsi: Lorem ipsum dolor, sit amet
           consectetur adipisicing elit.</p>
         <router-link to="/detail-pengajuan-barter">
@@ -22,7 +22,7 @@
       <div class="col-8 no-margin  no-padding">
         <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
         <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-        <span class="status-tag pending">Menunggu Konfirmasi</span>
+        <!-- <span class="status-tag pending">Menunggu Konfirmasi</span> -->
         <p class="desc-product">Deskripsi: Lorem ipsum dolor, sit amet
           consectetur adipisicing elit.</p>
         <button class="buy-btn">Lihat Detail</button>
@@ -35,7 +35,7 @@
       <div class="col-8 no-margin  no-padding">
         <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
         <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-        <span class="status-tag fail">Ditolak</span>
+        <!-- <span class="status-tag fail">Ditolak</span> -->
         <p class="desc-product">Deskripsi: Lorem ipsum dolor, sit amet
           consectetur adipisicing elit.</p>
         <button class="buy-btn">Lihat Detail</button>
@@ -193,7 +193,7 @@ p{
 .desc-product{
   font-size: 11px;
   color: #AEAEAE;
-  margin-top: 15px;
+  margin-top: 2px;
 }
 
 .brand-product{

@@ -10,7 +10,7 @@
           <div class="p-2">
             <div>
               <p class="detail-title-product float-left">Samsung A10</p>
-              <p class="detail-tag-product float-right mt-1">Sudah dikonfirmasi</p>
+              <!-- <p class="detail-tag-product float-right mt-1">Sudah dikonfirmasi</p> -->
             </div>
             <div style="clear: both;">
               <p class="brand-detail-product">
@@ -25,9 +25,57 @@
             </div>
             <div class="pl-3 mb-2">
               <span class="uang-text">Bid </span>
-              <span class="price-detail-text ml-2">Rp15.000</span>
+              <span class="price-detail-text ml-2">Rp13.000.000</span>
             </div>
             <div class="about-detail-product">
+<!--  -->
+              <div class="p-3">
+                <div class="custom-card box-shadow px-3 py-2 mb-2 mt-2">
+                  <table class="table table-borderless mb-0">
+                    <tr @click="expand(0)">
+                      <td>
+                        <span
+                          :class="{hideIcon: isExpand[0]}">
+                          <font-awesome-icon
+                          class="blue"
+                          icon="plus"
+                          />
+                        </span>
+                        <span
+                        :class="{hideIcon: !isExpand[0]}">
+                          <font-awesome-icon
+                          class="blue"
+                          icon="minus"
+                          />
+                        </span>
+                      </td>
+                      <td>
+                        <p class="title-product col-9 m-0 p-0">Samsung Note 10</p>
+                      </td>
+                    </tr>
+                  </table>
+                  <div
+                  :class="{hideIcon: !isExpand[0]}">
+                    <hr class="my-2">
+                    <div class="row no-gutters">
+                      <div class="col-3 no-margin no-padding">
+                        <img src="@/assets/etc/aqua.png" alt="" class="img-product2">
+                      </div>
+                      <div class="col-9 no-margin no-padding">
+                        <p class="brand-product">Brand: <span class="brand">Samsung</span></p>
+                        <p class="brand-product">Status:
+                          <span class="status-tag success">Baru</span></p>
+                        <p class="brand-product">Estimasi Harga:
+                          <span class="price">Rp{{formatPrice(150000)}}</span></p>
+                        <router-link to="/detail-pengajuan-barter/12398123">
+                          <button class="buy-btn mt-1">Lihat Detail</button>
+                        </router-link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+<!--  -->
               <div class="p-3">
                 <div class="box-shadow mb-2">
                   <div class="head-tentang">
@@ -74,10 +122,30 @@ export default {
     HeaderWithCart,
     Footer,
   },
+  data() {
+    return {
+      isExpand: [
+        false,
+        false,
+      ],
+    };
+  },
+  methods: {
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
+    expand(idx) {
+      this.isExpand.splice(idx, 1, !this.isExpand[idx]);
+    },
+  },
 };
 </script>
 
 <style scoped>
+.hideIcon{
+  display: none;
+}
 
 .bottom-buy{
   height: 60px;
@@ -108,6 +176,12 @@ p{
   margin-bottom: 0px;
 }
 
+.custom-card{
+  margin-top: 10px!important;
+  border-radius: 7px;
+  border: 0.5px solid rgba(208, 208, 208, 0.245);
+}
+
 .float-left{
   float: left;
 }
@@ -118,6 +192,15 @@ p{
 
 .about-detail-product{
   background-color: #F3F3F3;
+}
+
+.blue{
+  color: #0088FF;
+}
+
+tr td{
+  padding: 0px;
+  margin: 0px;
 }
 
 .detail-image-product{

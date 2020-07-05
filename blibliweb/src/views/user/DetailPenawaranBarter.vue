@@ -2,7 +2,14 @@
   <div class="mb-5">
     <HeaderWithCart/>
     <div class="overlay bg-gray">
-      <div class="modal-detail show-modal pt-3">
+      <div class="modal-detail show-modal">
+        <div class="bg-white d-flex justify-content-between p-2">
+          <p class="brand-detail-product">Kode Transaksi:
+            <span class="blue-brand font-weight-bold">KDSW-e2314DS-55</span>
+          </p>
+          <span class="status-tag success">Sudah Dikonfirmasi</span>
+        </div>
+        <p class="fs-12 p-2">Barang yang didapatkan</p>
         <div class="custom-detail-card">
           <div class="p-2 pl-3 pr-3">
             <div>
@@ -26,20 +33,67 @@
                   <td class="uang-text">Estimasi Harga</td>
                   <td class="price-detail-text pl-4">Rp15.000</td>
                 </tr>
-                <tr>
-                  <td class="uang-text">Barter Referensi</td>
-                  <td class="price-detail-text pl-4">Samsung Note 10</td>
-                </tr>
               </table>
             </div>
-            <div class="profile-pemilik pt-3">
-              <div class="pt-2 pb-2 bg-white pl-3 pr-3">
-                <p class="profile-text">Profile Pemilik Barang</p>
-                <p class="name-text">Nama : <span class="detail-name">Handi Hermawan</span></p>
-                <p class="address-text">Alamat : <span class="detail-address">Jl.
-                  Juadi No.29, Kotabaru, Kec. Gondokusuman, Kota Yogyakarta,
-                  Daerah Istimewa Yogyakarta 55224</span></p>
+            <div class="about-detail-product">
+              <div class="pt-3 pl-3 pr-3">
+                <div class="box-shadow mb-2">
+                  <div class="head-tentang">
+                    <p class="text-detail-product">Tentang Produk</p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">
+                      Status Barang :
+                      <span class="tag">Baru</span>
+                    </p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">Lama Pemakaian : 3 Tahun 6 bulan</p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">
+                      Deskripsi barang : Lorem ipsum dolor
+                      sit amet consectetur adipisicing elit. Neque reiciendis eos, doloribus
+                      veniam nobis praesentium nesciunt, voluptatum voluptas corporis ipsam
+                      exercitationem fugit perferendis quisquam ab voluptates voluptate doloremque
+                      quibusdam accusamus.
+                    </p>
+                  </div>
+                </div>
+                <div class="separator fs-12 mt-2">Barter dengan
+                  <font-awesome-icon
+                    class="ml-1 exchange"
+                    icon="exchange-alt"/>
+                </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <p class="fs-12 p-2">Barang yang anda tawarkan</p>
+        <div class="custom-detail-card">
+          <div class="p-2 pl-3 pr-3">
+            <div>
+              <p class="detail-title-product float-left">Samsung A10</p>
+              <p class="tag float-right mt-1">Baru</p>
+            </div>
+            <div style="clear: both;">
+              <p class="brand-detail-product">
+                Brand:
+                <span class="blue-brand">Samsung</span>
+              </p>
+            </div>
+          </div>
+          <div class="overflow-y">
+            <div class="p-3 center">
+              <img src="@/assets/etc/aqua.png" alt class="detail-image-product p-3" />
+            </div>
+            <div class="pl-3 pb-2">
+              <table>
+                <tr>
+                  <td class="uang-text">Estimasi Harga</td>
+                  <td class="price-detail-text pl-4">Rp15.000</td>
+                </tr>
+              </table>
             </div>
             <div class="about-detail-product">
               <div class="p-3">
@@ -72,17 +126,6 @@
         </div>
       </div>
     </div>
-    <div @click="ajukanBarter" class="bottom-ajukan box-shadow">
-      <div class="text-uppercase">ajukan barter</div>
-    </div>
-    <div class="overlay-loading d-flex align-items-center"
-    :class="{hide: !isLoading}">
-      <b-spinner
-      type="grow"
-      variant="primary"
-      class="ml-auto mr-auto spinner"
-      ></b-spinner>
-    </div>
     <Footer/>
   </div>
 </template>
@@ -96,22 +139,14 @@ export default {
     HeaderWithCart,
     Footer,
   },
-  data() {
-    return {
-      isLoading: false,
-    };
-  },
-  methods: {
-    ajukanBarter() {
-      // add logic checkout here
-      this.isLoading = true;
-      setTimeout(() => this.$router.push('/barter/pengajuan'), 1000);
-    },
-  },
 };
 </script>
 
 <style scoped>
+.exchange{
+  transform: rotate(90deg);
+}
+
 .name-text{
   font-size: 13px;
   font-weight: 500;
@@ -126,23 +161,8 @@ export default {
   text-align: justify;
 }
 
-.hide{
-  display: none!important;
-}
-
-.spinner{
-  width: 50px;
-  height: 50px;
-}
-
-.overlay-loading{
-  z-index: 200;
-  background-color: #0000006a;
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
+.fs-12{
+  font-size: 12px;
 }
 
 .detail-name{
@@ -303,7 +323,7 @@ p{
 
 .status-tag{
   color: white;
-  padding: 3px 10px;
+  padding: 1px 10px;
   font-size: 10px;
   border-radius: 15px;
 }
@@ -371,16 +391,16 @@ p{
 }
 
 .buy-btn{
-    width: 100%;
-    background-color: rgb(0, 128, 255);
-    padding-top: 6px;
-    padding-bottom: 6px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-weight: 500;
-    transition: all 1s;
-    font-size: 13px;
+  width: 100%;
+  background-color: rgb(0, 128, 255);
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: 500;
+  transition: all 1s;
+  font-size: 13px;
 }
 
 .buy-btn:hover {
@@ -439,6 +459,26 @@ p{
 .active{
     border-bottom: 2px #0095DA solid;
     color: #0095DA;
+}
+
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.separator::before, .separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 0.8px solid rgb(148, 148, 148);
+}
+
+.separator::before {
+    margin-right: .25em;
+}
+
+.separator::after {
+    margin-left: .25em;
 }
 
 </style>

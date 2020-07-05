@@ -17,7 +17,9 @@
               <img src="@/assets/etc/product.png" alt="" class="img-preview border">
             </div>
             <div class="col-5 column ml-auto no-gutters">
-              <b-button class="pl-5 pr-5" variant="outline-primary">Lihat</b-button>
+              <router-link to="./pemberitahuan/detail-pesanan">
+                <b-button class="pl-5 pr-5" variant="outline-primary">Lihat</b-button>
+              </router-link>
             </div>
           </div>
         </div>

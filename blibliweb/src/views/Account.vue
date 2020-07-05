@@ -51,15 +51,15 @@
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>
-          <router-link to="/jual" class="alink">
+          <!-- <router-link to="/jual" class="alink">
             <div class="list-menu">
               Jual di Blibli
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
-          </router-link>
-          <router-link to="/cari-barang" class="alink">
+          </router-link> -->
+          <router-link to="/lelang" class="alink">
             <div class="list-menu">
-              Cari Barang
+              Lelang
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>

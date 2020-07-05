@@ -5,14 +5,14 @@
       <div>
         <div class="background-white border-bottom box-shadow">
           <div class="p-2">
-            <small style="color: #AEAEAE; font-weight: 600;">Daftar Pengajuan</small>
+            <small style="color: #AEAEAE; font-weight: 600;">Daftar Pengajuan Masuk</small>
           </div>
           <div class="pl-2">
             <span @click="pengajuanBarter" class="pengajuan-barter"
-            :class="{active: isActive}">Pengajuan Barter</span>
+            :class="{active: isActive}">Barter</span>
             <span @click="pengajuanBarang" class="pengajuan-barang"
             :class="{active: !isActive}"
-            id="pengajuanBarang">Pengajuan Barang</span>
+            id="pengajuanBarang">Lelang</span>
           </div>
         </div>
         <component :is="currentComponent"></component>
@@ -44,12 +44,10 @@ export default {
     pengajuanBarter() {
       this.isActive = true;
       this.currentComponent = DaftarPengajuanBarter;
-      window.history.pushState({ page: 1 }, '', '#/daftar-pengajuan?page=pengajuanBarter');
     },
     pengajuanBarang() {
       this.isActive = false;
       this.currentComponent = DaftarPengajuanBarang;
-      window.history.pushState({ page: 1 }, '', '#/daftar-pengajuan?page=pengajuanBarang');
     },
   },
 };

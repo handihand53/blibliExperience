@@ -2,20 +2,80 @@
   <div>
     <ConfirmHeader/>
     <div class="pl-3 pt-2">
-      <p class="address-label"><font-awesome-icon icon="map-marker-alt" /> Alamat Pengiriman</p>
+      <p class="address-label"><font-awesome-icon icon="shipping-fast" />
+      Pilih metode pengambilan</p>
     </div>
     <div class="pl-3 pr-3">
-      <div class="cst-card pl-3 pr-3 pt-2">
-        <p class="name-text">Handi Hermawan</p>
-        <p class="address-text">Alamat :
-          <span class="color-gray">Jl. Juadi No.29, Kotabaru, Kec.
-          Gondokusuman, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55224</span>
-        </p>
-        <p class="name-text">0821203585645</p>
+      <div class="cst-card pl-3 pr-3 py-2">
+        <select class="form-control"
+        name="method"
+        id="method"
+        @change="changeMethod"
+        ref="methode">
+          <option value=null>- Pilih metode pengambilan -</option>
+          <option value=0>Ambil di Bliblimart</option>
+          <option value=1>Delivery</option>
+        </select>
+      </div>
+    </div>
+    <div class="pl-3 pr-3">
+      <div :class="{hideSection: isDelivery}">
+        <div class="d-flex justify-content-between">
+          <p class="address-label pt-2">
+          <font-awesome-icon icon="map-marker-alt" /> Alamat Pengiriman</p>
+          <p class="change-label pt-2" v-b-modal.modal-sm>ubah</p>
+        </div>
+        <div class="cst-card pl-3 pr-3 pt-2">
+          <p class="name-text">Handi Hermawan</p>
+          <p class="address-text">Alamat :
+            <span class="color-gray">Jl. Juadi No.29, Kotabaru, Kec.
+            Gondokusuman, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55224</span>
+          </p>
+          <p class="name-text">0821203585645</p>
+        </div>
       </div>
       <div class="cst-card mt-3 pt-2">
         <p class="border-bottom shop-name pl-3 pb-3 pt-1">Nama
           ssadTokas dkoasjd oajsd jas;joasjd oo</p>
+        <div class="col-12 row no-margin no-padding">
+          <div class="pl-3 col-4 no-padding">
+            <img src="@/assets/etc/aqua.png" alt="aqua"
+            class="img-product ml-auto mr-auto" >
+          </div>
+          <div class="col-8 no-padding pr-3">
+            <p class="product-name">Botol minum aqua mineral 300 ML</p>
+            <p class="total-product">Jumlah: 1</p>
+            <p class="price-product">Total Harga <span class="price">Rp3.000</span></p>
+          </div>
+        </div>
+        <hr>
+        <div class="col-12 row no-margin no-padding">
+          <div class="pl-3 col-4 no-padding">
+            <img src="@/assets/etc/aqua.png" alt="aqua"
+            class="img-product ml-auto mr-auto" >
+          </div>
+          <div class="col-8 no-padding pr-3">
+            <p class="product-name">Botol minum aqua mineral 300 ML</p>
+            <p class="total-product">Jumlah: 1</p>
+            <p class="price-product">Total Harga <span class="price">Rp3.000</span></p>
+          </div>
+        </div>
+      </div>
+      <div class="cst-card mt-3 pt-2">
+        <p class="border-bottom shop-name pl-3 pb-3 pt-1">Nama
+          ssadTokas dkoasjd oajsd jas;joasjd oo</p>
+        <div class="col-12 row no-margin no-padding">
+          <div class="pl-3 col-4 no-padding">
+            <img src="@/assets/etc/aqua.png" alt="aqua"
+            class="img-product ml-auto mr-auto" >
+          </div>
+          <div class="col-8 no-padding pr-3">
+            <p class="product-name">Botol minum aqua mineral 300 ML</p>
+            <p class="total-product">Jumlah: 1</p>
+            <p class="price-product">Total Harga <span class="price">Rp3.000</span></p>
+          </div>
+        </div>
+        <hr>
         <div class="col-12 row no-margin no-padding">
           <div class="pl-3 col-4 no-padding">
             <img src="@/assets/etc/aqua.png" alt="aqua"
@@ -78,6 +138,37 @@
       class="ml-auto mr-auto spinner"
       ></b-spinner>
     </div>
+    <b-modal id="modal-sm" size="sm" centered
+    body-class="mod-bod"
+    title="Pilih Lokasi"  @ok="confirmLocation">
+        <p class="address-text2"
+        :class="{'bg-active': this.isChoosen[0]}"
+        @click="changeLocation(0)">
+          <span class="color-gray">1. Jl. Juadi No.29, Kotabaru, Kec.
+          Gondokusuman, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55224</span>
+          <font-awesome-icon icon="check-circle" class="dp-none"
+          :class="{choosen: this.isChoosen[0]}"/>
+        </p>
+        <hr>
+        <p class="address-text2"
+        @click="changeLocation(1)"
+        :class="{'bg-active': this.isChoosen[1]}"
+        >
+          <span class="color-gray">2. Jl. Juadi No.29, Kotabaru, Kec.
+          Gondokusuman, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55224</span>
+          <font-awesome-icon icon="check-circle" class="dp-none"
+          :class="{choosen: this.isChoosen[1]}"/>
+        </p>
+        <hr>
+        <p class="address-text2"
+        :class="{'bg-active': this.isChoosen[2]}"
+        @click="changeLocation(2)">
+          <span class="color-gray">3. Jl. Juadi No.29, Kotabaru, Kec.
+          Gondokusuman, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55224</span>
+          <font-awesome-icon icon="check-circle" class="dp-none"
+          :class="{choosen: this.isChoosen[2]}"/>
+        </p>
+    </b-modal>
   </div>
 </template>
 
@@ -91,6 +182,12 @@ export default {
   data() {
     return {
       isLoading: false,
+      isDelivery: false,
+      isChoosen: [
+        true,
+        false,
+        false,
+      ],
     };
   },
   methods: {
@@ -98,6 +195,24 @@ export default {
       // add logic checkout here
       this.isLoading = true;
       setTimeout(() => this.$router.push('/pay'), 1000);
+    },
+    confirmLocation() {
+      console.log('ok');
+    },
+    changeMethod() {
+      if (this.$refs.methode.value === '1') {
+        this.isDelivery = true;
+      } else {
+        this.isDelivery = false;
+      }
+    },
+    changeLocation(idx) {
+      this.isChoosen.splice(idx, 1, true);
+      for (let i = 0; i < this.isChoosen.length; i += 1) {
+        if (i !== idx) {
+          this.isChoosen.splice(i, 1, false);
+        }
+      }
     },
   },
 };
@@ -111,8 +226,16 @@ export default {
   box-shadow: 0px 0px 13px -9px rgba(0, 0, 0, 1);
 }
 
+.hideSection{
+  display: none;
+}
+
 .mb-cst{
   margin-bottom: 75px;
+}
+
+.mod-bod{
+  padding: 0px!important;
 }
 
 .jumlah-total-text{
@@ -123,6 +246,15 @@ export default {
 .address-label{
   color: #737373;
   font-size: 14px;
+}
+
+.change-label{
+  color: rgb(0, 157, 255);
+  font-size: 12px;
+}
+
+.dp-none{
+  display: none;
 }
 
 .btn-checkout{
@@ -147,6 +279,14 @@ export default {
 .spinner{
   width: 50px;
   height: 50px;
+}
+
+.choosen{
+  color: rgb(0, 149, 255);
+  float: right;
+  top: 0;
+  right: 20px;
+  display: block;
 }
 
 .overlay-loading{
@@ -262,6 +402,11 @@ export default {
   font-size: 14px;
   font-weight: 600;
   text-align: justify;
+}
+
+.address-text2{
+  font-size: 14px;
+  font-weight: 600;
 }
 
 p{

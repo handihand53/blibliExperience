@@ -8,7 +8,7 @@
               <font-awesome-icon icon="chevron-left" />
             </div>
             <div class="float-right sub-title-text">
-              Konfirmasi Pengajuan Cari Barang
+              Konfirmasi Lelang
             </div>
           </div>
         </div>

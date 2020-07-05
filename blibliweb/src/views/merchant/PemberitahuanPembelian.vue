@@ -50,7 +50,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .text-gray{
   color: rgb(121, 121, 121);
 }

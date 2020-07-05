@@ -49,9 +49,18 @@
       <small class="text-suggest">Format foto yang diperbolehkan : png,
       jpeg, jpg</small><br>
       <small class="text-suggest">Ukuran maks per foto adalah 5 mb</small><br>
-      <button class="ajukan-btn text-uppercase">Ajukan</button>
+      <button class="ajukan-btn text-uppercase"
+      @click="ajukanBarter">Ajukan</button>
     </div>
     <Footer/>
+    <div class="overlay-loading d-flex align-items-center"
+    :class="{hide: !isLoading}">
+      <b-spinner
+      type="grow"
+      variant="primary"
+      class="ml-auto mr-auto spinner"
+      ></b-spinner>
+    </div>
   </div>
 </template>
 
@@ -64,12 +73,43 @@ export default {
     HeaderWithCart,
     Footer,
   },
+  data() {
+    return {
+      isLoading: false,
+    };
+  },
+  methods: {
+    ajukanBarter() {
+      // add logic checkout here
+      this.isLoading = true;
+      setTimeout(() => this.$router.push('/barter/pengajuan/berhasil'), 1000);
+    },
+  },
 };
 </script>
 
 <style scoped>
 .bg-gray{
   background-color: #f1f0f0;
+}
+
+.hide{
+  display: none!important;
+}
+
+.spinner{
+  width: 50px;
+  height: 50px;
+}
+
+.overlay-loading{
+  z-index: 200;
+  background-color: #0000006a;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
 }
 
 .red{
