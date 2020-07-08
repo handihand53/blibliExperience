@@ -4,7 +4,7 @@
       <div class="row col-12 no-padding no-margin pt-2 pb-2 bg-bl shadow-box">
         <div class="col-12 no-padding mt-mb-auto">
           <div class="ml-2 mr-2 row">
-            <div v-on:click="back" class="left-arrow">
+            <div v-on:click="back" class="left-arrow" id="back">
               <font-awesome-icon icon="chevron-left" />
             </div>
             <div class="sub-title-text">

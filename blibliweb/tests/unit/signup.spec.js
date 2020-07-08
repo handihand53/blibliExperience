@@ -8,7 +8,11 @@ jest.mock('axios', () => ({
 
 describe('Signup.vue', () => {
   it('Signup page render correctly', () => {
-    const wrapper = shallowMount(Signup);
+    const wrapper = shallowMount(Signup, {
+      methods: {
+        checkLoginUser: () => {},
+      },
+    });
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -18,7 +22,7 @@ describe('Signup.vue', () => {
     expect(wrapper.vm.isContentVisible1).toBe(false);
     wrapper.find('#pass2').trigger('click');
     expect(wrapper.vm.isContentVisible1).toBe(false);
-    // wrapper.vm.showPassword('password2');
+    // wrapper.vm.showPassword('password1');
     // expect(wrapper.vm.isContentVisible2).toBe(false);
   });
 
@@ -50,6 +54,7 @@ describe('Signup.vue', () => {
     });
     wrapper.vm.isAllFormFill();
     expect(wrapper.vm.isDisable).toBe(false);
+    expect(wrapper.vm.passwordMsg1).toBe('');
     expect(wrapper.vm.$refs.btn.disabled).toBe(false);
     wrapper.find('button').trigger('click');
     expect(wrapper.vm.isLoading).toBe(true);
