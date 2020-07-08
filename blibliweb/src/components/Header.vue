@@ -7,15 +7,66 @@
         </div>
         <div class="col-3 no-padding mt-mb-auto">
           <div class="right">
-            <router-link to="/login">
+            <router-link to="/login" v-if="this.user === null">
               <font-awesome-icon icon="sign-in-alt"/> Masuk
+            </router-link>
+            <router-link to="/profile" v-else>
+              Hi, {{ getFirstName }}
             </router-link>
           </div>
         </div>
       </div>
+      <button @click="fetchResults">klik</button>
     </nav>
   </header>
 </template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      search: '',
+      slide: 0,
+      dismissSecs: 3,
+      dismissCountDown: 0,
+      user: null,
+      dataId: '',
+      dataToken: '',
+    };
+  },
+  async created() {
+    await getUserData();
+  },
+  methods: {
+    async getUserData() {
+      this.dataId = this.$cookie.get('dataId');
+      this.dataToken = this.$cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${this.dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${this.dataToken}`,
+            },
+        })
+        .then((response) => {
+          this.user = response.data;
+          console.log(this.user);
+        })
+        .catch((resp) => {
+          console.log(resp);
+        });
+    },
+  },
+  computed: {
+    getFirstName() {
+      const name = this.user.data.userName.split(' ');
+      return name[0];
+    },
+  },
+};
+</script>
 
 <style scoped lang="scss">
 @import "../style/font/font.scss";

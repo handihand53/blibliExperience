@@ -4,9 +4,9 @@
         <div>
             <div class="center mt-3">
                 <img src="@/assets/logo/signature.png" alt="" class="icon-signature">
-                <p class="name-text">Handi Hermawan</p>
+                <p class="name-text">{{ nama }}</p>
                 <p class="member-text">Member</p>
-                <p class="date-text">Sejak Nov 2010</p>
+                <p class="date-text">Sejak {{ this.getMonthYear }}</p>
             </div>
             <div class="p-3">
                 <!-- nama -->
@@ -14,22 +14,23 @@
                     Nama Lengkap<span class="red">*</span></label>
                 <input type="text" class="form-control form-input"
                 placeholder="Nama Lengkap" id="name" name="name"
-                value="Handi Hermawan">
+                :value="nama">
                 <!-- email -->
                 <label for="email" class="detail-label">
                     Email Login<span class="red">*</span></label>
                 <input type="text" class="form-control form-input" id="email" name="email"
-                disabled value="handihand53@gmail.com">
+                disabled v-model="email">
                 <!-- tanggal -->
                 <label for="day" class="detail-label">
                     Tanggal Lahir<span class="red">*</span></label>
                 <input type="date" class="form-control form-input"
-                placeholder="" id="date" name="date">
+                v-model="tglLahir" id="date" name="date">
                 <!-- handphone -->
                 <label for="nohp" class="detail-label">
                     Nomor Handphone<span class="red">*</span></label>
                 <input type="number" min="0" class="form-control"
-                placeholder="Nomor Telepon" id="nohp" name="nohp">
+                placeholder="Nomor Telepon" id="nohp" name="nohp"
+                v-model="noTlp">
                 <small class="text-suggest">Contoh: 082120393939</small><br>
                 <!-- kenis kelamin -->
                 <label for="jk" class="detail-label">
@@ -44,16 +45,24 @@
                     <button class="change-password-btn">Ubah Kata Sandi</button>
                 </router-link><br>
                 <button class="save-btn">Simpan</button>
-                <full-calendar :events="events"></full-calendar>
             </div>
         </div>
         <Footer/>
+        <div class="overlay-loading d-flex align-items-center"
+      :class="{hide: !isLoading}">
+        <b-spinner
+        type="grow"
+        variant="primary"
+        class="ml-auto mr-auto spinner"
+        ></b-spinner>
+        </div>
     </div>
 </template>
 
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
 
 export default {
   name: 'Profile',
@@ -61,12 +70,80 @@ export default {
     HeaderWithCart,
     Footer,
   },
+  data() {
+    return {
+      nama: '',
+      email: '',
+      tglLahir: null,
+      noTlp: '',
+      gender: null,
+      createdAt: null,
+      isLoading: true,
+      monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+      ],
+    };
+  },
+  created() {
+    // melakukan check apakah user masih login atau tidak
+    // jika user masih login, maka akan dilempar ke halaman utama
+    const dataId = this.$cookie.get('dataId');
+    const dataToken = this.$cookie.get('dataToken');
+    axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+      {
+        headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+      })
+      .then((response) => {
+        if (response.data === null) {
+          this.$router.push('/');
+        }
+
+        this.isLoading = false;
+        this.nama = response.data.data.userName;
+        this.email = response.data.data.userEmail;
+        this.gender = response.data.data.userGender;
+        this.noTlp = response.data.data.userPhoneNumber;
+        this.tglLahir = response.data.data.userBirthDate;
+        this.createdAt = response.data.data.userCreatedAt;
+      }).catch(() => {
+        this.$router.push('/');
+        this.isLoading = false;
+      });
+  },
+  computed: {
+    getMonthYear() {
+      const theDate = new Date(this.createdAt);
+      return `${this.monthNames[theDate.getMonth()]} ${theDate.getFullYear()}`;
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 
 $red: #FF0000;
+
+.overlay-loading{
+  z-index: 200;
+  background-color: #0000006a;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+
+.hide{
+  display: none!important;
+}
+
+.spinner{
+  width: 50px;
+  height: 50px;
+}
 
 .save-btn{
     border: none;

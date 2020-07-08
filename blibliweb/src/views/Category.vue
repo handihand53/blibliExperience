@@ -3,11 +3,11 @@
       <PlainHeader/>
       <div class="p-3">
         <div class="cst-card pl-3 pt-2 pr-3 pb-2 mb-2"
-        v-for='category in CategoriesDetails.data'
-        v-bind:key='category.categoryId'>
-         <router-link :to='"/c/"+category.categoryName'>
+        v-for='category in CategoriesDetails'
+        v-bind:key='category'>
+         <router-link :to='"/c/"+category'>
           <div>
-            <span>{{category.categoryName}}
+            <span class="text-capitalize">{{changeFormatText(category)}}
               <font-awesome-icon
                 class="float-right f-icon mt-auto mb-auto"
                 icon="angle-right"/>
@@ -25,7 +25,7 @@
 import PlainHeader from '@/components/PlainHeader.vue';
 import Footer from '@/components/Footer.vue';
 import BottomNavigation from '@/components/BottomNavigation.vue';
-import { mapGetters, mapActions } from 'vuex';
+import axios from 'axios';
 
 export default {
   name: 'Category',
@@ -35,31 +35,26 @@ export default {
     BottomNavigation,
   },
   created() {
-    const store = this.$store;
-    store.dispatch('productData/getCategory');
+    axios.get(`http://localhost:${this.port}/experience/api/products/enums/category`)
+      .then((response) => {
+        this.category = response.data.data.categories;
+      });
   },
   data() {
     return {
       isRotate: false,
       isActive: false,
+      category: null,
     };
   },
   computed: {
-    ...mapGetters([
-      'productData/categoryList',
-    ]),
     CategoriesDetails() {
-      const store = this.$store;
-      return store.getters['productData/categoryList'];
+      return this.category;
     },
   },
   methods: {
-    ...mapActions([
-      'productData/getCategory',
-    ]),
-    changeArrow() {
-      this.isRotate = !this.isRotate;
-      this.isActive = this.isRotate;
+    changeFormatText(category) {
+      return category.toLowerCase();
     },
   },
 };

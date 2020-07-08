@@ -1,40 +1,32 @@
 module.exports = {
-    root: true,
-    env: {
-      node: true,
-    },
-    extends: [
-      'plugin:vue/essential',
-      '@vue/airbnb',
-    ],
-    rules: {
-      'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-      'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-      'linebreak-style' : 0,
-      'no-useless-escape': 2,
-      "import/extensions": [
-        "error",
-        "ignorePackages",
-        {
-          "js": "never",
-          "jsx": "never",
-          "ts": "never",
-          "tsx": "never"
-        }
-     ]
-    },
-    parserOptions: {
-      parser: 'babel-eslint',
-    },
-    overrides: [
-      {
-        files: [
-          '**/__tests__/*.{j,t}s?(x)',
-          '**/tests/unit/**/*.spec.{j,t}s?(x)',
-        ],
-        env: {
-          jest: true,
-        },
+  root: true,
+  env: {
+    node: true,
+  },
+  extends: [
+    'plugin:vue/essential',
+    '@vue/airbnb',
+  ],
+  rules: {
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'linebreak-style': 0,
+    'no-useless-escape': 2,
+    'import/extensions': 'off',
+    'import/no-unresolved': 'off',
+  },
+  parserOptions: {
+    parser: 'babel-eslint',
+  },
+  overrides: [
+    {
+      files: [
+        '**/__tests__/*.{j,t}s?(x)',
+        '**/tests/unit/**/*.spec.{j,t}s?(x)',
+      ],
+      env: {
+        jest: true,
       },
-    ],
-  };
+    },
+  ],
+};

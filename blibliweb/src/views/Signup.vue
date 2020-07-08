@@ -17,7 +17,7 @@
               <div class="invalid-feedback" :class="{show:emailIsFalse}">
                 {{ emailMsg }}
               </div>
-              <span @click="showPassword('password1')">
+              <span @click="showPassword('password1')" id="pass1">
                 <div>
                   <font-awesome-icon
                     class="password-option"
@@ -36,7 +36,7 @@
                 :class="{show:passwordIsFalse1}">
                   {{ passwordMsg1 }}
                 </div>
-                <span @click="showPassword('password2')">
+                <span @click="showPassword('password2')" id="pass2">
                   <div>
                     <font-awesome-icon
                       class="password-option2"
@@ -72,16 +72,25 @@
             ref='btn' disabled>Daftar</button>
             </div>
             <p class="center redirect-text">Sudah punya akun ?
-                <router-link to="/login">Masuk disini</router-link>
+              <router-link to="/login">Masuk disini</router-link>
             </p>
         </div>
         <Footer/>
+      <div class="overlay-loading d-flex align-items-center"
+      :class="{hide: !isLoading}">
+        <b-spinner
+        type="grow"
+        variant="primary"
+        class="ml-auto mr-auto spinner"
+        ></b-spinner>
+      </div>
     </div>
 </template>
 
 <script>
 import PlainHeader from '@/components/PlainHeader.vue';
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
 
 export default {
   name: 'Login',
@@ -110,6 +119,7 @@ export default {
       syaratDanKetentuan: false,
       isDisable: true,
       isDisabled: false,
+      isLoading: false,
     };
   },
   methods: {
@@ -209,6 +219,31 @@ export default {
       this.isAllFormFill();
     },
     signUp() {
+      this.isLoading = true;
+
+      const payload = {
+        userEmail: this.email,
+        userName: this.nama,
+        userPassword: this.password1,
+      };
+
+      const login = {
+        userEmail: this.email,
+        userPassword: this.password1,
+      };
+
+      axios.post(`http://localhost:${this.port}/experience/api/auth/register`, payload)
+        .then(() => {
+          axios.post(`http://localhost:${this.port}/experience/api/auth/login`, login)
+            .then((response) => {
+              this.$cookie.set('dataId', response.data.userId, 1); // set cookies dengan expired 1 hari
+              this.$cookie.set('dataToken', response.data.accessToken, 1); // set cookies dengan expired 1 hari
+              setTimeout(() => this.$router.push('/'), 1000);
+            });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
   },
 };
@@ -239,12 +274,31 @@ export default {
     margin-top: 19px;
 }
 
+.overlay-loading{
+  z-index: 200;
+  background-color: #0000006a;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+
+.hide{
+  display: none!important;
+}
+
+.spinner{
+  width: 50px;
+  height: 50px;
+}
+
 .password-option{
-    position: absolute;
-    right: 40px;
-    margin-top: 30px;
-    color: #808080;
-    visibility: hidden;
+  position: absolute;
+  right: 40px;
+  margin-top: 30px;
+  color: #808080;
+  visibility: hidden;
 }
 
 .active{
@@ -265,6 +319,7 @@ export default {
 
 .daftar-btn{
     // width: 311px;
+    background-color: #c9c4c4;
     margin-left: 25px;
     margin-right: 25px;
     width: 100%;

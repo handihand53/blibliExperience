@@ -10,21 +10,44 @@
           <span class="text-bold">Menunggu Konfirmasi</span></p>
       </div>
       <div class="px-3 mt-3">
-        <span class="text-detail">Produk yang dibarter</span>
+        <span class="text-detail">Produk yang ditawarkan</span>
         <div class="bg-white p-3">
-          <p class="status-produk m-0">Terkirim</p>
           <div>
-            <hr class="m-0 my-1">
             <div class="row">
               <div class="col-4 m-0 p-0">
                 <img src="@/assets/etc/aqua.png" alt="" class="img-product m-auto">
               </div>
               <div class="col-8 m-0 p-0">
                 <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-                <p class="price-product">Rp.13.000</p>
-                <p class="stock-product">Jumlah: 1</p>
+                <span class="tag-status blue">Baru</span>
+                <p class="desc-product">Deskripsi: laskdjkla jdlaskj l</p>
               </div>
             </div>
+          </div>
+        </div>
+        <div class="bg-white mt-3">
+          <div class="header-desc no-margin no-padding">
+            <p class="desc-box p-2">Detail Barang</p>
+          </div>
+          <div class="desc pl-3 pr-3 pb-2">
+            <table class="table table-striped border-0 m-0 p-0">
+              <tr class="content-table">
+                <td>Lama pemakaian</td>
+                <td>-</td>
+              </tr>
+              <tr class="content-table">
+                <td>Kelengkapan paket</td>
+                <td>Dus, Buku panduan, headset, charger</td>
+              </tr>
+              <tr class="content-table">
+                <td>Dimensi</td>
+                <td>15 Inch</td>
+              </tr>
+              <tr class="content-table">
+                <td>Berat</td>
+                <td>15 kg</td>
+              </tr>
+            </table>
           </div>
         </div>
       </div>
@@ -33,34 +56,51 @@
           class="ml-1 exchange"
           icon="exchange-alt"/>
       </div>
-      <div class="px-3">
-        <span class="text-detail">Pembayaran</span>
+       <div class="px-3 mt-3">
+        <span class="text-detail"></span>
         <div class="bg-white p-3">
-          <p class="m-0 pembayaran">
-            <span class="text-detail left-side">Total Pembayaran:</span>
-            <span class="text-detail right-side orange">Rp 107,000</span>
-          </p>
-          <p class="m-0 pembayaran">
-            <span class="text-detail left-side">Total Belanja:</span>
-            <span class="text-detail right-side orange">Rp 107,000</span>
-          </p>
-          <p class="m-0 pembayaran">
-            <span class="text-detail left-side">Biaya Pengiriman:</span>
-            <span class="text-detail right-side">gratis</span>
-          </p>
-          <p class="m-0 pembayaran">
-            <span class="text-detail left-side">Biaya Layanan:</span>
-            <span class="text-detail right-side">gratis</span>
-          </p>
-          <hr>
-          <p class="m-0 pembayaran">
-            <span class="text-detail">Metode Pembayaran: </span>
-            <span class="text-detail font-weight-bold">BANK BNI</span>
-          </p>
-          <p class="m-0 pembayaran">
-            <span class="text-detail">Status Transaksi: </span>
-            <span class="text-detail font-weight-bold success">Sukses</span>
-          </p>
+          <div>
+            <div class="row">
+              <div class="col-4 m-0 p-0">
+                <img src="@/assets/etc/aqua.png" alt="" class="img-product m-auto">
+              </div>
+              <div class="col-8 m-0 p-0">
+                <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
+                <span class="tag-status blue">Baru</span>
+                <p class="desc-product">Deskripsi: laskdjkla jdlaskj l asd laskdjkla jdlaskj l</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white mt-3">
+          <div class="header-desc no-margin no-padding">
+            <p class="desc-box p-2">Detail Barang</p>
+          </div>
+          <div class="desc pl-3 pr-3 pb-2">
+            <table class="table table-striped border-0 m-0 p-0">
+              <tr class="content-table">
+                <td>Lama pemakaian</td>
+                <td>-</td>
+              </tr>
+              <tr class="content-table">
+                <td>Kelengkapan paket</td>
+                <td>Dus, Buku panduan, headset, charger</td>
+              </tr>
+              <tr class="content-table">
+                <td>Dimensi</td>
+                <td>15 Inch</td>
+              </tr>
+              <tr class="content-table">
+                <td>Berat</td>
+                <td>15 kg</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <hr>
+        <div class="mt-3">
+          <b-button variant="primary" block="">Proses</b-button>
+          <b-button variant="outline-secondary" block="">Tolak</b-button>
         </div>
       </div>
     </div>
@@ -91,6 +131,10 @@ export default {
 
 .success{
   color: rgb(0, 106, 255);
+}
+
+.header-desc{
+  background-color: #0095DA;
 }
 
 .separator {
@@ -125,6 +169,27 @@ export default {
 
 .pembayaran{
   line-height: 20px;
+}
+
+.tag-status{
+  font-size: 12px;
+  padding: 3px 5px;
+}
+
+.desc-box{
+  color: white;
+}
+
+.blue{
+  background-color:rgb(50, 115, 206);
+  border-radius: 10px;
+  color: white;
+}
+
+.desc-product{
+  font-size: 12px;
+  color: #6c6c6c;
+  margin: 0px;
 }
 
 .bg-gray{
@@ -177,5 +242,9 @@ export default {
 
 .text-bold{
   font-weight: 600;
+}
+
+tr.content-table:nth-child(odd){
+  background-color: #eeeeee;
 }
 </style>

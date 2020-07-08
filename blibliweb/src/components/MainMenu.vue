@@ -12,24 +12,28 @@
         >{{category.categoryName}}</span>
       </div>
     </div>
-    <div class='content col-12 row no-margin pl-2 pr-2'>
-      <router-link :to='"/detail-product/"+product.id'  class='cst-card col-6'
-      v-for='product in this.ProductDetails'
-      v-bind:key='product.id'>
-        <div class='align-items-start'>
-          <div class="cont d-flex align-items-center">
-            <img :src='product.imgUrl[0]' :alt='product.productName'
-            class='img-product ml-auto mr-auto'/>
+    <!-- <div class="p-2" v-for='category in this.categoryNames' v-bind:key='category.categoryId'
+    :ref='category.categoryName'>
+      <p class="label-tag">{{category.categoryName}}</p>
+      <div class="overflow-x m-0 p-0">
+        <router-link :to='"/detail-product/"+product.id' class='cst-card col-6'
+        v-for='product in this.ProductDetails'
+        v-bind:key='product.id'>
+          <div class='align-items-start'>
+            <div class="cont d-flex align-items-center">
+              <img :src='product.imgUrl[0]' :alt='product.productName'
+              class='img-product ml-auto mr-auto'/>
+            </div>
+            <div class="mt-auto">
+              <p class='title-product'>{{product.productName}}</p>
+              <p class='product-price' title=product.productPrice>
+                Rp.{{formatPrice(product.productPrice)}}
+              </p>
+            </div>
           </div>
-          <div class="mt-auto">
-            <p class='title-product'>{{product.productName}}</p>
-            <p class='product-price' title=product.productPrice>
-              Rp.{{formatPrice(product.productPrice)}}
-            </p>
-          </div>
-        </div>
-      </router-link>
-    </div>
+        </router-link>
+      </div>
+    </div> -->
   </div>
 </template>
 
@@ -41,6 +45,8 @@ export default {
   data() {
     return {
       catParam: '',
+      categoryNames: null,
+      allProduct: null,
       products: [
         {
           id: 'kkjs-1231',
@@ -79,6 +85,12 @@ export default {
     const store = this.$store;
     store.dispatch('productData/getProducts');
     store.dispatch('productData/getCategory');
+    // this.CategoriesDetails.data.forEach((e) => {
+    //   console.log(e.categoryName);
+    // });
+    // this.categoryNames = await this.CategoriesDetails;
+    // console.log(this.categoryNames);
+    // this.allProduct = this.ProductDetails;
   },
   computed: {
     ...mapGetters([
@@ -86,13 +98,14 @@ export default {
       'productData/categoryList',
     ]),
     ProductDetails() {
+      console.log('terpanggil');
       const store = this.$store;
-      if (this.catParam === '') {
-        return store.getters['productData/productList'].data;
-      }
-      return store.getters['productData/productList'].data.filter((ele) => ele.category === this.catParam);
+      return store.getters['productData/productList'].data;
+      // return store.getters['productData/productList']
+      // .data.filter((ele) => ele.category === this.catParam);
     },
     CategoriesDetails() {
+      console.log('category terpanggil');
       const store = this.$store;
       return store.getters['productData/categoryList'];
     },
@@ -125,8 +138,13 @@ export default {
         }
       };
     },
+    setProduct(cat) {
+      console.log(this.allProduct.data.filter((ele) => ele.category === cat));
+    },
   },
-  mounted() {
+  async mounted() {
+    const data = await this.axios.get('http://www.mocky.io/v2/5ec98a583000006b00a6ce11?mocky-delay=50ms');
+    this.allProduct = data;
     this.scroll();
   },
 };
@@ -149,10 +167,20 @@ export default {
   transition: all 0.3s;
 }
 
+.label-tag{
+  font-size: 13px;
+}
+
 .un-active:hover {
   background: #e86c00 radial-gradient(circle, transparent 1%, #e86c00 1%)
     center/15000%;
   color: white;
+}
+
+.overflow-content {
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 .overflow-x{
@@ -200,6 +228,7 @@ a:hover{
   max-width: 49.1%;
   border: 1px solid rgba(0, 0, 0, 0.061);
   padding: 7px;
+  display: inline-block;
 }
 
 .cont{
@@ -208,6 +237,7 @@ a:hover{
 
 .cst-card:nth-child(even) {
   margin-left: 5px;
+  margin-right: 5px;
 }
 
 .img-product {

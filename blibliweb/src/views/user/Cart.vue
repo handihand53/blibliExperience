@@ -206,6 +206,7 @@
 <script>
 import PlainHeader from '@/components/PlainHeader.vue';
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
 
 export default {
   name: 'Cart',
@@ -226,6 +227,22 @@ export default {
   },
   created() {
     this.scrollToTop();
+    const dataId = this.$cookie.get('dataId');
+    const dataToken = this.$cookie.get('dataToken');
+    axios.get(`http://localhost:${this.port}/experience/api/carts?id=${dataId}`,
+      {
+        headers:
+          {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: `Bearer ${dataToken}`,
+          },
+      })
+      .then(() => {
+        console.log(dataToken);
+      }).catch(() => {
+        this.isLoading = false;
+      });
   },
   methods: {
     checkAll() {

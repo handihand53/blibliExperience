@@ -77,7 +77,7 @@
         </div>
         <img src="@/assets/spanduk/blibligratisongkir.jpg"
         class="img-fluid w-100 d-block mt-4 mb-2" alt="">
-        <MainMenu />
+        <MainMenu/>
       </div>
       <BottomNavigation />
     </main>

@@ -1,51 +1,59 @@
 <template>
     <div>
-        <PlainHeader/>
+      <PlainHeader/>
         <div class="center">
             <img src="@/assets/logo/blibli_logo.png" class="login-logo">
         </div>
         <div class="login-area">
-            <p class="login-text">Masuk Ke Akun Kamu</p>
-            <div class="form-input">
-              <input type="email" placeholder="Email" class="form-control"
-              v-model="email" @change="emailCheckFormat">
-              <div class="invalid-feedback" :class="{show:emailIsFalse, 'mb-3':emailIsFalse}">
-                {{ emailMsg }}
-              </div>
-              <span @click="showPassword">
-                <div>
-                  <font-awesome-icon
-                    class="password-option"
-                    :class="{active: !isContentVisible}"
-                    icon="eye-slash"/>
-                  <font-awesome-icon
-                    class="password-option"
-                    :class="{active: isContentVisible}"
-                    icon="eye"/>
-                </div>
-              </span>
-              <input v-model="password" id="password" type="password" placeholder="Kata Sandi"
-              class="form-control password-field">
-              <div class="invalid-feedback" :class="{show:passwordIsFalse, 'mb-3':passwordIsFalse}">
-                {{ passwordMsg }}
-              </div>
-              <button @click="login" class="btn-masuk">Masuk</button>
-              <p class="sign-information">Belum punya akun ?
-                <router-link to="/signup">Daftar disini</router-link>
-              </p>
-              <div class="forget-password">
-                <router-link to="/ww">Lupa kata sandi </router-link>
-              </div>
+          <p class="login-text">Masuk Ke Akun Kamu</p>
+          <div class="form-input">
+            <input type="email" placeholder="Email" class="form-control"
+            v-model="email" @change="emailCheckFormat">
+            <div class="invalid-feedback" :class="{show:emailIsFalse, 'mb-3':emailIsFalse}">
+              {{ emailMsg }}
             </div>
+            <span @click="showPassword">
+              <div>
+                <font-awesome-icon
+                  class="password-option"
+                  :class="{active: !isContentVisible}"
+                  icon="eye-slash"/>
+                <font-awesome-icon
+                  class="password-option"
+                  :class="{active: isContentVisible}"
+                  icon="eye"/>
+              </div>
+            </span>
+            <input v-model="password" id="password" type="password" placeholder="Kata Sandi"
+            class="form-control password-field">
+            <div class="invalid-feedback" :class="{show:passwordIsFalse, 'mb-3':passwordIsFalse}">
+              {{ passwordMsg }}
+            </div>
+            <button @click="login" class="btn-masuk">Masuk</button>
+            <p class="sign-information">Belum punya akun ?
+              <router-link to="/signup">Daftar disini</router-link>
+            </p>
+            <div class="forget-password">
+              <router-link to="/ww">Lupa kata sandi </router-link>
+            </div>
+          </div>
         </div>
         <Footer/>
+        <div class="overlay-loading d-flex align-items-center"
+      :class="{hide: !isLoading}">
+        <b-spinner
+        type="grow"
+        variant="primary"
+        class="ml-auto mr-auto spinner"
+        ></b-spinner>
+      </div>
     </div>
 </template>
 
 <script>
-// @ is an alias to /src
 import PlainHeader from '@/components/PlainHeader.vue';
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
 
 export default {
   name: 'Login',
@@ -55,6 +63,7 @@ export default {
   },
   data() {
     return {
+      isLoading: true,
       isContentVisible: true,
       emailIsFalse: false,
       emailMsg: 'x',
@@ -62,9 +71,38 @@ export default {
       passwordIsFalse: false,
       passwordMsg: '',
       password: '',
+      isLoggedIn: false,
     };
   },
+  async created() {
+    await this.checkLoginUser();
+  },
   methods: {
+    async checkLoginUser() {
+    // melakukan check apakah user masih login atau tidak
+    // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = this.$cookie.get('dataId');
+      const dataToken = this.$cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((response) => {
+          this.isLoggedIn = true;
+          if (response.data !== null) {
+            this.$router.push('/');
+          } else {
+            this.isLoading = false;
+          }
+        }).catch((s) => {
+          console.log(s);
+          this.isLoading = false;
+        });
+    },
+    // untuk toggle on/off show/hide password
     showPassword() {
       this.isContentVisible = !this.isContentVisible;
 
@@ -85,6 +123,26 @@ export default {
     login() {
       this.checkEmail();
       this.checkPassword();
+      this.isLoading = false;
+      if (!this.emailIsFalse && !this.passwordIsFalse) {
+        this.isLoading = true;
+        const login = {
+          userEmail: this.email,
+          userPassword: this.password,
+        };
+
+        axios.post(`http://localhost:${this.port}/experience/api/auth/login`, login)
+          .then((response) => {
+            console.log(response);
+            this.isLoggedIn = true;
+            this.$cookie.set('dataId', response.data.userId, 1); // set cookies dengan expired 1 hari
+            this.$cookie.set('dataToken', response.data.accessToken, 1); // set cookies dengan expired 1 hari
+            setTimeout(() => this.$router.push('/'), 1000); // jika login berhasil maka akan dilempar ke halaman utama
+          })
+          .catch(() => {
+            this.isLoading = false;
+          });
+      }
     },
     checkEmail() {
       if (this.email === undefined || this.email === '') {
@@ -104,6 +162,25 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/font/font.scss";
+
+.overlay-loading{
+  z-index: 200;
+  background-color: #0000006a;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+
+.hide{
+  display: none!important;
+}
+
+.spinner{
+  width: 50px;
+  height: 50px;
+}
 
 .center{
   text-align: center;

@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
 import { Icon } from 'leaflet';
 import './registerServiceWorker';
+import axios from 'axios';
+import vueResource from 'vue-resource';
 import router from './router';
 import store from './store';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -24,13 +26,20 @@ Icon.Default.mergeOptions({
   // eslint-disable-next-line global-require
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
+
+Vue.prototype.$axios = axios;
+const VueCookie = require('vue-cookie');
+
 Vue.component('l-map', LMap);
 Vue.component('l-tile-layer', LTileLayer);
 Vue.component('l-marker', LMarker);
 Vue.use(BootstrapVue);
+Vue.use(vueResource);
+
 library.add(fas);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
+Vue.use(VueCookie);
 
 new Vue({
   router,
@@ -42,6 +51,7 @@ Vue.mixin({
   data() {
     return {
       currentLocation: 'Belum ada lokasi yang dipilih',
+      port: '8080',
     };
   },
 });
