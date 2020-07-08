@@ -122,7 +122,34 @@ export default {
       isLoading: false,
     };
   },
+  async created() {
+    await this.checkLoginUser();
+  },
   methods: {
+    async checkLoginUser() {
+    // melakukan check apakah user masih login atau tidak
+    // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = this.$cookie.get('dataId');
+      const dataToken = this.$cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((response) => {
+          this.isLoggedIn = true;
+          if (response.data !== null) {
+            this.$router.push('/');
+          } else {
+            this.isLoading = false;
+          }
+        }).catch((s) => {
+          console.log(s);
+          this.isLoading = false;
+        });
+    },
     showPassword(id) {
       if (id === 'password1') this.isContentVisible1 = !this.isContentVisible1;
       if (id === 'password2') this.isContentVisible = !this.isContentVisible;

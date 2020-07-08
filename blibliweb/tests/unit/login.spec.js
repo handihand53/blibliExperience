@@ -2,61 +2,16 @@ import { shallowMount } from '@vue/test-utils';
 import Login from '@/views/Login.vue';
 import flushPromises from 'flush-promises';
 
-// const $router = {
-//   push: jest.fn(),
-// };
-
-// const $axios = {
-//   get: () => Promise.resolve({
-//     data: [
-//       {
-//         userId: 'b2ce0878-ca94-46b2-b257-4cd5f85a616d',
-//         accessToken: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiMmNlMDg3OC1jYTk0LTQ2YjItYjI1Ny00Y2Q1Zjg1YTYxNmQiLCJpYXQiOjE1OTQxMzIzMjUsImV4cCI6MTU5NDczNzEyNX0.HfAT_6OKW6klVluDwgtnyE1ItSVFql8eC21vszx8QQlYCX_I1tCBXoFE92xp3fMuQ_fwyj-g6eD3xr6T8Ar4AQ',
-//         tokenType: 'Bearer',
-//       },
-//     ],
-//   }),
-// };
-
-// jest.mock('axios', () => ({
-//   post(fnc) {
-//     return fnc(true);
-//   },
-// }));
-
-// jest.mock('axios', () => ({
-//   get(fnc) {
-//     return fnc(true);
-//   },
-// }));
+const $router = {
+  path: '/',
+};
 
 jest.mock('axios', () => ({
   get: () => Promise.resolve({ data: [{ val: 1 }] }),
+  post: () => Promise.resolve({ data: [{ val: 1 }] }),
 }));
 
 describe('Login.vue', () => {
-  // let wrapper;
-  // beforeEach(() => {
-  //   wrapper = shallowMount(Login, {
-  //     // mocks: { axios },
-  //     methods: {
-  //       checkLoginUser: () => {},
-  //     },
-  //     data() {
-  //       return {
-  //         email: 'handihand53@gmail.com',
-  //         password: 'asdasd',
-  //       };
-  //     },
-  //   });
-  // });
-
-  // it('mocking the axios call to get data', async () => {
-  //   const wrapper = shallowMount(Login);
-  //   await flushPromises();
-  //   expect(wrapper.vm.post.length).toBe(1);
-  // });
-
   it('Login render correctly', () => {
     const wrapper = shallowMount(Login, {
       methods: {
@@ -64,6 +19,30 @@ describe('Login.vue', () => {
       },
     });
     expect(wrapper.exists()).toBe(true);
+  });
+
+  it('mocking the axios call do login posts should work', async () => {
+    const wrapper = shallowMount(Login, {
+      mocks: {
+        $router,
+      },
+      data() {
+        return {
+          email: 'handihand53@gmail.com',
+          password: 'asdasd',
+          emailIsFalse: false,
+          passwordIsFalse: false,
+        };
+      },
+    });
+    expect(wrapper.vm.isLoggedIn).toBe(false);
+    expect(wrapper.vm.isLoading).toBe(true);
+    wrapper.find('#login').trigger('click');
+    await flushPromises();
+    expect(wrapper.vm.isLoggedIn).toBe(true);
+    expect(wrapper.vm.isLoggedIn).toBe(true);
+    expect(wrapper.vm.isLoggedIn).toBe(true);
+    expect(wrapper.vm.$router.path).toBe('/');
   });
 
   it('Check Login button work correctly', () => {
@@ -109,6 +88,22 @@ describe('Login.vue', () => {
     expect(wrapper.vm.emailIsFalse).toBe(false);
   });
 
+  it('Check if user email is empty', () => {
+    const wrapper = shallowMount(Login, {
+      methods: {
+        checkLoginUser: () => {},
+      },
+      data() {
+        return {
+          email: '',
+        };
+      },
+    });
+    wrapper.vm.checkEmail();
+    expect(wrapper.vm.emailIsFalse).toBe(true);
+    expect(wrapper.vm.emailMsg).toBe('Silahkan isi email anda');
+  });
+
   it('Check if user password is not empty', () => {
     const wrapper = shallowMount(Login, {
       methods: {
@@ -124,7 +119,7 @@ describe('Login.vue', () => {
     expect(wrapper.vm.passwordIsFalse).toBe(false);
   });
 
-  it('Check if user password is not empty', () => {
+  it('Check if user email format is correct', () => {
     const wrapper = shallowMount(Login, {
       methods: {
         checkLoginUser: () => {},
@@ -137,5 +132,21 @@ describe('Login.vue', () => {
     });
     wrapper.vm.emailCheckFormat();
     expect(wrapper.vm.emailIsFalse).toBe(false);
+  });
+
+  it('Check if user password is empty', () => {
+    const wrapper = shallowMount(Login, {
+      methods: {
+        checkLoginUser: () => {},
+      },
+      data() {
+        return {
+          password: '',
+        };
+      },
+    });
+    wrapper.vm.checkPassword();
+    expect(wrapper.vm.passwordMsg).toBe('Silahkan isi kata sandi anda');
+    expect(wrapper.vm.passwordIsFalse).toBe(true);
   });
 });

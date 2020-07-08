@@ -11,7 +11,8 @@
         <p class="bid-product">Bid:
             <span class="bid-price-product">Rp13.000.000</span></p>
         <router-link to="/detail-pengajuan-barang">
-          <button @click="showDetail" class="buy-btn">Lihat Detail</button>
+          <button @click="showDetail" class="buy-btn"
+          id="showDetail">Lihat Detail</button>
         </router-link>
       </div>
     </div>
@@ -54,9 +55,6 @@ export default {
   methods: {
     showDetail() {
       this.display = false;
-    },
-    closeModal() {
-      this.display = true;
     },
   },
 };

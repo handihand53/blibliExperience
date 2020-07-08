@@ -29,7 +29,7 @@
             <div class="invalid-feedback" :class="{show:passwordIsFalse, 'mb-3':passwordIsFalse}">
               {{ passwordMsg }}
             </div>
-            <button @click="login" class="btn-masuk">Masuk</button>
+            <button @click="login" class="btn-masuk" id="login">Masuk</button>
             <p class="sign-information">Belum punya akun ?
               <router-link to="/signup">Daftar disini</router-link>
             </p>

@@ -16,7 +16,6 @@
           </div>
         </div>
       </div>
-      <button @click="fetchResults">klik</button>
     </nav>
   </header>
 </template>
@@ -37,7 +36,7 @@ export default {
     };
   },
   async created() {
-    await getUserData();
+    await this.getUserData();
   },
   methods: {
     async getUserData() {
