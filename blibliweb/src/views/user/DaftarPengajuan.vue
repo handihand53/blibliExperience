@@ -9,10 +9,9 @@
           </div>
           <div class="pl-2">
             <span @click="pengajuanBarter" class="pengajuan-barter"
-            :class="{active: isActive}">Barter</span>
+            :class="{active: isActive}" id="barter">Barter</span>
             <span @click="pengajuanBarang" class="pengajuan-barang"
-            :class="{active: !isActive}"
-            id="pengajuanBarang">Lelang</span>
+            :class="{active: !isActive}" id="lelang">Lelang</span>
           </div>
         </div>
         <component :is="currentComponent"></component>

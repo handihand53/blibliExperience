@@ -8,9 +8,9 @@
                 </div>
                 <div class="pl-2">
                     <span @click="barter" class="barter"
-                    :class="{active: isActive}">Barter</span>
+                    :class="{active: isActive}" id="barter">Barter</span>
                     <span @click="cariBarang" class="cari-barang"
-                    :class="{active: !isActive}">Lelang</span>
+                    :class="{active: !isActive}" id="lelang">Lelang</span>
                 </div>
             </div>
           <component :is="currentComponent"></component>

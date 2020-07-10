@@ -63,6 +63,7 @@
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
 import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   name: 'Profile',
@@ -85,33 +86,37 @@ export default {
     };
   },
   created() {
-    // melakukan check apakah user masih login atau tidak
-    // jika user masih login, maka akan dilempar ke halaman utama
-    const dataId = this.$cookie.get('dataId');
-    const dataToken = this.$cookie.get('dataToken');
-    axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
-      {
-        headers:
-          {
-            Authorization: `Bearer ${dataToken}`,
-          },
-      })
-      .then((response) => {
-        if (response.data === null) {
-          this.$router.push('/');
-        }
+    this.checkUser();
+  },
+  methods: {
+    checkUser() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((response) => {
+          if (response.data === null) {
+            this.$router.push('/');
+          }
 
-        this.isLoading = false;
-        this.nama = response.data.data.userName;
-        this.email = response.data.data.userEmail;
-        this.gender = response.data.data.userGender;
-        this.noTlp = response.data.data.userPhoneNumber;
-        this.tglLahir = response.data.data.userBirthDate;
-        this.createdAt = response.data.data.userCreatedAt;
-      }).catch(() => {
-        this.$router.push('/');
-        this.isLoading = false;
-      });
+          this.isLoading = false;
+          this.nama = response.data.data.userName;
+          this.email = response.data.data.userEmail;
+          this.gender = response.data.data.userGender;
+          this.noTlp = response.data.data.userPhoneNumber;
+          this.tglLahir = response.data.data.userBirthDate;
+          this.createdAt = response.data.data.userCreatedAt;
+        }).catch(() => {
+          this.$router.push('/');
+        });
+    }
   },
   computed: {
     getMonthYear() {

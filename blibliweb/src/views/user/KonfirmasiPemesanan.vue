@@ -200,6 +200,7 @@ export default {
       console.log('ok');
     },
     changeMethod() {
+      console.log(this.$refs.methode.value);
       if (this.$refs.methode.value === '1') {
         this.isDelivery = true;
       } else {

@@ -120,8 +120,6 @@
 
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
-import DaftarPengajuanBarter from '@/components/DaftarPengajuanBarter.vue';
-import DaftarPengajuanBarang from '@/components/DaftarPengajuanBarang.vue';
 import Footer from '@/components/Footer.vue';
 
 export default {
@@ -131,8 +129,6 @@ export default {
   },
   data() {
     return {
-      isActive: true,
-      currentComponent: DaftarPengajuanBarter,
       isExpand: [
         false,
         false,
@@ -143,14 +139,6 @@ export default {
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    },
-    pengajuanBarter() {
-      this.isActive = true;
-      this.currentComponent = DaftarPengajuanBarter;
-    },
-    pengajuanBarang() {
-      this.isActive = false;
-      this.currentComponent = DaftarPengajuanBarang;
     },
     expand(idx) {
       this.isExpand.splice(idx, 1, !this.isExpand[idx]);

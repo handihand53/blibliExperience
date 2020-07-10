@@ -5,7 +5,8 @@
     <div class='p-3'>
       <div class='row no-padding no-margin cst-card p-2'>
         <label class="container col-1 no-padding">
-          <input type="checkbox" checked="checked" ref="maincheckbox" @click="checkAll">
+          <input type="checkbox" checked="checked" ref="maincheckbox" @click="checkAll"
+          id="checkAll">
           <span class="checkmark"></span>
         </label>
         <label>Pilih Semua Produk</label>
@@ -188,7 +189,8 @@
         <p class="text-price">Rp3.000</p>
       </div>
       <div class="col-6 right no-padding">
-        <button @click="checkOut" class="btn-checkout">Checkout</button>
+        <button @click="checkOut" class="btn-checkout"
+        id="checkOut">Checkout</button>
       </div>
     </div>
     <Footer />
@@ -207,6 +209,7 @@
 import PlainHeader from '@/components/PlainHeader.vue';
 import Footer from '@/components/Footer.vue';
 import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   name: 'Cart',
@@ -226,25 +229,28 @@ export default {
     };
   },
   created() {
+    this.checkUser();
     this.scrollToTop();
-    const dataId = this.$cookie.get('dataId');
-    const dataToken = this.$cookie.get('dataToken');
-    axios.get(`http://localhost:${this.port}/experience/api/carts?id=${dataId}`,
-      {
-        headers:
-          {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: `Bearer ${dataToken}`,
-          },
-      })
-      .then(() => {
-        console.log(dataToken);
-      }).catch(() => {
-        this.isLoading = false;
-      });
   },
   methods: {
+    checkUser() {
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/carts?id=${dataId}`,
+        {
+          headers:
+            {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then(() => {
+          console.log(dataToken);
+        }).catch(() => {
+          this.isLoading = false;
+        });
+    },
     checkAll() {
       for (let i = 0; i < document.getElementsByClassName('check').length; i += 1) {
         document.getElementsByClassName('check')[i].checked = this.$refs.maincheckbox.checked;

@@ -7,7 +7,7 @@
     <div class="pl-2 pr-2 pb-2">
       <div class="custom-card">
         <div class="border-bottom pr-3 pt-2 pb-3" :class="{'bg-color': !isVirtual}">
-          <label class="container no-padding mt-1" @click="activePay('VA')">
+          <label class="container no-padding mt-1" @click="activePay('VA')" id='VA'>
             <input type="radio" checked="checked" name="radio" id="va">
             <span class="checkmark"></span>
           </label>
@@ -27,7 +27,7 @@
           </div>
         </div>
         <div class="pt-2 pb-2 border-bottom pr-3" :class="{'bg-color-mid': !isDebit}">
-          <label class="container no-padding mt-1" @click="activePay('debit')">
+          <label class="container no-padding mt-1" @click="activePay('debit')" id="debit">
             <input type="radio" name="radio" id="kartuDebit">
             <span class="checkmark"></span>
           </label>
@@ -71,7 +71,8 @@
           </div>
         </div>
         <div class="pt-2 pb-2 pr-3" :class="{'bg-color-bot': !isElektronik}">
-          <label class="container no-padding mt-1" @click="activePay('elektronik')">
+          <label class="container no-padding mt-1" @click="activePay('elektronik')"
+          id="elektronik">
             <input type="radio" name="radio" id="elektronik">
             <span class="checkmark"></span>
           </label>

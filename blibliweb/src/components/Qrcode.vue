@@ -101,17 +101,17 @@ export default {
       await this.timeout(2000);
       this.turnCameraOn();
     },
-    turnCameraOn() {
-      this.camera = 'auto';
-    },
-    turnCameraOff() {
-      this.camera = 'off';
-    },
-    timeout(ms) {
-      return new Promise((resolve) => {
-        window.setTimeout(resolve, ms);
-      });
-    },
+    // turnCameraOn() {
+    //   this.camera = 'auto';
+    // },
+    // turnCameraOff() {
+    //   this.camera = 'off';
+    // },
+    // timeout(ms) {
+    //   return new Promise((resolve) => {
+    //     window.setTimeout(resolve, ms);
+    //   });
+    // },
   },
 };
 </script>

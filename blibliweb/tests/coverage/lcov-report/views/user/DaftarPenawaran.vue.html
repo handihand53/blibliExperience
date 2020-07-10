@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -36,16 +36,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -255,10 +255,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -266,19 +266,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -420,9 +420,9 @@
         &lt;/div&gt;
         &lt;div class="pl-2"&gt;
           &lt;span @click="penawaranBarter" class="penawaran-barter"
-          :class="{active: isActive}"&gt;Barter&lt;/span&gt;
+          :class="{active: isActive}" id="barter"&gt;Barter&lt;/span&gt;
           &lt;span @click="penawaranBarang" class="penawaran-barang"
-          :class="{active: !isActive}"&gt;Lelang&lt;/span&gt;
+          :class="{active: !isActive}" id="lelang"&gt;Lelang&lt;/span&gt;
         &lt;/div&gt;
       &lt;/div&gt;
       &lt;component :is="currentComponent"&gt;&lt;/component&gt;
@@ -432,30 +432,30 @@
 &lt;/template&gt;
 &nbsp;
 &lt;script&gt;
-<span class="cstat-no" title="statement not covered" >import HeaderWithCart from '@/components/HeaderWithCart.vue';</span>
-<span class="cstat-no" title="statement not covered" >import DaftarPenawaranBarter from '@/components/DaftarPenawaranBarter.vue';</span>
-<span class="cstat-no" title="statement not covered" >import DaftarPenawaranBarang from '@/components/DaftarPenawaranBarang.vue';</span>
-<span class="cstat-no" title="statement not covered" >import Footer from '@/components/Footer.vue';</span>
+import HeaderWithCart from '@/components/HeaderWithCart.vue';
+import DaftarPenawaranBarter from '@/components/DaftarPenawaranBarter.vue';
+import DaftarPenawaranBarang from '@/components/DaftarPenawaranBarang.vue';
+import Footer from '@/components/Footer.vue';
 &nbsp;
 export default {
   components: {
     HeaderWithCart,
     Footer,
   },
-<span class="fstat-no" title="function not covered" >  data() {</span>
-<span class="cstat-no" title="statement not covered" >    return {</span>
+  data() {
+    return {
       isActive: true,
       currentComponent: DaftarPenawaranBarter,
     };
   },
   methods: {
-<span class="fstat-no" title="function not covered" >    penawaranBarter() {</span>
-<span class="cstat-no" title="statement not covered" >      this.isActive = true;</span>
-<span class="cstat-no" title="statement not covered" >      this.currentComponent = DaftarPenawaranBarter;</span>
+    penawaranBarter() {
+      this.isActive = true;
+      this.currentComponent = DaftarPenawaranBarter;
     },
-<span class="fstat-no" title="function not covered" >    penawaranBarang() {</span>
-<span class="cstat-no" title="statement not covered" >      this.isActive = false;</span>
-<span class="cstat-no" title="statement not covered" >      this.currentComponent = DaftarPenawaranBarang;</span>
+    penawaranBarang() {
+      this.isActive = false;
+      this.currentComponent = DaftarPenawaranBarang;
     },
   },
 };
@@ -594,7 +594,7 @@ export default {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Jul 10 2020 12:18:04 GMT+0700 (Indochina Time)
+                at Fri Jul 10 2020 23:32:33 GMT+0700 (Indochina Time)
             </div>
         </div>
         <script src="..\..\prettify.js"></script>
