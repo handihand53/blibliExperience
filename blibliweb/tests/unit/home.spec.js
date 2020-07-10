@@ -1,5 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import Home from '@/views/Home.vue';
+import Vue from 'vue';
+
+Vue.config.ignoredElements = ['b-form-input', 'b-carousel-slide', 'b-carousel', 'router-link', 'font-awesome-icon', 'b-button'];
 
 describe('Home.vue', () => {
   it('Home page render correctly', () => {

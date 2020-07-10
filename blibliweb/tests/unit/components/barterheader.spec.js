@@ -1,5 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import BarterHeader from '@/components/BarterHeader.vue';
+import Vue from 'vue';
+
+Vue.config.ignoredElements = ['font-awesome-icon'];
 
 describe('BarterHeader.vue', () => {
   it('Barter Header page render correctly', () => {
@@ -8,7 +11,7 @@ describe('BarterHeader.vue', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  it('getFirstName Computed function return correctly', () => {
+  it('Back function work correctly', () => {
     const mockMethods = {
       back: jest.fn(),
     };

@@ -1,5 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import MapHeader from '@/components/MapHeader.vue';
+import Vue from 'vue';
+
+Vue.config.ignoredElements = ['font-awesome-icon'];
 
 describe('MapHeader.vue', () => {
   it('MapHeader page render correctly', () => {

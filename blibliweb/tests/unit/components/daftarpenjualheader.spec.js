@@ -1,5 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import DaftarPenjualHeader from '@/components/DaftarPenjualHeader.vue';
+import Vue from 'vue';
+
+Vue.config.ignoredElements = ['router-link', 'font-awesome-icon', 'b-button'];
 
 describe('DaftarPenjualHeader.vue', () => {
   it('DaftarPenjualHeader page render correctly', () => {

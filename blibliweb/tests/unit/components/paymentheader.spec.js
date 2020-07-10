@@ -1,5 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import PaymentHeader from '@/components/PaymentHeader.vue';
+import Vue from 'vue';
+
+Vue.config.ignoredElements = ['font-awesome-icon'];
 
 describe('PaymentHeader.vue', () => {
   it('PaymentHeader page render correctly', () => {

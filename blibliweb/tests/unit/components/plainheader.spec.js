@@ -1,5 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import PlainHeader from '@/components/PlainHeader.vue';
+import Vue from 'vue';
+
+Vue.config.ignoredElements = ['router-link', 'font-awesome-icon'];
 
 describe('PlainHeader.vue', () => {
   it('PlainHeader page render correctly', () => {

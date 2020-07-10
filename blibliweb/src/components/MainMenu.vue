@@ -143,8 +143,9 @@ export default {
     },
   },
   async mounted() {
-    const data = await this.axios.get('http://www.mocky.io/v2/5ec98a583000006b00a6ce11?mocky-delay=50ms');
+    const data = await axios.get('http://www.mocky.io/v2/5ec98a583000006b00a6ce11?mocky-delay=50ms');
     this.allProduct = data;
+    console.log(data);
     this.scroll();
   },
 };

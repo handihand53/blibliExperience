@@ -1,5 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import Admin from '@/views/admin/Admin.vue';
+import Vue from 'vue';
+
+Vue.config.ignoredElements = ['router-link'];
 
 describe('Admin.vue', () => {
   it('Admin page render correctly', () => {

@@ -1,23 +1,26 @@
 import { shallowMount } from '@vue/test-utils';
 import Login from '@/views/Login.vue';
 import flushPromises from 'flush-promises';
+import Vue from 'vue';
+import Cookie from 'vue-cookie';
+
+Vue.config.ignoredElements = ['b-spinner', 'router-link', 'font-awesome-icon', 'b-spinner'];
 
 const $router = {
   path: '/',
 };
+
+Cookie.get = jest.fn().mockImplementation(() => 'ok');
 
 jest.mock('axios', () => ({
   get: () => Promise.resolve({ data: [{ val: 1 }] }),
   post: () => Promise.resolve({ data: [{ val: 1 }] }),
 }));
 
+
 describe('Login.vue', () => {
   it('Login render correctly', () => {
-    const wrapper = shallowMount(Login, {
-      methods: {
-        checkLoginUser: () => {},
-      },
-    });
+    const wrapper = shallowMount(Login);
     expect(wrapper.exists()).toBe(true);
   });
 

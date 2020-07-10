@@ -1,5 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import ConfirmHeader from '@/components/ConfirmHeader.vue';
+import Vue from 'vue';
+
+Vue.config.ignoredElements = ['router-link', 'font-awesome-icon', 'b-button'];
 
 describe('ConfirmHeader.vue', () => {
   it('ConfirmHeader page render correctly', () => {

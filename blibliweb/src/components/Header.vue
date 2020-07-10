@@ -22,6 +22,7 @@
 
 <script>
 import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   data() {
@@ -40,8 +41,8 @@ export default {
   },
   methods: {
     async getUserData() {
-      this.dataId = this.$cookie.get('dataId');
-      this.dataToken = this.$cookie.get('dataToken');
+      this.dataId = Cookie.get('dataId');
+      this.dataToken = Cookie.get('dataToken');
       await axios.get(`http://localhost:${this.port}/experience/api/users?id=${this.dataId}`,
         {
           headers:
@@ -51,10 +52,6 @@ export default {
         })
         .then((response) => {
           this.user = response.data;
-          console.log(this.user);
-        })
-        .catch((resp) => {
-          console.log(resp);
         });
     },
   },

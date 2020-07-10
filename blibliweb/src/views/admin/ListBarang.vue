@@ -12,7 +12,6 @@
         <b-input-group-append>
           <b-button size="sm" variant="primary">
             <font-awesome-icon
-            @click="search"
             icon="search"/>
           </b-button>
         </b-input-group-append>

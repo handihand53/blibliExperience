@@ -1,5 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import CategoryPage from '@/views/CategoryPage.vue';
+import Vue from 'vue';
+
+Vue.config.ignoredElements = ['router-link', 'font-awesome-icon', 'b-button'];
 
 // jest.mock('axios', () => ({
 //   get: () => Promise.resolve({ data: [{ val: 1 }] }),

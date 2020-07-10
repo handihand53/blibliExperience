@@ -1,5 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import ListKonfirmasiBarter from '@/views/admin/ListKonfirmasiBarter.vue';
+import Vue from 'vue';
+
+Vue.config.ignoredElements = ['router-link', 'font-awesome-icon', 'b-button'];
 
 describe('ListKonfirmasiBarter.vue', () => {
   it('ListKonfirmasiBarter page render correctly', () => {

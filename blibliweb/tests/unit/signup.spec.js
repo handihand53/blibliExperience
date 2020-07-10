@@ -1,10 +1,17 @@
 import { shallowMount } from '@vue/test-utils';
 import Signup from '@/views/signup.vue';
+import Vue from 'vue';
+import Cookie from 'vue-cookie';
+
+Vue.config.ignoredElements = ['b-spinner', 'router-link', 'font-awesome-icon', 'b-button'];
 
 jest.mock('axios', () => ({
   get: () => Promise.resolve({ data: [{ val: 1 }] }),
   post: () => Promise.resolve({ data: [{ val: 1 }] }),
 }));
+
+Cookie.get = jest.fn().mockImplementation(() => 'ok');
+
 
 describe('Signup.vue', () => {
   it('Signup page render correctly', () => {

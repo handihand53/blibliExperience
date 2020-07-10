@@ -25,6 +25,7 @@
               </div>
             </span>
             <input v-model="password" id="password" type="password" placeholder="Kata Sandi"
+            ref="pass"
             class="form-control password-field">
             <div class="invalid-feedback" :class="{show:passwordIsFalse, 'mb-3':passwordIsFalse}">
               {{ passwordMsg }}
@@ -54,6 +55,7 @@
 import PlainHeader from '@/components/PlainHeader.vue';
 import Footer from '@/components/Footer.vue';
 import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   name: 'Login',
@@ -81,8 +83,8 @@ export default {
     async checkLoginUser() {
     // melakukan check apakah user masih login atau tidak
     // jika user masih login, maka akan dilempar ke halaman utama
-      const dataId = this.$cookie.get('dataId');
-      const dataToken = this.$cookie.get('dataToken');
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
       await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
         {
           headers:
@@ -97,8 +99,7 @@ export default {
           } else {
             this.isLoading = false;
           }
-        }).catch((s) => {
-          console.log(s);
+        }).catch(() => {
           this.isLoading = false;
         });
     },
@@ -107,7 +108,7 @@ export default {
       this.isContentVisible = !this.isContentVisible;
 
       const passwordField = document.getElementById('password');
-      if (passwordField.getAttribute('type') === 'password') {
+      if (!this.isContentVisible) {
         passwordField.setAttribute('type', 'text');
       } else {
         passwordField.setAttribute('type', 'password');
@@ -135,8 +136,8 @@ export default {
           .then((response) => {
             console.log(response);
             this.isLoggedIn = true;
-            this.$cookie.set('dataId', response.data.userId, 1); // set cookies dengan expired 1 hari
-            this.$cookie.set('dataToken', response.data.accessToken, 1); // set cookies dengan expired 1 hari
+            Cookie.set('dataId', response.data.userId, 1); // set cookies dengan expired 1 hari
+            Cookie.set('dataToken', response.data.accessToken, 1); // set cookies dengan expired 1 hari
             setTimeout(() => this.$router.push('/'), 1000); // jika login berhasil maka akan dilempar ke halaman utama
           })
           .catch(() => {

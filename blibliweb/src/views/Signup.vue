@@ -91,6 +91,7 @@
 import PlainHeader from '@/components/PlainHeader.vue';
 import Footer from '@/components/Footer.vue';
 import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   name: 'Login',
@@ -129,8 +130,8 @@ export default {
     async checkLoginUser() {
     // melakukan check apakah user masih login atau tidak
     // jika user masih login, maka akan dilempar ke halaman utama
-      const dataId = this.$cookie.get('dataId');
-      const dataToken = this.$cookie.get('dataToken');
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
       await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
         {
           headers:
@@ -263,8 +264,8 @@ export default {
         .then(() => {
           axios.post(`http://localhost:${this.port}/experience/api/auth/login`, login)
             .then((response) => {
-              this.$cookie.set('dataId', response.data.userId, 1); // set cookies dengan expired 1 hari
-              this.$cookie.set('dataToken', response.data.accessToken, 1); // set cookies dengan expired 1 hari
+              Cookie.set('dataId', response.data.userId, 1); // set cookies dengan expired 1 hari
+              Cookie.set('dataToken', response.data.accessToken, 1); // set cookies dengan expired 1 hari
               setTimeout(() => this.$router.push('/'), 1000);
             });
         })

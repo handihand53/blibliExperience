@@ -1,5 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import DaftarPengajuanBarang from '@/components/DaftarPengajuanBarang.vue';
+import Vue from 'vue';
+
+Vue.config.ignoredElements = ['router-link', 'font-awesome-icon'];
 
 describe('DaftarPengajuanBarang.vue', () => {
   it('DaftarPengajuanBarang page render correctly', () => {

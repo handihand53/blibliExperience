@@ -35,7 +35,7 @@ Vue.component('l-tile-layer', LTileLayer);
 Vue.component('l-marker', LMarker);
 Vue.use(BootstrapVue);
 Vue.use(vueResource);
-
+Vue.use(FontAwesomeIcon);
 library.add(fas);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;

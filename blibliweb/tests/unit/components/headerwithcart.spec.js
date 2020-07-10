@@ -1,5 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
+import Vue from 'vue';
+
+Vue.config.ignoredElements = ['router-link', 'font-awesome-icon'];
 
 describe('HeaderWithCart.vue', () => {
   it('HeaderWithCart page render correctly', () => {
