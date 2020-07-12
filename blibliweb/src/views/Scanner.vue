@@ -8,7 +8,8 @@
         <font-awesome-icon
         class="m-2"
         @click="back"
-        icon="chevron-left"/>
+        icon="chevron-left"
+        id="back"/>
         <p class="font-weight-bold m-auto">Scanner</p>
       </div>
       <div class="p-2">
@@ -27,12 +28,12 @@
         </div>
         <p class="p-0 m-0 my-2">Pilih metode scan</p>
         <b-button block variant="primary"
-        @click="showBarcode"
+        @click="showBarcode" id="barcode"
         :disabled="this.location === null || this.location.name === undefined
         || this.$refs.city.value == 'null'"
         >Scan Barcode</b-button>
         <b-button block variant="primary"
-        @click="showQr"
+        @click="showQr" id="qrcode"
         :disabled="this.location === null || this.location.name === undefined
         || this.$refs.city.value == 'null'"
         >Scan QrCode</b-button>
@@ -55,7 +56,7 @@ export default {
   data() {
     return {
       display: false,
-      currentComponent: null,
+      currentComponent: '',
       location: null,
       layers: [
         {

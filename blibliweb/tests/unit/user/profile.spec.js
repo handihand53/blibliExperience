@@ -4,6 +4,8 @@ import Vue from 'vue';
 import Cookie from 'vue-cookie';
 import flushPromises from 'flush-promises';
 
+Vue.config.ignoredElements = ['b-form-input', 'b-input-group', 'router-link', 'font-awesome-icon', 'b-button', 'b-carousel', 'b-carousel-slide', 'b-form-group', 'b-form-radio', 'b-alert', 'b-modal', 'b-spinner'];
+
 Cookie.get = jest.fn().mockImplementation(() => 'ok');
 
 jest.mock('axios', () => ({

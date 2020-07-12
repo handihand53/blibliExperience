@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div class="top-50">
     <div class="header bg-blue">
       <img src="..\..\..\src\assets\logo\blibli_wht.png"
@@ -15,7 +15,7 @@
           <div class="invalid-feedback" :class="{show:emailIsFalse}">
             {{ emailMsg }}
           </div>
-          <span @click="showPassword" class="eye-icon">
+          <span @click="showPassword" class="eye-icon" id="showpassword">
             <div>
               <font-awesome-icon
                 class="password-option"
@@ -34,7 +34,8 @@
           <div class="invalid-feedback" :class="{show:passwordIsFalse}">
             {{ passwordMsg }}
           </div>
-          <button @click="login" class="btn rounded shadow-lg bg-bl-btn">Masuk</button>
+          <button @click="login" class="btn rounded shadow-lg bg-bl-btn" id="login"
+          >Masuk</button>
           <router-link to="" class="forget-pass">Lupa kata sandi ?</router-link>
         </div>
       </div>
@@ -93,7 +94,6 @@ export default {
   methods: {
     showPassword() {
       this.isContentVisible = !this.isContentVisible;
-
       const passwordField = document.getElementById('password');
       if (passwordField.getAttribute('type') === 'password') {
         passwordField.setAttribute('type', 'text');

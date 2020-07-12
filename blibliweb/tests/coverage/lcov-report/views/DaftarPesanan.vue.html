@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -437,8 +437,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -446,7 +446,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -456,9 +456,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -736,17 +736,17 @@
       &lt;div class="d-flex justify-content-between mt-2 pb-2"&gt;
         &lt;div class="col-4"&gt;
           &lt;b-button pill block variant="outline-primary"
-          class="p-1" @click="changeStatus(0)" size="sm"
+          class="p-1" @click="changeStatus(0)" size="sm" id="changeStat0"
           :class="{buttonActive : this.isActive[0]}"&gt;Proses&lt;/b-button&gt;
         &lt;/div&gt;
         &lt;div class="col-4"&gt;
           &lt;b-button pill block variant="outline-primary"
-          class="p-1" @click="changeStatus(1)" size="sm"
+          class="p-1" @click="changeStatus(1)" size="sm" id="changeStat1"
           :class="{buttonActive : this.isActive[1]}"&gt;Selesai&lt;/b-button&gt;
         &lt;/div&gt;
         &lt;div class="col-4"&gt;
           &lt;b-button pill block variant="outline-primary"
-          class="p-1" @click="changeStatus(2)" size="sm"
+          class="p-1" @click="changeStatus(2)" size="sm" id="changeStat2"
           :class="{buttonActive : this.isActive[2]}"&gt;Batal&lt;/b-button&gt;
         &lt;/div&gt;
       &lt;/div&gt;
@@ -772,16 +772,16 @@
 &lt;/template&gt;
 &nbsp;
 &lt;script&gt;
-<span class="cstat-no" title="statement not covered" >import HeaderWithCart from '@/components/HeaderWithCart.vue';</span>
-<span class="cstat-no" title="statement not covered" >import Footer from '@/components/Footer.vue';</span>
+import HeaderWithCart from '@/components/HeaderWithCart.vue';
+import Footer from '@/components/Footer.vue';
 &nbsp;
 export default {
   components: {
     HeaderWithCart,
     Footer,
   },
-<span class="fstat-no" title="function not covered" >  data() {</span>
-<span class="cstat-no" title="statement not covered" >    return {</span>
+  data() {
+    return {
       isActive: [
         true,
         false,
@@ -790,10 +790,10 @@ export default {
     };
   },
   methods: {
-<span class="fstat-no" title="function not covered" >    changeStatus(idx) {</span>
-<span class="cstat-no" title="statement not covered" >      this.isActive.splice(idx, 1, true);</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >      for (let i = 0; i &lt; this.isActive.length; i += 1) {</span></span>
-<span class="cstat-no" title="statement not covered" >        if (i !== idx) this.isActive.splice(i, 1, false);</span>
+    changeStatus(idx) {
+      this.isActive.splice(idx, 1, true);
+      for (let i = 0; i &lt; this.isActive.length; i += 1) {
+        if (i !== idx) this.isActive.splice(i, 1, false);
       }
     },
   },
@@ -1068,7 +1068,7 @@ p {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Jul 10 2020 23:32:33 GMT+0700 (Indochina Time)
+                at Sat Jul 11 2020 21:07:43 GMT+0700 (Indochina Time)
             </div>
         </div>
         <script src="..\prettify.js"></script>

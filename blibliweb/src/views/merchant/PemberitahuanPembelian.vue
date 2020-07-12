@@ -5,9 +5,9 @@
       <small class="text-gray">Pemberitahuan Pembelian</small>
       <div>
         <small class="text-gray bold mr-3" :class="{active: isActive}"
-        @click="pesananMasuk">Pesanan Masuk</small>
+        @click="pesananMasuk" id="pesananMasuk">Pesanan Masuk</small>
         <small class="text-gray bold" :class="{active: !isActive}"
-        @click="riwayat">Riwayat</small>
+        @click="riwayat" id="riwayat">Riwayat</small>
       </div>
     </div>
     <component :is="currentComponent"></component>

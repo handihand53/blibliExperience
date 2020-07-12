@@ -12,7 +12,8 @@
     <div class="card ml-2 mr-2 pt-1 pb-2">
       <div class="overflow-x">
         <span class="category mr-2 ml-2 un-active"
-        @click='getProductByCategoryName("")'>Semua</span>
+        @click='getProductByCategoryName("")'
+        id="getProduct">Semua</span>
         <span class='category mr-2'
         :class="{'un-active':category.categoryName, active: !category.categoryName}"
         v-for='category in CategoriesDetails.data' v-bind:key='category.categoryId'

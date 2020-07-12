@@ -9,7 +9,6 @@
       <b-form-input type="text" class="form-control" id="nama-barang"
       placeholder="Nama Barang"
       v-model="namaBarang" trim @keyup="checkAll"></b-form-input>
-
       <label for="nama-barang">Stok<span class="red">*</span></label>
       <b-form-input type="number" min="0" class="form-control" id="nama-barang"
       placeholder="Nama Barang"
@@ -49,9 +48,6 @@ export default {
   },
   methods: {
     checkAll() {
-      console.log(this.namaBarang);
-      console.log(this.harga);
-      console.log(this.stock);
       if (
         this.namaBarang !== ''
         && this.harga !== ''

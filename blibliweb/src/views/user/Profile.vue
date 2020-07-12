@@ -116,7 +116,7 @@ export default {
         }).catch(() => {
           this.$router.push('/');
         });
-    }
+    },
   },
   computed: {
     getMonthYear() {

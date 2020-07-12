@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>8/20</span>
             </div>
         
             
@@ -36,16 +36,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>3/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>8/20</span>
             </div>
         
             
@@ -224,7 +224,8 @@
 <a name='L166'></a><a href='#L166'>166</a>
 <a name='L167'></a><a href='#L167'>167</a>
 <a name='L168'></a><a href='#L168'>168</a>
-<a name='L169'></a><a href='#L169'>169</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -268,10 +269,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -279,8 +280,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -340,12 +341,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -402,7 +404,8 @@
         &lt;font-awesome-icon
         class="m-2"
         @click="back"
-        icon="chevron-left"/&gt;
+        icon="chevron-left"
+        id="back"/&gt;
         &lt;p class="font-weight-bold m-auto"&gt;Scanner&lt;/p&gt;
       &lt;/div&gt;
       &lt;div class="p-2"&gt;
@@ -421,12 +424,12 @@
         &lt;/div&gt;
         &lt;p class="p-0 m-0 my-2"&gt;Pilih metode scan&lt;/p&gt;
         &lt;b-button block variant="primary"
-        @click="showBarcode"
+        @click="showBarcode" id="barcode"
         :disabled="this.location === null || this.location.name === undefined
         || this.$refs.city.value == 'null'"
         &gt;Scan Barcode&lt;/b-button&gt;
         &lt;b-button block variant="primary"
-        @click="showQr"
+        @click="showQr" id="qrcode"
         :disabled="this.location === null || this.location.name === undefined
         || this.$refs.city.value == 'null'"
         &gt;Scan QrCode&lt;/b-button&gt;
@@ -436,9 +439,9 @@
 &lt;/template&gt;
 &nbsp;
 &lt;script&gt;
-<span class="cstat-no" title="statement not covered" >import HeaderWithCart from '@/components/HeaderWithCart.vue';</span>
-<span class="cstat-no" title="statement not covered" >import Barcode from '@/components/Barcode.vue';</span>
-<span class="cstat-no" title="statement not covered" >import Qrcode from '@/components/Qrcode.vue';</span>
+import HeaderWithCart from '@/components/HeaderWithCart.vue';
+import Barcode from '@/components/Barcode.vue';
+import Qrcode from '@/components/Qrcode.vue';
 &nbsp;
 export default {
   components: {
@@ -446,10 +449,10 @@ export default {
     Barcode,
     Qrcode,
   },
-<span class="fstat-no" title="function not covered" >  data() {</span>
-<span class="cstat-no" title="statement not covered" >    return {</span>
+  data() {
+    return {
       display: false,
-      currentComponent: null,
+      currentComponent: '',
       location: null,
       layers: [
         {
@@ -507,13 +510,13 @@ export default {
     };
   },
   methods: {
-<span class="fstat-no" title="function not covered" >    showBarcode() {</span>
-<span class="cstat-no" title="statement not covered" >      this.display = true;</span>
-<span class="cstat-no" title="statement not covered" >      this.currentComponent = 'Barcode';</span>
+    showBarcode() {
+      this.display = true;
+      this.currentComponent = 'Barcode';
     },
-<span class="fstat-no" title="function not covered" >    showQr() {</span>
-<span class="cstat-no" title="statement not covered" >      this.display = true;</span>
-<span class="cstat-no" title="statement not covered" >      this.currentComponent = 'Qrcode';</span>
+    showQr() {
+      this.display = true;
+      this.currentComponent = 'Qrcode';
     },
 <span class="fstat-no" title="function not covered" >    back() {</span>
 <span class="cstat-no" title="statement not covered" >      window.history.back();</span>
@@ -567,7 +570,7 @@ export default {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Jul 10 2020 23:32:33 GMT+0700 (Indochina Time)
+                at Sat Jul 11 2020 21:07:43 GMT+0700 (Indochina Time)
             </div>
         </div>
         <script src="..\prettify.js"></script>

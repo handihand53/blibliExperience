@@ -8,17 +8,17 @@
       <div class="d-flex justify-content-between mt-2 pb-2">
         <div class="col-4">
           <b-button pill block variant="outline-primary"
-          class="p-1" @click="changeStatus(0)" size="sm"
+          class="p-1" @click="changeStatus(0)" size="sm" id="changeStat0"
           :class="{buttonActive : this.isActive[0]}">Proses</b-button>
         </div>
         <div class="col-4">
           <b-button pill block variant="outline-primary"
-          class="p-1" @click="changeStatus(1)" size="sm"
+          class="p-1" @click="changeStatus(1)" size="sm" id="changeStat1"
           :class="{buttonActive : this.isActive[1]}">Selesai</b-button>
         </div>
         <div class="col-4">
           <b-button pill block variant="outline-primary"
-          class="p-1" @click="changeStatus(2)" size="sm"
+          class="p-1" @click="changeStatus(2)" size="sm" id="changeStat2"
           :class="{buttonActive : this.isActive[2]}">Batal</b-button>
         </div>
       </div>
