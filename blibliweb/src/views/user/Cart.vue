@@ -234,6 +234,7 @@ export default {
   },
   methods: {
     checkUser() {
+      this.isLoading = true;
       const dataId = Cookie.get('dataId');
       const dataToken = Cookie.get('dataToken');
       axios.get(`http://localhost:${this.port}/experience/api/carts?id=${dataId}`,
@@ -245,9 +246,10 @@ export default {
               Authorization: `Bearer ${dataToken}`,
             },
         })
-        .then(() => {
-          console.log(dataToken);
-        }).catch(() => {
+        .catch(() => {
+          this.$router.replace('/');
+        })
+        .finally(() => {
           this.isLoading = false;
         });
     },

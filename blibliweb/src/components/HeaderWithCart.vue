@@ -12,6 +12,7 @@
               <font-awesome-icon class="toggle-dropdown"
               :class="{rotate: isRotate}" icon="ellipsis-v" />
               <router-link to="/cart">
+                <div class="notif">0</div>
                 <img src="@/assets/logo/blibli_wht_logoonly.png" class="stash-icon" alt="">
               </router-link>
             </div>
@@ -68,6 +69,22 @@ export default {
 
 $break-small: 720px;
 $break-large: 730px;
+
+.notif{
+  text-align: center;
+  background-color: red;
+  color: white;
+  display: inline-block;
+  position: absolute;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  width: 18px;
+  height: 18px;
+  top: -10px;
+  right: 28px;
+  z-index: 10;
+}
 
 .stash-icon{
     position: absolute;

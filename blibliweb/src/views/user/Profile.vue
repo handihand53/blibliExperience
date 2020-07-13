@@ -85,8 +85,8 @@ export default {
       ],
     };
   },
-  created() {
-    this.checkUser();
+  async created() {
+    await this.checkUser();
   },
   methods: {
     checkUser() {
@@ -105,7 +105,6 @@ export default {
           if (response.data === null) {
             this.$router.push('/');
           }
-
           this.isLoading = false;
           this.nama = response.data.data.userName;
           this.email = response.data.data.userEmail;
@@ -113,8 +112,9 @@ export default {
           this.noTlp = response.data.data.userPhoneNumber;
           this.tglLahir = response.data.data.userBirthDate;
           this.createdAt = response.data.data.userCreatedAt;
-        }).catch(() => {
-          this.$router.push('/');
+        })
+        .catch(() => {
+          this.$router.replace('/');
         });
     },
   },

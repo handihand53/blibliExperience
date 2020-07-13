@@ -1,16 +1,16 @@
 <template>
   <div class="">
     <PlainHeader />
-    <div class="bg-gray">
+    <div class="bg-gray" v-if="nama !== ''">
       <div class="col-12 row no-margin p-3 bg-white">
         <div class="">
           <img src="@/assets/logo/signature.png" class="logo mr-3" alt="">
         </div>
         <div class=" align-self-end">
           <h6 style="font-weight: 700">Informasi Akun anda</h6>
-          <p class="text-name">Handi Hermawan</p>
+          <p class="text-name">{{ nama }}</p>
           <p class="tag-member">Member</p>
-          <label class="text-date">Sejak Nov 2010</label>
+          <label class="text-date">Sejak {{ getMonthYear }}</label>
         </div>
       </div>
       <div class="mt-3 bg-white">
@@ -51,12 +51,6 @@
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>
-          <!-- <router-link to="/jual" class="alink">
-            <div class="list-menu">
-              Jual di Blibli
-              <font-awesome-icon icon="chevron-right" class="right-arrow"/>
-            </div>
-          </router-link> -->
           <router-link to="/lelang" class="alink">
             <div class="list-menu">
               Lelang
@@ -81,6 +75,30 @@
         <button class="logout-button">Keluar</button>
       </div>
     </div>
+    <div class="bg-gray" v-else-if="isLogin === false">
+      <div class="bg-white">
+        <div class="p-3">
+          <router-link to="/login" class="alink">
+            <div class="list-menu">
+              Login / Register
+              <font-awesome-icon icon="chevron-right" class="right-arrow"/>
+            </div>
+          </router-link>
+          <router-link to="/hubungi-kami" class="alink">
+            <div class="list-menu">
+              Hubungi Kami
+              <font-awesome-icon icon="chevron-right" class="right-arrow"/>
+            </div>
+          </router-link>
+          <router-link to="/" class="alink">
+            <div class="list-menu">
+              Menu utama
+              <font-awesome-icon icon="chevron-right" class="right-arrow"/>
+            </div>
+          </router-link>
+        </div>
+      </div>
+    </div>
     <BottomNavigation />
     <Footer />
   </div>
@@ -90,6 +108,8 @@
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import PlainHeader from '@/components/PlainHeader.vue';
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   name: 'Account',
@@ -97,6 +117,51 @@ export default {
     PlainHeader,
     BottomNavigation,
     Footer,
+  },
+  data() {
+    return {
+      nama: '',
+      createdAt: '',
+      monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+      ],
+      isLogin: '',
+    };
+  },
+  async created() {
+    await this.checkUser();
+  },
+  methods: {
+    checkUser() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((response) => {
+          if (response.data === null) {
+            this.$router.push('/');
+          }
+          this.isLoading = false;
+          this.nama = response.data.data.userName;
+          this.createdAt = response.data.data.userCreatedAt;
+        })
+        .catch(() => {
+          this.isLogin = false;
+        });
+    },
+  },
+  computed: {
+    getMonthYear() {
+      const theDate = new Date(this.createdAt);
+      return `${this.monthNames[theDate.getMonth()]} ${theDate.getFullYear()}`;
+    },
   },
 };
 </script>
@@ -114,7 +179,8 @@ export default {
 }
 
 .list-menu{
-  margin-bottom: 15px;
+  font-weight: 400;
+  margin-bottom: 13px;
 }
 
 .alink{

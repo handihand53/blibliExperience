@@ -19,6 +19,7 @@
       </router-link>
       <router-link to="/cart" class="col-navigation">
         <div>
+          <div class="notif">0</div>
           <font-awesome-icon icon="shopping-cart" class="nav-icon" />
           <p class="icon-text">Keranjang</p>
         </div>
@@ -62,6 +63,20 @@ $break-large: 730px;
   .col-navigation {
     flex: 0 0 20%;
     max-width: 20%;
+  }
+
+  .notif{
+    background-color: red;
+    color: white;
+    display: inline-block;
+    position: absolute;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    width: 18px;
+    height: 18px;
+    margin-left: 20px;
+    margin-top: 3px;
   }
 
   .nav-style {

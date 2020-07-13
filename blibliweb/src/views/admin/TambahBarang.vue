@@ -61,6 +61,7 @@
 import PlainHeaderMarket from '@/components/PlainHeaderMarket.vue';
 import Footer from '@/components/Footer.vue';
 import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -83,9 +84,27 @@ export default {
     };
   },
   async created() {
+    await this.checkLoginUser();
     await this.getCategory();
   },
   methods: {
+    async checkLoginUser() {
+      this.isLoggedIn = true;
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataIdAdmin');
+      const dataToken = Cookie.get('dataTokenAdmin');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .catch(() => {
+          this.$router.push('/merchant/login');
+        });
+    },
     getCategory() {
       // const config = {
       //   headers:
@@ -143,6 +162,25 @@ export default {
 </script>
 
 <style scoped>
+.overlay-loading{
+  z-index: 200;
+  background-color: #0000006a;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+
+.hide{
+  display: none!important;
+}
+
+.spinner{
+  width: 50px;
+  height: 50px;
+}
+
 .red{
   color: red;
 }

@@ -2,37 +2,24 @@
   <div class="bg-gray">
     <PlainHeaderMarket/>
     <div class="bg-white p-2">
-      <small class="text-gray">List Barang</small>
+      <small class="text-gray">Detail Master Data</small>
     </div>
-    <div class="p-2 sticky shadow-sm">
-      <b-input-group>
-        <b-form-input
-        v-model="searchKey"
-        placeholder="Cari"
-        ></b-form-input>
-        <b-input-group-append>
-          <b-button size="sm" variant="primary"
-          @click="searchProduk">
-            <font-awesome-icon
-            icon="search"/>
-          </b-button>
-        </b-input-group-append>
-      </b-input-group>
-    </div>
-    <div class="p-1" v-for="data in listOfData" v-bind:key="data.productId">
-      <div class="row border card no-gutters shadow-sm p-3"
-      style="flex-direction: row!important;">
-        <div class="column">
-          <p class="title-product">{{ data.productName }}</p>
-          <p class="brand-product">Brand: <span class="brand">{{ data.productBrand }}</span></p>
-          <p class="deskripsi mt-1">{{ getDescription(data.productDescription) }}</p>
-          <router-link :to='"/admin/list-barang/detail/"+data.productId'>
-            <b-button size="sm" variant="outline-primary" class="float-right px-3 py-1">
-              Lihat Detail
-            </b-button>
-          </router-link>
-        </div>
-      </div>
+    <div class="mt-3 shadow-sm card border-0 p-2">
+      <p class="title-product">{{ listOfData.productName }}</p>
+      <p class="brand-product mt-1">Brand:
+        <span class="brand">{{ listOfData.productBrand }}</span></p>
+      <p class="brand-product mt-1">Kategori:
+        <span class="brand">{{ listOfData.productCategory }}</span></p>
+      <hr class="m-0 my-1">
+      <p class="deskripsi mt-1">Deskripsi:<br>{{ listOfData.productDescription }}</p>
+      <p class="brand-product">Ukuran produk: {{ listOfData.productVolume }}</p>
+      <p class="brand-product mt-1">Berat produk: {{ listOfData.productWeight }}</p>
+      <p class="brand-product mt-1">Barcode produk: {{ listOfData.productBarcode }}</p>
+      <router-link to='' class="ml-auto mr-auto mt-3 mb-2">
+        <b-button variant="outline-primary" class="px-3 py-1">
+          Edit data produk
+        </b-button>
+      </router-link>
     </div>
     <Footer/>
   </div>
@@ -51,17 +38,24 @@ export default {
   },
   data() {
     return {
-      listOfData: [],
-      searchKey: '',
+      listOfData: {
+        productBarcode: '',
+        productBrand: '',
+        productCategory: '',
+        productDescription: '',
+        productId: '',
+        productName: '',
+        productVolume: '',
+        productWeight: '',
+      },
     };
   },
   async created() {
     await this.checkLoginUser();
-    await this.getListProduct();
+    await this.getDetailProduct();
   },
   methods: {
     async checkLoginUser() {
-      this.isLoggedIn = true;
       // melakukan check apakah user masih login atau tidak
       // jika user masih login, maka akan dilempar ke halaman utama
       const dataId = Cookie.get('dataIdAdmin');
@@ -77,11 +71,9 @@ export default {
           this.$router.push('/merchant/login');
         });
     },
-    async getListProduct() {
-      this.isLoggedIn = true;
+    async getDetailProduct() {
       const dataToken = Cookie.get('dataTokenAdmin');
-      const dataCount = 10;
-      await axios.get(`http://localhost:${this.port}/experience/api/products/getAll?count=${dataCount}`,
+      await axios.get(`http://localhost:${this.port}/experience/api/products?id=${this.$route.params.id}`,
         {
           headers:
           {
@@ -92,27 +84,6 @@ export default {
           this.listOfData = response.data.data;
         });
     },
-    getDescription(str) {
-      if (str.length > 180) {
-        return `${str.substr(0, 180)} ...`;
-      }
-      return str;
-    },
-    async searchProduk() {
-      const dataToken = Cookie.get('dataTokenAdmin');
-      await axios.get(`http://localhost:${this.port}/experience/api/products/search?searchKey=${this.searchKey}`,
-        {
-          headers:
-          {
-            Authorization: `Bearer ${dataToken}`,
-          },
-        })
-        .then((response) => {
-          this.listOfData = response.data.data;
-        });
-    },
-  },
-  computed: {
   },
 };
 </script>

@@ -440,6 +440,14 @@ const routes = [
     },
   },
   {
+    path: '/admin/list-barang/detail/:id',
+    name: 'Detail barang admin',
+    component: () => import(/* webpackChunkName: "category" */ '../views/admin/DetailBarang.vue'),
+    meta: {
+      title: 'Detail barang admin',
+    },
+  },
+  {
     path: '*',
     name: 'Not Found',
     component: () => import(/* webpackChunkName: "category" */ '../views/NotFound.vue'),

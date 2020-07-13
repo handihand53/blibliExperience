@@ -70,11 +70,21 @@
       </div>
     </div>
     <Footer/>
+    <div class="overlay-loading d-flex align-items-center"
+    :class="{hide: !isLoading}">
+      <b-spinner
+      type="grow"
+      variant="primary"
+      class="ml-auto mr-auto spinner"
+      ></b-spinner>
+    </div>
   </div>
 </template>
 
 <script>
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -89,9 +99,37 @@ export default {
       passwordIsFalse: false,
       passwordMsg: '',
       password: '',
+      isLoggedIn: false,
     };
   },
+  async created() {
+    await this.checkLoginUser();
+  },
   methods: {
+    async checkLoginUser() {
+      this.isLoggedIn = true;
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataIdAdmin');
+      const dataToken = Cookie.get('dataTokenAdmin');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((response) => {
+          this.isLoggedIn = true;
+          if (response.data !== null) {
+            this.$router.push('/admin');
+          } else {
+            this.isLoading = false;
+          }
+        }).catch(() => {
+          this.isLoading = false;
+        });
+    },
     showPassword() {
       this.isContentVisible = !this.isContentVisible;
       const passwordField = document.getElementById('password');
@@ -111,6 +149,29 @@ export default {
     login() {
       this.checkEmail();
       this.checkPassword();
+      if (!this.emailIsFalse && !this.passwordIsFalse) {
+        this.isLoading = true;
+        const login = {
+          userEmail: this.email,
+          userPassword: this.password,
+        };
+        axios.post(`http://localhost:${this.port}/experience/api/auth/login`, login)
+          .then((response) => {
+            console.log(response);
+            this.isLoggedIn = true;
+            // Cookie.set('dataIdAdmin', response.data.userId, 1); // set cookies expired 1 hari
+            // set cookies expired 1 hari
+            // Cookie.set('dataTokenAdmin', response.data.accessToken, 1);
+            // jika login berhasil maka akan dilempar ke halaman utama
+            // setTimeout(() => this.$router.push('/admin'), 1000);
+            Cookie.set('dataIdMerchant', response.data.userId, 1); // set cookies expired 1 hari
+            Cookie.set('dataTokenMerchant', response.data.accessToken, 1); // set cookies expired 1 hari
+            setTimeout(() => this.$router.push('/merchant/menu-utama'), 1000); // jika login berhasil maka akan dilempar ke halaman utama
+          })
+          .catch(() => {
+            this.isLoading = false;
+          });
+      }
     },
     checkEmail() {
       if (this.email === undefined || this.email === '') {
@@ -132,14 +193,19 @@ export default {
 @import "../../style/font/font.scss";
 
 .btn-orange {
-    width: 100%;
-    background-color: #FFA000;
-    color: white;
-    border: none;
-    font-size: 14px;
-    text-transform: uppercase;
-    font-weight: 600;
-    transition: all 1s;
+  width: 100%;
+  background-color: #FFA000;
+  color: white;
+  border: none;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: all 1s;
+}
+
+.spinner{
+  width: 50px;
+  height: 50px;
 }
 
 .btn-orange:hover {
@@ -227,6 +293,29 @@ export default {
   background-color: #0095DA;
   color: white!important;
   font-weight: 600;
+}
+
+.overlay-loading{
+  z-index: 10000;
+  background-color: #0000006a;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+
+.hide{
+  display: none!important;
+}
+
+.spinner{
+  width: 50px;
+  height: 50px;
+}
+
+.center{
+  text-align: center;
 }
 
 .bg-bl-btn:hover {
