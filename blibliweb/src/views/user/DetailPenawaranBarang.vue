@@ -73,6 +73,8 @@
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -87,6 +89,9 @@ export default {
       ],
     };
   },
+  async created() {
+    await this.checkUser();
+  },
   methods: {
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
@@ -94,6 +99,22 @@ export default {
     },
     expand(idx) {
       this.isExpand.splice(idx, 1, !this.isExpand[idx]);
+    },
+    checkUser() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .catch(() => {
+          this.$router.replace('/');
+        });
     },
   },
 };

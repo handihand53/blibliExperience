@@ -71,8 +71,9 @@ export default {
       // melakukan check apakah user masih login atau tidak
       // jika user masih login, maka akan dilempar ke halaman utama
       const dataId = Cookie.get('dataIdMerchant');
+      // const dataShopId = Cookie.get('dataShopIdMerchant');
       const dataToken = Cookie.get('dataTokenMerchant');
-      await axios.get(`http://localhost:${this.port}/experience/api/shops?id=${dataId}`,
+      await axios.get(`http://localhost:${this.port}/experience/api/shops?userId=${dataId}`,
         {
           headers:
           {

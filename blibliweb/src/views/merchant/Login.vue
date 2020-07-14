@@ -99,6 +99,7 @@ export default {
       passwordIsFalse: false,
       passwordMsg: '',
       password: '',
+      isLoadin: '',
       isLoggedIn: false,
     };
   },
@@ -110,9 +111,9 @@ export default {
       this.isLoggedIn = true;
       // melakukan check apakah user masih login atau tidak
       // jika user masih login, maka akan dilempar ke halaman utama
-      const dataId = Cookie.get('dataIdAdmin');
-      const dataToken = Cookie.get('dataTokenAdmin');
-      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+      const dataId = Cookie.get('dataIdMerchant');
+      const dataToken = Cookie.get('dataTokenMerchant');
+      await axios.get(`http://localhost:${this.port}/experience/api/shops?userId=${dataId}`,
         {
           headers:
           {
@@ -122,7 +123,7 @@ export default {
         .then((response) => {
           this.isLoggedIn = true;
           if (response.data !== null) {
-            this.$router.push('/admin');
+            this.$router.push('/merchant/menu-utama');
           } else {
             this.isLoading = false;
           }
@@ -157,16 +158,19 @@ export default {
         };
         axios.post(`http://localhost:${this.port}/experience/api/auth/login`, login)
           .then((response) => {
-            console.log(response);
             this.isLoggedIn = true;
-            // Cookie.set('dataIdAdmin', response.data.userId, 1); // set cookies expired 1 hari
-            // set cookies expired 1 hari
-            // Cookie.set('dataTokenAdmin', response.data.accessToken, 1);
-            // jika login berhasil maka akan dilempar ke halaman utama
-            // setTimeout(() => this.$router.push('/admin'), 1000);
-            Cookie.set('dataIdMerchant', response.data.userId, 1); // set cookies expired 1 hari
-            Cookie.set('dataTokenMerchant', response.data.accessToken, 1); // set cookies expired 1 hari
-            setTimeout(() => this.$router.push('/merchant/menu-utama'), 1000); // jika login berhasil maka akan dilempar ke halaman utama
+            if (response.data.userRoles[0] === 'MERCHANT') {
+              Cookie.set('dataIdMerchant', response.data.userId, 1); // set cookies expired 1 hari
+              Cookie.set('dataShopIdMerchant', response.data.shopId, 1); // set cookies expired 1 hari
+              Cookie.set('dataTokenMerchant', response.data.accessToken, 1); // set cookies expired 1 hari
+              setTimeout(() => this.$router.push('/merchant/menu-utama'), 1000); // jika login berhasil maka akan dilempar ke halaman utama
+            } else if (response.data.userRoles[0] === 'ADMIN') {
+              // Cookie.set('dataIdAdmin', response.data.userId, 1); // set cookies expired 1 hari
+              // // set cookies expired 1 hari
+              // Cookie.set('dataTokenAdmin', response.data.accessToken, 1);
+              // // jika login berhasil maka akan dilempar ke halaman utama
+              // setTimeout(() => this.$router.push('/admin'), 1000);
+            }
           })
           .catch(() => {
             this.isLoading = false;

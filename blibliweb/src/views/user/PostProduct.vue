@@ -24,6 +24,8 @@ import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import PostProductComponent from '@/components/PostProductComponent.vue';
 import CariProductComponent from '@/components/CariProductComponent.vue';
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   name: 'PostProduct',
@@ -37,6 +39,9 @@ export default {
     HeaderWithCart,
     Footer,
   },
+  async created() {
+    await this.checkUser();
+  },
   methods: {
     barter() {
       this.isActive = true;
@@ -45,6 +50,22 @@ export default {
     cariBarang() {
       this.isActive = false;
       this.currentComponent = CariProductComponent;
+    },
+    checkUser() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .catch(() => {
+          this.$router.replace('/');
+        });
     },
   },
 };

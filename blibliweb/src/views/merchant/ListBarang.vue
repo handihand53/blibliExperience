@@ -20,41 +20,17 @@
     </div>
     <div class="p-2">
       <div class="row border card no-gutters shadow-sm p-3 mt-1"
-      style="flex-direction: row!important;">
+      style="flex-direction: row!important;"
+      v-for="product in productLists" v-bind:key="product.stockId">
         <div class="col-4">
           <img src="@/assets/etc/aqua.png" alt="" class="img-product">
         </div>
         <div class="col-8 column">
-          <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-          <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-          <p class="deskripsi">Deskripsi: Xiaomi Redmi 6A mempuyai dimensi
-            tinggi 147,5mm, lebar 71,5...</p>
-          <button class="btn btn-outline-primary pl-5 pr-5 float-right">Lihat</button>
-        </div>
-      </div>
-      <div class="row border card no-gutters shadow-sm p-3 mt-1"
-      style="flex-direction: row!important;">
-        <div class="col-4">
-          <img src="@/assets/etc/aqua.png" alt="" class="img-product">
-        </div>
-        <div class="col-8 column">
-          <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-          <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-          <p class="deskripsi">Deskripsi: Xiaomi Redmi 6A mempuyai dimensi
-            tinggi 147,5mm, lebar 71,5...</p>
-          <button class="btn btn-outline-primary pl-5 pr-5 float-right">Lihat</button>
-        </div>
-      </div>
-      <div class="row border card no-gutters shadow-sm p-3 mt-1"
-      style="flex-direction: row!important;">
-        <div class="col-4">
-          <img src="@/assets/etc/aqua.png" alt="" class="img-product">
-        </div>
-        <div class="col-8 column">
-          <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-          <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-          <p class="deskripsi">Deskripsi: Xiaomi Redmi 6A mempuyai dimensi
-            tinggi 147,5mm, lebar 71,5...</p>
+          <p class="title-product">{{ product.productForm.productName }}</p>
+          <p class="brand-product">Brand:
+            <span class="brand">{{  product.productForm.productBrand  }}</span></p>
+          <p class="deskripsi">Deskripsi:
+            {{ getDescription(product.productForm.productDescription) }}</p>
           <button class="btn btn-outline-primary pl-5 pr-5 float-right">Lihat</button>
         </div>
       </div>
@@ -68,12 +44,68 @@
 import PlainHeaderMarket from '@/components/PlainHeaderMarket.vue';
 import Footer from '@/components/Footer.vue';
 import BottomNavMerchant from '@/components/BottomNavMerchant.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
     PlainHeaderMarket,
     BottomNavMerchant,
     Footer,
+  },
+  data() {
+    return {
+      productLists: [],
+    };
+  },
+  async created() {
+    await this.checkLoginUser();
+    await this.getShopProduct();
+  },
+  methods: {
+    async checkLoginUser() {
+      this.isLoggedIn = true;
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataIdMerchant');
+      // const dataShopId = Cookie.get('dataShopIdMerchant');
+      const dataToken = Cookie.get('dataTokenMerchant');
+      await axios.get(`http://localhost:${this.port}/experience/api/shops?userId=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .catch(() => {
+          this.$router.push('/merchant/login');
+        });
+    },
+    async getShopProduct() {
+      const dataShopId = Cookie.get('dataShopIdMerchant');
+      const dataToken = Cookie.get('dataTokenMerchant');
+      await axios.get(`http://localhost:${this.port}/experience//api/merchant/productStocks?shopId=${dataShopId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((response) => {
+          this.productLists = response.data.data;
+        })
+        .catch(() => {
+          this.$router.push('/merchant/login');
+        });
+    },
+    getDescription(str) {
+      if (str.length > 136) {
+        return `${str.substr(0, 136)} . . .`;
+      }
+      return str;
+    },
+    search() {
+    },
   },
 };
 </script>
@@ -123,6 +155,11 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 0px;
+}
+
+.brand{
+  color: rgb(45, 105, 223);
+  font-weight: 600;
 }
 
 .no-margin{

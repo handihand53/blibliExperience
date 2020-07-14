@@ -93,6 +93,7 @@ export default {
           },
         })
         .then((response) => {
+          console.log(response);
           this.isLoggedIn = true;
           if (response.data !== null) {
             this.$router.push('/');

@@ -31,6 +31,8 @@
 import PlainHeaderMarket from '@/components/PlainHeaderMarket.vue';
 import Footer from '@/components/Footer.vue';
 import BottomNavMerchant from '@/components/BottomNavMerchant.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -46,7 +48,31 @@ export default {
       btnState: false,
     };
   },
+  async created() {
+    await this.checkLoginUser();
+  },
   methods: {
+    async checkLoginUser() {
+      this.isLoggedIn = true;
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataIdMerchant');
+      // const dataShopId = Cookie.get('dataShopIdMerchant');
+      const dataToken = Cookie.get('dataTokenMerchant');
+      await axios.get(`http://localhost:${this.port}/experience/api/shops?userId=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((response) => {
+          this.userName = response.data.data.userName;
+        })
+        .catch(() => {
+          this.$router.push('/merchant/login');
+        });
+    },
     checkAll() {
       if (
         this.namaBarang !== ''
