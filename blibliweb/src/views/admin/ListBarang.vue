@@ -74,7 +74,7 @@ export default {
           },
         })
         .catch(() => {
-          this.$router.push('/merchant/login');
+          this.$router.replace('/admin/login');
         });
     },
     async getListProduct() {

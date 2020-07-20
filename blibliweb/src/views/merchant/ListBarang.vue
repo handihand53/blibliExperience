@@ -29,9 +29,15 @@
           <p class="title-product">{{ product.productForm.productName }}</p>
           <p class="brand-product">Brand:
             <span class="brand">{{  product.productForm.productBrand  }}</span></p>
+          <p class="brand-product">Harga:
+          <span class="price">Rp.{{ formatPrice(product.productPrice) }}</span></p>
+          <p class="brand-product">Stok:
+          <span class="stok">{{ product.productStock }}</span></p>
           <p class="deskripsi">Deskripsi:
             {{ getDescription(product.productForm.productDescription) }}</p>
-          <button class="btn btn-outline-primary pl-5 pr-5 float-right">Lihat</button>
+          <router-link :to='"/merchant/list-barang/detail/"+product.stockId'>
+            <button class="btn btn-outline-primary pl-5 pr-5 float-right">Lihat</button>
+          </router-link>
         </div>
       </div>
     </div>
@@ -92,11 +98,16 @@ export default {
           },
         })
         .then((response) => {
+          console.log(response.data.data);
           this.productLists = response.data.data;
         })
         .catch(() => {
           this.$router.push('/merchant/login');
         });
+    },
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     },
     getDescription(str) {
       if (str.length > 136) {
@@ -159,6 +170,11 @@ export default {
 
 .brand{
   color: rgb(45, 105, 223);
+  font-weight: 600;
+}
+
+.price{
+  color: rgb(240, 164, 0);
   font-weight: 600;
 }
 

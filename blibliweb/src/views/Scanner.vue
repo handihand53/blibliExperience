@@ -161,6 +161,7 @@ export default {
   background-color: white;
   top: 0;
   left: 0;
+  z-index: 10000;
 }
 
 .display-none{

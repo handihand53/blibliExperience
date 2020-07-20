@@ -74,8 +74,8 @@ export default {
     checkUser() {
       // melakukan check apakah user masih login atau tidak
       // jika user masih login, maka akan dilempar ke halaman utama
-      const dataId = Cookie.get('dataId');
-      const dataToken = Cookie.get('dataToken');
+      const dataId = Cookie.get('dataIdAdmin');
+      const dataToken = Cookie.get('dataTokenAdmin');
       axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
         {
           headers:
@@ -85,14 +85,12 @@ export default {
         })
         .then((response) => {
           if (response.data === null) {
-            this.$router.push('/');
+            this.$router.push('/admin/login');
           }
-          this.isLoading = false;
-          this.nama = response.data.data.userName;
-          this.createdAt = response.data.data.userCreatedAt;
         })
         .catch(() => {
           this.isLogin = false;
+          this.$router.push('/admin/login');
         });
     },
     changeStatus(idx) {

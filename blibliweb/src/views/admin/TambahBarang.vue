@@ -52,6 +52,17 @@
       <button @click="post" class="next-btn mt-4"
       :class="{'disable': !btnState, 'active-btn': btnState}"
       ref='btn' disabled>Input Barang</button>
+      <div class="fixed-alert text-center pl-3 pr-3">
+        <b-alert
+          :show="dismissCountDown"
+          dismissible
+          variant="success"
+          @dismissed="dismissCountDown=0"
+          @dismiss-count-down="countDownChanged"
+        >
+          Barang berhasil ditambahkan
+        </b-alert>
+      </div>
     </div>
     <Footer/>
   </div>
@@ -77,6 +88,8 @@ export default {
       dimensiBarang: '',
       deskripsi: '',
       kategori: null,
+      dismissSecs: 2,
+      dismissCountDown: 0,
       kategoris: [
         { value: null, text: 'Kategori' },
       ],
@@ -104,6 +117,10 @@ export default {
         .catch(() => {
           this.$router.push('/merchant/login');
         });
+    },
+    // Untuk notifikasi ketika berhasil menambah product
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
     },
     getCategory() {
       // const config = {
@@ -154,8 +171,8 @@ export default {
       axios.post(`http://localhost:${this.port}/experience/api/admin/productMasters`, masterData)
         .then((response) => {
           console.log(response);
+          this.dismissCountDown = this.dismissSecs;
         });
-      console.log(masterData);
     },
   },
 };
@@ -174,6 +191,15 @@ export default {
 
 .hide{
   display: none!important;
+}
+
+.fixed-alert{
+  z-index: 100;
+  position: fixed;
+  bottom: -20px;
+  margin: 5% auto; /* Will not center vertically and won't work in IE6/7. */
+  left: 0;
+  right: 0;
 }
 
 .spinner{

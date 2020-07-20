@@ -3,15 +3,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
     <PlainHeader />
     <div class='p-3'>
-      <div class='row no-padding no-margin cst-card p-2'>
-        <label class="container col-1 no-padding">
-          <input type="checkbox" checked="checked" ref="maincheckbox" @click="checkAll"
-          id="checkAll">
-          <span class="checkmark"></span>
-        </label>
-        <label>Pilih Semua Produk</label>
-      </div>
-      <!--  -->
       <div class='cst-card'>
         <div class='row no-padding no-margin border-bottom pb-2'>
           <label class="container col-1 no-padding">
@@ -19,31 +10,32 @@
             @click="checkToko('toko1')">
             <span class="checkmark"></span>
           </label>
-          <label>Nama Toko</label>
+          <label>Pilih semua produk</label>
         </div>
         <div class='row no-padding no-margin'>
           <!--  -->
-          <div class='col-12 no-margin no-padding row mt-3 border-bottom'>
+          <div class='col-12 no-margin no-padding row mt-3 border-bottom'
+          v-for='(cart, idx) in cartProduct' v-bind:key='cart.stockId'>
             <label class="container col-1" style="padding: 0px!important; margin: 0px!important;">
               <input type="checkbox" checked="checked" class="check toko1"
-              @click="checkItem('toko1')">
+              @click="checkItem('toko1', idx)">
               <span class="checkmark"></span>
             </label>
             <div class='col-11 row no-margin no-padding mb-2'>
               <div class='col-4 no-padding'>
-                <img src='@/assets/etc/aqua.png' alt />
+                <img src='@/assets/etc/aqua.png' />
               </div>
               <div class='col-8 no-padding'>
-                <p class='title-product'>Botol Minum Aqua Mineral 300Ml</p>
-                <p class='product-price'>Rp.3.000</p>
-                <p class="location">Bliblimart A</p>
+                <p class='title-product'>{{ cart.productForm.productName }}</p>
+                <p class='product-price'>Rp.{{formatPrice(cart.productPrice) }}</p>
+                <p class="location">{{ cart.shopForm.shopName }}</p>
                 <p class="total-product">Jumlah</p>
                 <div class="col-12 row no-margin no-padding">
                   <div class="no-margin no-padding col-8">
-                    <button @click="minAmount(0)"
+                    <button @click="minAmount(idx, cart.productPrice)"
                     class="stock-btn">-</button>
-                    <span class="stock-product">{{ this.amount[0] }}</span>
-                    <button @click="addAmount(0)"
+                    <span class="stock-product">{{ amount[idx] }}</span>
+                    <button @click="addAmount(idx, cart.productStock, cart.productPrice)"
                     class="stock-btn">+</button>
                   </div>
                   <div class="col-4 no-margin no-padding p-1">
@@ -58,135 +50,13 @@
               </div>
             </div>
           </div>
-          <div class='col-12 no-margin no-padding row mt-3 border-bottom'>
-            <label class="container col-1" style="padding: 0px!important; margin: 0px!important;">
-              <input type="checkbox" checked="checked" class="check toko1"
-              @click="checkItem('toko1')">
-              <span class="checkmark"></span>
-            </label>
-            <div class='col-11 row no-margin no-padding mb-2'>
-              <div class='col-4 no-padding'>
-                <img src='@/assets/etc/aqua.png' alt />
-              </div>
-              <div class='col-8 no-padding'>
-                <p class='title-product'>Botol Minum Aqua Mineral 300Ml</p>
-                <p class='product-price'>Rp.3.000</p>
-                <p class="location">Bliblimart A</p>
-                <p class="total-product">Jumlah</p>
-                <div class="col-12 row no-margin no-padding">
-                  <div class="no-margin no-padding col-8">
-                    <button class="stock-btn"
-                    @click="minAmount(1)">-</button>
-                    <span class="stock-product">{{ this.amount[1] }}</span>
-                    <button class="stock-btn"
-                    @click="addAmount(1)">+</button>
-                  </div>
-                  <div class="col-4 no-margin no-padding p-1">
-                      <font-awesome-icon
-                      class="float-right f-icon mt-auto mb-auto"
-                      icon="trash"/>
-                      <font-awesome-icon
-                      class="float-right f-icon mt-auto mb-auto"
-                      icon="heart"/>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--  -->
         </div>
       </div>
-      <!-- HAPUS NANTI -->
-      <div class='cst-card'>
-        <div class='row no-padding no-margin border-bottom pb-2'>
-          <label class="container col-1 no-padding">
-            <input type="checkbox" checked="checked" class="check" id="toko2"
-            @click="checkToko('toko2')">
-            <span class="checkmark"></span>
-          </label>
-          <label>Nama Toko</label>
-        </div>
-        <div class='row no-padding no-margin'>
-          <!--  -->
-          <div class='col-12 no-margin no-padding row mt-3 border-bottom'>
-            <label class="container col-1" style="padding: 0px!important; margin: 0px!important;">
-              <input type="checkbox" checked="checked" class="check toko2"
-              @click="checkItem('toko2')">
-              <span class="checkmark"></span>
-            </label>
-            <div class='col-11 row no-margin no-padding mb-2'>
-              <div class='col-4 no-padding'>
-                <img src='@/assets/etc/aqua.png' alt />
-              </div>
-              <div class='col-8 no-padding'>
-                <p class='title-product'>Botol Minum Aqua Mineral 300Ml</p>
-                <p class='product-price'>Rp.3.000</p>
-                <p class="location">Bliblimart A</p>
-                <p class="total-product">Jumlah</p>
-                <div class="col-12 row no-margin no-padding">
-                  <div class="no-margin no-padding col-8">
-                    <button class="stock-btn"
-                    @click="minAmount(2)">-</button>
-                    <span class="stock-product">{{ this.amount[2] }}</span>
-                    <button class="stock-btn"
-                    @click="addAmount(2)">+</button>
-                  </div>
-                  <div class="col-4 no-margin no-padding p-1">
-                      <font-awesome-icon
-                      class="float-right f-icon mt-auto mb-auto"
-                      icon="trash"/>
-                      <font-awesome-icon
-                      class="float-right f-icon mt-auto mb-auto"
-                      icon="heart"/>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class='col-12 no-margin no-padding row mt-3 border-bottom'>
-            <label class="container col-1" style="padding: 0px!important; margin: 0px!important;">
-              <input type="checkbox" checked="checked" class="check toko2"
-              @click="checkItem('toko2')">
-              <span class="checkmark"></span>
-            </label>
-            <div class='col-11 row no-margin no-padding mb-2'>
-              <div class='col-4 no-padding'>
-                <img src='@/assets/etc/aqua.png' alt />
-              </div>
-              <div class='col-8 no-padding'>
-                <p class='title-product'>Botol Minum Aqua Mineral 300Ml</p>
-                <p class='product-price'>Rp.3.000</p>
-                <p class="location">Bliblimart A</p>
-                <p class="total-product">Jumlah</p>
-                <div class="col-12 row no-margin no-padding">
-                  <div class="no-margin no-padding col-8">
-                    <button @click="minAmount(3)"
-                    class="stock-btn">-</button>
-                    <span class="stock-product">{{ this.amount[3] }}</span>
-                    <button @click="addAmount(3)"
-                    class="stock-btn">+</button>
-                  </div>
-                  <div class="col-4 no-margin no-padding p-1">
-                      <font-awesome-icon
-                      class="float-right f-icon mt-auto mb-auto"
-                      icon="trash"/>
-                      <font-awesome-icon
-                      class="float-right f-icon mt-auto mb-auto"
-                      icon="heart"/>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--  -->
-        </div>
-      </div>
-      <!-- BATAS DUMMY -->
     </div>
     <div class="bottom-navigation p-2 row no-margin">
       <div class="col-6">
-        <p class="text-total">Total Belanja(1)</p>
-        <p class="text-price">Rp3.000</p>
+        <p class="text-total">Total Belanja({{ length }})</p>
+        <p class="text-price">Rp{{ formatPrice(total) }}</p>
       </div>
       <div class="col-6 right no-padding">
         <button @click="checkOut" class="btn-checkout"
@@ -220,12 +90,11 @@ export default {
   data() {
     return {
       isLoading: false,
-      amount: [
-        1,
-        1,
-        1,
-        1,
-      ],
+      amount: [],
+      cartProduct: [],
+      total: 0,
+      price: [],
+      length: 0,
     };
   },
   created() {
@@ -237,7 +106,7 @@ export default {
       this.isLoading = true;
       const dataId = Cookie.get('dataId');
       const dataToken = Cookie.get('dataToken');
-      axios.get(`http://localhost:${this.port}/experience/api/carts?id=${dataId}`,
+      axios.get(`http://localhost:${this.port}/experience/api/carts?userId=${dataId}`,
         {
           headers:
             {
@@ -245,6 +114,18 @@ export default {
               Accept: 'application/json',
               Authorization: `Bearer ${dataToken}`,
             },
+        })
+        .then((response) => {
+          this.cartProduct = response.data.data.cartStockForms;
+          this.amount = new Array(this.cartProduct.length);
+          this.amount.fill(1);
+          this.cartProduct.forEach((res) => {
+            this.price.push({
+              price: res.productPrice,
+              status: true,
+            });
+          });
+          this.countTotal();
         })
         .catch(() => {
           this.$router.replace('/');
@@ -260,10 +141,13 @@ export default {
     },
     checkToko(shop) {
       for (let i = 0; i < document.getElementsByClassName(shop).length; i += 1) {
+        this.price[i].status = document.getElementById(shop).checked;
         document.getElementsByClassName(shop)[i].checked = document.getElementById(shop).checked;
       }
+      this.countTotal();
     },
-    checkItem(shop) {
+    checkItem(shop, idx) {
+      this.price[idx].status = !this.price[idx].status;
       let xTrue = 0;
       let xFalse = 0;
       for (let i = 0; i < document.getElementsByClassName(shop).length; i += 1) {
@@ -279,6 +163,11 @@ export default {
       if (xFalse === document.getElementsByClassName(shop).length) {
         document.getElementById(shop).checked = false;
       }
+      this.countTotal();
+    },
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     },
     scrollToTop() {
       window.scrollTo(0, 0);
@@ -288,15 +177,31 @@ export default {
       this.isLoading = true;
       setTimeout(() => this.$router.push('/confirm'), 1000);
     },
-    addAmount(idx) {
+    addAmount(idx, stock, price) {
       // add logic change amount here
-      this.amount.splice(idx, 1, this.amount[idx] += 1);
+      if (this.amount[idx] + 1 <= stock) {
+        this.amount.splice(idx, 1, this.amount[idx] += 1);
+        this.price[idx].price += price;
+        this.countTotal();
+      }
     },
-    minAmount(idx) {
+    minAmount(idx, price) {
       // add logic change amount here
       if (this.amount[idx] - 1 > 0) {
         this.amount.splice(idx, 1, this.amount[idx] -= 1);
+        this.price[idx].price -= price;
+        this.countTotal();
       }
+    },
+    countTotal() {
+      this.total = 0;
+      this.length = 0;
+      this.price.forEach((data) => {
+        if (data.status) {
+          this.total += data.price;
+          this.length += 1;
+        }
+      });
     },
   },
 };
@@ -408,7 +313,7 @@ export default {
     border-radius: 7px;
     font-weight: 500;
     padding: 2px 9px;
-    border: #D1D1D1 1.3px solid;
+    border: #D1D1D1 1.3px solid!important;
 }
 
 .stock-btn:active {

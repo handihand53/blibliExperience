@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div>
+    <!-- <div> -->
       <!-- <b class="decode-result">Last result: <b>{{ result }}</b></p> -->
-      <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit">
+      <!-- <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit">
         <div v-if="validationSuccess" class="validation-success">
           This is a URL
         </div>
@@ -13,107 +13,108 @@
           Long validation in progress...
         </div>
       </qrcode-stream>
-    </div>
-    <!-- <div>
+    </div> -->
+    <div>
       <p class="decode-result">Last result: <b>{{ result }}</b></p>
       <qrcode-drop-zone @decode="onDecode" @init="logErrors">
       <qrcode-stream @decode="onDecode" @init="onInit" />
       </qrcode-drop-zone>
       <qrcode-capture v-if="noStreamApiSupport" @decode="onDecode" />
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
-import { QrcodeStream } from 'vue-qrcode-reader';
-// import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
-
-// export default {
-//   components: { QrcodeStream, QrcodeDropZone, QrcodeCapture },
-//   data() {
-//     return {
-//       result: '',
-//       noStreamApiSupport: false,
-//     };
-//   },
-//   methods: {
-//     onDecode(result){
-//       this.result = result;
-//     },
-//     logErrors(promise){
-//       promise.catch(console.error)
-//     },
-//     async onInit(promise) {
-//       try {
-//         await promise;
-//       } catch(error) {
-//         if (error.name === 'StreamApiNotSupportedError') {
-//           this.noStreamApiSupport = true;
-//         }
-//       }
-//     },
-//   },
-// }
+// import { QrcodeStream } from 'vue-qrcode-reader';
+import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader';
 
 export default {
-  components: {
-    QrcodeStream,
-  },
+  components: { QrcodeStream, QrcodeDropZone, QrcodeCapture },
   data() {
     return {
-      isValid: undefined,
-      camera: 'auto',
-      result: null,
+      result: '',
+      noStreamApiSupport: false,
     };
   },
-  computed: {
-    validationPending() {
-      return this.isValid === undefined
-        && this.camera === 'off';
-    },
-
-    validationSuccess() {
-      return this.isValid === true;
-    },
-
-    validationFailure() {
-      return this.isValid === false;
-    },
-  },
   methods: {
-    onInit(promise) {
-      promise
-        .catch(console.error)
-        .then(this.resetValidationState);
+    onDecode(result) {
+      this.result = result;
+      console.log(result);
     },
-    resetValidationState() {
-      this.isValid = undefined;
+    logErrors(promise) {
+      promise.catch(console.error);
     },
-    async onDecode(content) {
-      this.result = content;
-      this.turnCameraOff();
-
-      // pretend it's taking really long
-      await this.timeout(3000);
-      this.isValid = content.startsWith('http');
-
-      // some more delay, so users have time to read the message
-      await this.timeout(2000);
-      this.turnCameraOn();
+    async onInit(promise) {
+      try {
+        await promise;
+      } catch (error) {
+        if (error.name === 'StreamApiNotSupportedError') {
+          this.noStreamApiSupport = true;
+        }
+      }
     },
-    // turnCameraOn() {
-    //   this.camera = 'auto';
-    // },
-    // turnCameraOff() {
-    //   this.camera = 'off';
-    // },
-    // timeout(ms) {
-    //   return new Promise((resolve) => {
-    //     window.setTimeout(resolve, ms);
-    //   });
-    // },
   },
 };
+
+// export default {
+//   components: {
+//     QrcodeStream,
+//   },
+//   data() {
+//     return {
+//       isValid: undefined,
+//       camera: 'auto',
+//       result: null,
+//     };
+//   },
+//   computed: {
+//     validationPending() {
+//       return this.isValid === undefined
+//         && this.camera === 'off';
+//     },
+
+//     validationSuccess() {
+//       return this.isValid === true;
+//     },
+
+//     validationFailure() {
+//       return this.isValid === false;
+//     },
+//   },
+//   methods: {
+//     onInit(promise) {
+//       promise
+//         .catch(console.error)
+//         .then(this.resetValidationState);
+//     },
+//     resetValidationState() {
+//       this.isValid = undefined;
+//     },
+//     async onDecode(content) {
+//       this.result = content;
+//       this.turnCameraOff();
+
+//       // pretend it's taking really long
+//       await this.timeout(3000);
+//       this.isValid = content.startsWith('http');
+
+//       // some more delay, so users have time to read the message
+//       await this.timeout(2000);
+//       this.turnCameraOn();
+//     },
+//     turnCameraOn() {
+//       this.camera = 'auto';
+//     },
+//     turnCameraOff() {
+//       this.camera = 'off';
+//     },
+//     timeout(ms) {
+//       return new Promise((resolve) => {
+//         window.setTimeout(resolve, ms);
+//       });
+//     },
+//   },
+// };
 </script>
 
 <style scoped>

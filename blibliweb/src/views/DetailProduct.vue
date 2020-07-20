@@ -3,10 +3,10 @@
     <HeaderWithCart/>
     <div class="">
       <div class="p-3 bg-white mt-3">
-        <p class="title-product">{{ ProductDetails.productName }}</p>
+        <p class="title-product">{{ allProduct.productName }}</p>
         <p class="brand-product">Brand:
-          <span class="brand">{{ ProductDetails.brand }}</span></p>
-          <b-carousel
+          <span class="brand">{{ allProduct.productBrand }}</span></p>
+          <!-- <b-carousel
             id="carousel-1"
             v-model="slide"
             :interval="0"
@@ -15,7 +15,6 @@
             background="transparent"
             style="text-shadow: 1px 1px 2px #333;"
           >
-            <!-- Text slides with image -->
             <b-carousel-slide
               :img-src=ProductDetails.imgUrl[0]
             ></b-carousel-slide>
@@ -25,8 +24,8 @@
              <b-carousel-slide
               :img-src=ProductDetails.imgUrl[0]
             ></b-carousel-slide>
-          </b-carousel>
-        <div class="row m-0 p-0 mt-4">
+          </b-carousel> -->
+        <!-- <div class="row m-0 p-0 mt-4">
           <img :src="ProductDetails.imgUrl[0]"
           @click="moveSlider(0)"
           alt="" class="img-preview">
@@ -36,9 +35,10 @@
           <img :src="ProductDetails.imgUrl[0]"
           @click="moveSlider(2)"
           alt="" class="img-preview">
-        </div>
-        <p class="price-text">Harga <span class="price">
-          Rp{{ formatPrice(ProductDetails.productPrice) }}</span></p>
+        </div> -->
+        <p class="price-text"
+        v-if="this.currentIdx !== null">Harga <span class="price">
+          Rp{{ formatPrice(allProduct.productStockList[currentIdx].productPrice) }}</span></p>
         <hr>
         <p @click="addToWishList"
           class="wishlist-text">
@@ -52,12 +52,12 @@
           <span ref="lokasi" v-b-modal.modal-sm class="lokasi float-right">Pilih</span></p>
         <p class="selected-location">{{ currentLocation }}</p>
       </div>
-      <div class="bg-white mt-3 pb-2">
+      <div class="bg-white mt-3 pb-2" v-if="this.currentIdx !== null">
         <div class="p-3">
           <div class="row no-margin no-padding col-12">
             <b-form-group label="Metode Pengiriman">
               <b-form-radio v-model="selected"
-              :disabled="ProductDetails.bliblimartStock === 0"
+              :disabled="allProduct.productStockList[currentIdx].productStock === 0"
               name="some-radios" value="A">
                 <div class="no-padding">
                   <div class="d-flex justify-content-between row p-0 m-0">
@@ -70,8 +70,9 @@
                         </p>
                       </td>
                       <td class="stock-table">
-                        <span v-if="this.ProductDetails.bliblimartStock
-                        > 0" class="stock ml-auto display-content">Stock Ada
+                        <span v-if="allProduct.productStockList[currentIdx].productStock
+                        > 0"
+                        class="stock ml-auto display-content">Stock Ada
                           <font-awesome-icon
                           class="f-icon"
                           icon="check-circle"/>
@@ -90,7 +91,7 @@
                 <p class="radio-text-desc">Ambil barang langsung di bliblimart</p>
               </b-form-radio>
               <b-form-radio v-model="selected" name="some-radios"
-              :disabled="ProductDetails.deliveryStock === 0" value="B">
+              :disabled="allProduct.productStockList[currentIdx].productStock === 0" value="B">
                 <div class="no-padding">
                   <div class="d-flex justify-content-between row p-0 m-0">
                    <table class="table m-0 p-0">
@@ -99,7 +100,7 @@
                         <p class="radio-text">Pengiriman Langsung</p>
                       </td>
                       <td class="text-right">
-                        <span v-if="this.ProductDetails.deliveryStock
+                        <span v-if="allProduct.productStockList[currentIdx].productStock
                         > 0" class="stock">Stock Ada
                           <font-awesome-icon
                           class="f-icon"
@@ -137,30 +138,30 @@
           </div>
           <div class="desc pt-2 pl-3 pr-3 pb-2">
             <p class="title-product2"
-            >{{this.ProductDetails.productName}}</p>
+            >{{allProduct.productName}}</p>
             <p class="desc-product"
             :class="{'display-block': descActive, 'display-none': !descActive}">
-            {{this.ProductDetails.description}}
+            {{ allProduct.productDescription }}
             </p>
             <h5 :class="{'display-block': detailActive, 'display-none': !detailActive}"
             >Detail Barang</h5>
             <table class="table table-striped border-0 m-0 p-0"
             :class="{'display-none': !detailActive}">
               <tr class="content-table">
-                <td>Kelengkapan paket</td>
-                <td>{{this.ProductDetails.packetSet}}</td>
+                <td>Kategori</td>
+                <td>{{allProduct.productCategory}}</td>
               </tr>
               <tr class="content-table">
                 <td>Dimensi</td>
-                <td>{{this.ProductDetails.volume}}</td>
+                <td>{{allProduct.productVolume}}</td>
               </tr>
               <tr class="content-table">
-                <td>Berat</td>
-                <td>{{this.ProductDetails.weight}}</td>
+                <td>Berat (gram)</td>
+                <td>{{allProduct.productWeight}}</td>
               </tr>
               <tr class="content-table">
                 <td>Kode barcode</td>
-                <td>{{this.ProductDetails.barcode}}</td>
+                <td>{{allProduct.productBarcode}}</td>
               </tr>
             </table>
             <p class="desc-product" :class="{'kelas untuk detail': detailActive}">
@@ -191,15 +192,24 @@
       </b-alert>
     </div>
     <b-modal id="modal-sm" size="sm" centered
-    title="Pilih Lokasi Bliblimart"  @ok="confirmLocation">
+    v-model="show"
+    no-close-on-backdrop
+    no-close-on-esc
+    no-enforce-focus
+    hide-header-close
+    title="Pilih Lokasi Bliblimart"
+    hide-footer>
       <div class="mb-2">Pilih :</div>
       <select class="form-control" ref="location">
-        <option selected disabled hidden>--Pilih--</option>
-        <option value="bliblimartA">Bliblimart A</option>
-        <option value="bliblimartB">Bliblimart B</option>
-        <option value="bliblimartC">Bliblimart C</option>
-        <option value="bliblimartD">Bliblimart D</option>
+        <option selected disabled value=null>--Pilih--</option>
+        <option :value='idx'
+        v-for='(shop, idx) in allProduct.productStockList'
+        v-bind:key='shop.shopForm.shopId'>{{shop.shopForm.shopName}}</option>
       </select>
+      <p class="red mt-2"
+      :v-if="this.locations">Lokasi tidak boleh kosong</p>
+      <b-button variant="primary" class="float-right mt-1"
+      @click="confirmLocation">Pilih Lokasi</b-button>
     </b-modal>
     <Footer/>
     <div class="overlay-loading d-flex align-items-center"
@@ -215,7 +225,8 @@
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
-import { mapGetters, mapActions } from 'vuex';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -223,13 +234,13 @@ export default {
     Footer,
   },
   created() {
-    const store = this.$store;
-    store.dispatch('items/getItem');
+    this.getDetailProduct();
     this.scrollToTop();
-    this.$refs.lokasi.click();
   },
   data() {
     return {
+      locations: false,
+      currentIdx: null,
       slide: 0,
       descActive: true,
       detailActive: false,
@@ -238,25 +249,17 @@ export default {
       dismissCountDown: 0,
       alertMsg: '',
       isLoading: false,
+      allProduct: '',
+      show: true,
     };
   },
-  computed: {
-    ...mapGetters([
-      'items/dataProduct',
-    ]),
-    ProductDetails() {
-      const store = this.$store;
-      if (store.getters['items/dataProduct'].data !== undefined) {
-        const data = store.getters['items/dataProduct'].data.find((ele) => ele.id === this.$route.params.id);
-        return data;
-      }
-      return true;
-    },
-  },
   methods: {
-    ...mapActions([
-      'items/getProducts',
-    ]),
+    getDetailProduct() {
+      axios.get(`http://localhost:${this.port}/experience/api/products?id=${this.$route.params.id}`)
+        .then((response) => {
+          this.allProduct = response.data.data;
+        });
+    },
     description() {
       this.descActive = true;
       this.detailActive = false;
@@ -266,7 +269,14 @@ export default {
       this.detailActive = true;
     },
     confirmLocation() {
-      this.currentLocation = this.$refs.location.value;
+      if (this.$refs.location.value !== null) {
+        this.currentIdx = this.$refs.location.value;
+        this.currentLocation = this.allProduct.productStockList[this.currentIdx].shopForm.shopName;
+        this.show = false;
+        this.locations = false;
+      } else {
+        this.locations = true;
+      }
     },
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
@@ -279,11 +289,50 @@ export default {
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
     },
-    buyItem() {
+    async checkLoginUser() {
+    // melakukan check apakah user masih login atau tidak
+    // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .catch(() => {
+          this.$router.push('/login');
+        });
+    },
+    async buyItem() {
       // logic beli item
       // post axios
+
       this.isLoading = true;
-      setTimeout(() => this.$router.push('/cart'), 1000);
+      await this.checkLoginUser();
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      const cart = {
+        productId: this.allProduct.productStockList[this.currentIdx].productForm.productId,
+        stockId: this.allProduct.productStockList[this.currentIdx].stockId,
+        userId: dataId,
+      };
+
+      await axios.post(`http://localhost:${this.port}/experience/api/carts`, cart,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then(() => {
+          setTimeout(() => this.$router.push('/cart'), 1000);
+        })
+        .catch(() => {
+          this.$router.push('/login');
+        });
+      this.isLoading = false;
     },
     addToBag() {
       this.alertMsg = 'Produk berhasil ditambahkan';
@@ -296,9 +345,6 @@ export default {
     moveSlider(idx) {
       this.slide = idx;
     },
-  },
-  mounted() {
-    this.$refs.lokasi.click();
   },
 };
 </script>
@@ -353,6 +399,12 @@ export default {
   font-size: 14px;
   color: rgb(228, 51, 51);
   margin-top: 3px;
+  font-weight: 600;
+}
+
+.red{
+  color: rgb(228, 51, 51);
+  font-size: 13px;
   font-weight: 600;
 }
 

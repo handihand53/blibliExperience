@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="m-0 p-0">
-      <div class="flip-h">
-        <v-quagga :onDetected="logIt" class="col-3 m-0 p-0" :readerSize="readerSize"
+      <!-- <div class="flip-h"> -->
+        <v-quagga :onDetected="logIt" :readerSize="readerSize"
         :readerTypes="['ean_reader']"></v-quagga>
-      </div>
+      <!-- </div> -->
     </div>
     <!-- <div id="interactive" class="viewport scanner">
       <video autoplay="true" preload="auto" src="" muted="true" playsinline="true"></video>
@@ -24,8 +24,8 @@ export default {
   data() {
     return {
       readerSize: {
-        width: 100,
-        height: 100,
+        width: 1240,
+        height: 480,
       },
       detecteds: [],
     };

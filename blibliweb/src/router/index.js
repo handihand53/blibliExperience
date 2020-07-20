@@ -152,14 +152,6 @@ const routes = [
     },
   },
   {
-    path: '/detail-pengajuan-barter',
-    name: 'Detail Pengajuan Barter',
-    component: () => import(/* webpackChunkName: "category" */ '../views/user/DetailPengajuanBarter.vue'),
-    meta: {
-      title: 'Detail Pengajuan Barter',
-    },
-  },
-  {
     path: '/detail-pengajuan-barter/:id',
     name: 'Detail Pengajuan Barang Barter',
     component: () => import(/* webpackChunkName: "category" */ '../views/user/DetailBarter.vue'),
@@ -304,6 +296,14 @@ const routes = [
     },
   },
   {
+    path: '/merchant/list-barang/detail/:id',
+    name: 'Detail List Barang Merchant Blibli mart',
+    component: () => import(/* webpackChunkName: "category" */ '../views/merchant/DetailListBarang.vue'),
+    meta: {
+      title: 'Detail List Barang Merchant Blibli mart',
+    },
+  },
+  {
     path: '/merchant/jual-barang',
     name: 'Jual Barang Merchant Blibli mart',
     component: () => import(/* webpackChunkName: "category" */ '../views/merchant/JualBarang.vue'),
@@ -389,6 +389,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "category" */ '../views/admin/Admin.vue'),
     meta: {
       title: 'Admin',
+    },
+  },
+  {
+    path: '/admin/login',
+    name: 'Login Admin Page',
+    component: () => import(/* webpackChunkName: "category" */ '../views/admin/Login.vue'),
+    meta: {
+      title: 'Login Admin',
     },
   },
   {

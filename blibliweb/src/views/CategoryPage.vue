@@ -1,7 +1,7 @@
 <template>
   <div>
     <HeaderWithCart :title='this.$route.params.name'/>
-    <div class='card mt-2 ml-2 mr-2 pt-1 pb-1 cat-sticky'>
+    <!-- <div class='card mt-2 ml-2 mr-2 pt-1 pb-1 cat-sticky'>
       <div class='overflow-x'>
         <span class='category mr-2 ml-2'
         :class="{'un-active':true, active: !true}"
@@ -12,16 +12,16 @@
         @click='getProductByCategoryName(category.categoryName)' :ref='category.categoryName'
         >{{category.categoryName}}</span>
       </div>
-    </div>
+    </div> -->
     <div class='content col-12 row no-margin pl-2 pr-2'>
       <div class='cst-card col-6'
-      v-for='product in this.ProductDetails'
-      v-bind:key='product.id'>
-        <router-link :to='"/detail-product/"+product.id'>
+      v-for='product in this.ProductDetailsByCategory'
+      v-bind:key='product.productId'>
+        <router-link :to='"/detail-product/"+product.productId'>
           <div class='align-items-start'>
             <div class="cont d-flex align-items-center">
-              <img :src='product.imgUrl[0]' :alt='product.productName'
-              class='img-product ml-auto mr-auto'/>
+              <!-- <img :src='product.imgUrl[0]' :alt='product.productName'
+              class='img-product ml-auto mr-auto'/> -->
             </div>
             <div class="mt-auto">
               <p class='title-product'>{{product.productName}}</p>
@@ -111,9 +111,8 @@
       <b-alert
         :show="dismissCountDown"
         dismissible
-        variant="dark"
+        variant="success"
         @dismissed="dismissCountDown=0"
-        @dismiss-count-down="countDownChanged"
       >
         {{alertMsg}}
       </b-alert>
@@ -125,7 +124,7 @@
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
-import { mapGetters, mapActions } from 'vuex';
+// import { mapGetters, mapActions } from 'vuex';
 import axios from 'axios';
 
 export default {
@@ -135,77 +134,43 @@ export default {
   },
   data() {
     return {
+      allProduct: [],
       catParam: '',
       sortPage: false,
       filterPage: false,
-      rows: 2000, // 20 rows is 1 page
+      rows: 2000, // 20 rows in 1 page
       currentPage: 1,
       dismissSecs: 2,
       dismissCountDown: 0,
       alertMsg: '',
+      startingIndex: 0,
     };
   },
   created() {
-    const store = this.$store;
-    store.dispatch('productData/getProducts');
-    store.dispatch('productData/getCategory');
+    console.log(this.$route.params.name);
+    this.getAllData();
   },
   computed: {
-    ...mapGetters([
-      'productData/productList',
-      'productData/categoryList',
-    ]),
-    ProductDetails() {
-      const store = this.$store;
-      if (this.catParam === '') {
-        return store.getters['productData/productList'].data;
-      }
-      return store.getters['productData/productList'].data.filter((ele) => ele.category === this.catParam);
-    },
-    CategoriesDetails() {
-      const store = this.$store;
-      return store.getters['productData/categoryList'];
+    ProductDetailsByCategory() {
+      return this.allProduct.filter((ele) => ele.productCategory === this.$route.params.name);
     },
   },
   methods: {
-    ...mapActions([
-      'productData/getProducts',
-      'productData/getCategory',
-    ]),
+    getAllData() {
+      axios.get(`http://localhost:${this.port}/experience/api/products/available?skipCount=${this.startingIndex}`)
+        .then((response) => {
+          this.allProduct = response.data.data;
+          console.log(this.allProduct);
+        });
+    },
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    },
-    getProductByCategoryName(category) {
-      this.catParam = category;
-    },
-    // Untuk notifikasi ketika user menekan 'beli sekarang'
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
     },
     addToBag() {
       this.alertMsg = 'Produk berhasil ditambahkan';
       this.dismissCountDown = this.dismissSecs;
     },
-    scroll() {
-      window.onscroll = () => {
-        const bottomOfWindow = document.documentElement.scrollTop
-        + window.innerHeight > document.documentElement.offsetHeight - 1;
-        if (bottomOfWindow) {
-          axios
-            .get('http://www.mocky.io/v2/5ec18a432f0000417a4c88c2?mocky-delay=50ms')
-            .then((response) => {
-              this.products.push(response.data.data[5]);
-              this.products.push(response.data.data[6]);
-              this.products.push(response.data.data[7]);
-              this.products.push(response.data.data[8]);
-            });
-        }
-      };
-    },
-  },
-  mounted() {
-    this.scroll();
   },
 };
 </script>

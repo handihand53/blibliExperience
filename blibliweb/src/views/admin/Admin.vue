@@ -60,6 +60,7 @@ export default {
   data() {
     return {
       isLoggedIn: false,
+      isLoading: false,
     };
   },
   async created() {
@@ -80,7 +81,7 @@ export default {
           },
         })
         .catch(() => {
-          this.$router.push('/merchant/login');
+          this.$router.replace('/admin/login');
         });
     },
   },

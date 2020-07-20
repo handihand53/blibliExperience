@@ -5,9 +5,9 @@
             alt="blibli Logo" class="ml-2 blilogo" />
     </div>
     <div >
-      <div class="bg-main p-2 pt-3">
+      <div class="bg-main p-2">
         <div class="card p-2 shadow">
-          <p class="card-title">Masuk ke Akun Merchant</p>
+          <p class="card-title">Admin Login Page</p>
           <label class="input-label" for="email">Email</label>
           <input v-model="email" @change="emailCheckFormat"
           type="email" name="email" id="email" placeholder="Masukkan Email"
@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div class="pt-4">
+    <!-- <div class="pt-4">
       <p class="f-12 center mb-3">Kenapa harus berjualan di Blibli.com ?</p>
       <div class="bg">
         <div class="d-flex justify-content-around">
@@ -71,7 +71,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <Footer/>
     <div class="overlay-loading d-flex align-items-center"
     :class="{hide: !isLoading}">
@@ -114,8 +114,8 @@ export default {
       this.isLoggedIn = true;
       // melakukan check apakah user masih login atau tidak
       // jika user masih login, maka akan dilempar ke halaman utama
-      const dataId = Cookie.get('dataIdMerchant');
-      const dataToken = Cookie.get('dataTokenMerchant');
+      const dataId = Cookie.get('dataIdAdmin');
+      const dataToken = Cookie.get('dataTokenAdmin');
       await axios.get(`http://localhost:${this.port}/experience/api/shops?userId=${dataId}`,
         {
           headers:
@@ -126,7 +126,7 @@ export default {
         .then((response) => {
           this.isLoggedIn = true;
           if (response.data !== null) {
-            this.$router.push('/merchant/menu-utama');
+            this.$router.replace('/admin');
           } else {
             this.isLoading = false;
           }
@@ -162,20 +162,20 @@ export default {
         axios.post(`http://localhost:${this.port}/experience/api/auth/login`, login)
           .then((response) => {
             this.isLoggedIn = true;
-            if (response.data.userRoles[0] === 'MERCHANT') {
-              Cookie.set('dataIdMerchant', response.data.userId, 1); // set cookies expired 1 hari
-              Cookie.set('dataShopIdMerchant', response.data.shopId, 1); // set cookies expired 1 hari
-              Cookie.set('dataTokenMerchant', response.data.accessToken, 1); // set cookies expired 1 hari
-              setTimeout(() => this.$router.push('/merchant/menu-utama'), 1000); // jika login berhasil maka akan dilempar ke halaman utama
+            if (response.data.userRoles[0] === 'ADMIN') {
+              Cookie.set('dataIdAdmin', response.data.userId, 1); // set cookies expired 1 hari
+              Cookie.set('dataShopIdAdmin', response.data.shopId, 1); // set cookies expired 1 hari
+              Cookie.set('dataTokenAdmin', response.data.accessToken, 1); // set cookies expired 1 hari
+              setTimeout(() => this.$router.replace('/admin'), 1000); // jika login berhasil maka akan dilempar ke halaman utama
             } else {
               this.isLoggedIn = false;
             }
+            this.isLoading = false;
           })
           .catch(() => {
             this.isLoggedIn = false;
             this.isLoading = false;
           });
-        this.isLoading = false;
       }
     },
     checkEmail() {
