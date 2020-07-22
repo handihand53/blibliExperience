@@ -42,6 +42,7 @@
       </router-link>
       <b-button class="col-12 simpan-btn mt-3" variant="warning">Simpan</b-button>
     </div>
+    <BottomNavMerchant/>
     <Footer/>
   </div>
 </template>
@@ -51,10 +52,12 @@ import PlainHeaderMarket from '@/components/PlainHeaderMarket.vue';
 import Footer from '@/components/Footer.vue';
 import axios from 'axios';
 import Cookie from 'vue-cookie';
+import BottomNavMerchant from '@/components/BottomNavMerchant.vue';
 
 export default {
   components: {
     PlainHeaderMarket,
+    BottomNavMerchant,
     Footer,
   },
   data() {

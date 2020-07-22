@@ -136,7 +136,7 @@ const routes = [
     },
   },
   {
-    path: '/scan/detail-barang',
+    path: '/detail-scan/:shopId/:barcode',
     name: 'Detail Barang',
     component: () => import(/* webpackChunkName: "category" */ '../views/DetailScan.vue'),
     meta: {
@@ -312,6 +312,14 @@ const routes = [
     },
   },
   {
+    path: '/merchant/edit-barang/:id',
+    name: 'Edit Barang Merchant Blibli mart',
+    component: () => import(/* webpackChunkName: "category" */ '../views/merchant/EditBarang.vue'),
+    meta: {
+      title: 'Edit Barang Merchant Blibli mart',
+    },
+  },
+  {
     path: '/merchant/pemberitahuan',
     name: 'Pemberitahuan Merchant Blibli mart',
     component: () => import(/* webpackChunkName: "category" */ '../views/merchant/PemberitahuanPembelian.vue'),
@@ -413,6 +421,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "category" */ '../views/admin/TambahBarang.vue'),
     meta: {
       title: 'Tambah Barang',
+    },
+  },
+  {
+    path: '/admin/edit-barang/:id',
+    name: 'Edit Barang Page',
+    component: () => import(/* webpackChunkName: "category" */ '../views/admin/EditBarang.vue'),
+    meta: {
+      title: 'Edit Barang',
     },
   },
   {

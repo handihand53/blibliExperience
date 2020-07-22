@@ -4,6 +4,23 @@ import Vue from 'vue';
 
 Vue.config.ignoredElements = ['b-spinner', 'router-link', 'font-awesome-icon', 'b-spinner'];
 
+jest.mock('axios', () => ({
+  get: () => Promise.resolve({
+    data: {
+      data: {
+        shopId: '12342',
+      },
+    },
+  }),
+  post: () => Promise.resolve({
+    data: {
+      userRoles: [
+        'ROLE_MERCHANT',
+      ],
+    },
+  }),
+}));
+
 describe('Login.vue', () => {
   it('Login render correctly', () => {
     const wrapper = shallowMount(Login);

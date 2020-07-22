@@ -2,7 +2,7 @@ import { shallowMount } from '@vue/test-utils';
 import JualBarang from '@/views/merchant/JualBarang.vue';
 import Vue from 'vue';
 
-Vue.config.ignoredElements = ['b-form-input', 'b-input-group', 'router-link', 'font-awesome-icon', 'b-button', 'b-carousel', 'b-carousel-slide', 'b-form-group', 'b-form-radio', 'b-alert', 'b-modal', 'b-spinner'];
+Vue.config.ignoredElements = ['VueBootstrapTypeahead', 'b-form-input', 'b-input-group', 'router-link', 'font-awesome-icon', 'b-button', 'b-carousel', 'b-carousel-slide', 'b-form-group', 'b-form-radio', 'b-alert', 'b-modal', 'b-spinner'];
 
 describe('JualBarang.vue', () => {
   it('JualBarang page render correctly', () => {

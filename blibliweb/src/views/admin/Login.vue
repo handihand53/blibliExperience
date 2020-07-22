@@ -125,12 +125,9 @@ export default {
         })
         .then((response) => {
           this.isLoggedIn = true;
-          if (response.data !== null) {
-            this.$router.replace('/admin');
-          } else {
-            this.isLoading = false;
-          }
-        }).catch(() => {
+          this.$router.replace('/admin');
+        })
+        .finally(() => {
           this.isLoading = false;
         });
     },
@@ -162,7 +159,7 @@ export default {
         axios.post(`http://localhost:${this.port}/experience/api/auth/login`, login)
           .then((response) => {
             this.isLoggedIn = true;
-            if (response.data.userRoles[0] === 'ADMIN') {
+            if (response.data.userRoles[0] === 'ROLE_ADMIN') {
               Cookie.set('dataIdAdmin', response.data.userId, 1); // set cookies expired 1 hari
               Cookie.set('dataShopIdAdmin', response.data.shopId, 1); // set cookies expired 1 hari
               Cookie.set('dataTokenAdmin', response.data.accessToken, 1); // set cookies expired 1 hari

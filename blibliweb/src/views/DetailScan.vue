@@ -5,10 +5,42 @@
       <p>Detail Produk Scan</p>
     </div>
     <div class="p-3 bg-white mt-3">
-      <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-      <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-      <img src="@/assets/etc/aqua.png" alt="" class="product-img">
-      <p class="price-text">Harga <span class="price">Rp3.000</span></p>
+      <p class="title-product">{{ detailProduct.productForm.productName }}</p>
+      <p class="brand-product">Brand:
+        <span class="brand">{{ detailProduct.productForm.productBrand }}</span></p>
+      <!-- <img src="@/assets/etc/aqua.png" alt="" class="product-img"> -->
+      <b-carousel
+            id="carousel-1"
+            v-model="slide"
+            :interval="0"
+            indicators
+            class="product-img"
+            background="transparent"
+            style="text-shadow: 1px 1px 2px #333;"
+          >
+            <b-carousel-slide
+              img-src="../../assets/etc/vit.png"
+            ></b-carousel-slide>
+             <b-carousel-slide
+              img-src="../../assets/etc/vit.png"
+            ></b-carousel-slide>
+             <b-carousel-slide
+              img-src="../../assets/etc/vit.png"
+            ></b-carousel-slide>
+          </b-carousel>
+        <div class="row m-0 p-0 mt-4">
+          <img src="@/assets/etc/vit.png"
+          @click="moveSlider(0)"
+          alt="" class="img-preview">
+          <img src="@/assets/etc/vit.png"
+          @click="moveSlider(1)"
+          alt="" class="img-preview">
+          <img src="@/assets/etc/vit.png"
+          @click="moveSlider(2)"
+          alt="" class="img-preview">
+        </div>
+      <p class="price-text">Harga
+        <span class="price">Rp{{ formatPrice(detailProduct.productPrice) }}</span></p>
       <hr>
       <p class="wishlist-text">
         <font-awesome-icon
@@ -17,28 +49,44 @@
           Wishlist</p>
     </div>
     <div class="p-3">
-      <div class="bg-white mt-1">
+      <div class="bg-white mt-1 shadow">
         <div class="header-desc col-12 row no-margin no-padding">
           <div @click="description"
           class="col-6 no-margin no-padding center"
-          :class="{active: descActive}">
+          :class="{'active-pan': descActive}">
             <p class="desc-box" :class="{'color-white': descActive}">Deskripsi</p>
           </div>
           <div @click="detail"
           class="col-6 no-margin no-padding center"
-          :class="{active: detailActive}">
+          :class="{'active-pan': detailActive}">
             <p class="desc-box" :class="{'color-white': detailActive}">Detail Barang</p>
           </div>
         </div>
-        <div class="desc p-2">
-          <p class="title-product2">Aqua Air Mineral [300 mL/pcs]</p>
+        <div class="desc p-2" v-if="descActive">
+          <p class="title-product2">{{ detailProduct.productForm.productName  }}</p>
           <p class="desc-product">
-          Aqua Air Mineral [300 mL/pcs] adalah air mineral dalam kemasan yang segar.
-          Dibuat dari sumber mata air pilihan yang diproduksi menggunakan teknologi
-          modern untuk mempertahankan rasa alami dan kesegarannya. Dikemas secara higienis
-          untuk menjaga kualitasnya, nikmati segala kebaikan alam dalam setiap tetesnya.
+          {{ detailProduct.productForm.productDescription }}
           </p>
         </div>
+        <table class="table table-striped border-0 m-0 p-0"
+            :class="{'display-none': !detailActive}" v-else>
+              <tr class="content-table">
+                <td>Kategori</td>
+                <td>{{detailProduct.productForm.productCategory}}</td>
+              </tr>
+              <tr class="content-table">
+                <td>Dimensi</td>
+                <td>{{detailProduct.productForm.productVolume}}</td>
+              </tr>
+              <tr class="content-table">
+                <td>Berat (gram)</td>
+                <td>{{detailProduct.productForm.productWeight}}</td>
+              </tr>
+              <tr class="content-table">
+                <td>Kode barcode</td>
+                <td>{{detailProduct.productForm.productBarcode}}</td>
+              </tr>
+            </table>
       </div>
     </div>
     <div class="bottom-navigation p-2 row no-margin">
@@ -60,20 +108,39 @@
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
 
 export default {
-  name: 'Profile',
   components: {
     HeaderWithCart,
     Footer,
   },
   data() {
     return {
+      slide: 0,
       descActive: true,
       detailActive: false,
+      detailProduct: {
+        productForm: {
+          productName: '',
+        },
+      },
     };
   },
+  async created() {
+    await this.getDetailProduct();
+  },
   methods: {
+    async getDetailProduct() {
+      await axios.get(`http://localhost:${this.port}/experience/api/products/barcode?shopId=${this.$route.params.shopId}&productBarcode=${this.$route.params.barcode}`)
+        .then((response) => {
+          this.detailProduct = response.data.data;
+        });
+    },
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
     description() {
       this.descActive = true;
       this.detailActive = false;
@@ -84,7 +151,9 @@ export default {
     },
     confirmLocation() {
       this.currentLocation = this.$refs.location.value;
-      console.log(this.$refs.location.value);
+    },
+    moveSlider(idx) {
+      this.slide = idx;
     },
   },
 };
@@ -128,10 +197,33 @@ export default {
   transition: all 0.7s;
 }
 
+.img-preview{
+  width: 60px;
+  border: 0.8px gray solid;
+  padding: 5px;
+  margin-right: 10px;
+}
+
 .btn-checkout:hover {
   background: #e86c00 radial-gradient(circle, transparent 1%, #e86c00 1%)
     center/15000%;
   color: white;
+}
+
+.content-table{
+  font-size: 14px;
+}
+
+tr.content-table:nth-child(odd){
+  background-color: #eeeeee;
+}
+
+.product-img{
+  width: 100%;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
 
 .btn-checkout:active {
@@ -197,13 +289,6 @@ hr{
   margin-left: 20px;
 }
 
-.product-img{
-  width: 173px;
-  margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-}
 
 .bg-gray{
   background-color: #f1f1f1;
@@ -216,7 +301,7 @@ hr{
   text-overflow: ellipsis;
 }
 
-.active{
+.active-pan{
   cursor: pointer;
   color: white;
   border-bottom: 5px #FC9B2D solid;

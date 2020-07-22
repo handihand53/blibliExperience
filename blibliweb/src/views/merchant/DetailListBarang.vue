@@ -6,13 +6,13 @@
         <div class="custom-detail-card">
           <div class="p-2 pl-3 pr-3">
             <div>
-              <p class="detail-title-product float-left">Samsung A10</p>
-              <p class="tag float-right mt-1">Kategori Daily</p>
+              <p class="detail-title-product float-left">{{ product.productForm.productName }}</p>
+              <p class="tag float-right mt-1">Kategori {{product.productForm.productCategory}}</p>
             </div>
             <div style="clear: both;">
               <p class="brand-detail-product">
                 Brand:
-                <span class="blue-brand">Samsung</span>
+                <span class="blue-brand">{{product.productForm.productBrand}}</span>
               </p>
             </div>
           </div>
@@ -56,7 +56,7 @@
               <table>
                 <tr>
                   <td class="uang-text">Harga</td>
-                  <td class="price-detail-text pl-4">Rp15.000</td>
+                  <td class="price-detail-text pl-4">Rp.{{ formatPrice(product.productPrice) }}</td>
                 </tr>
               </table>
             </div>
@@ -64,35 +64,32 @@
               <div class="p-3">
                 <div class="box-shadow mb-2">
                   <div class="head-tentang">
-                    <p class="text-detail-product">Tentang Produk</p>
+                    <p class="text-detail-product">Tentang Produk
+                      {{ product.productForm.productName }}</p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Barcode : <span>8886008101091</span>
+                      Barcode : <span>{{ product.productForm.productBarcode }}</span>
                     </p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Stok : <span>50</span>
+                      Stok : <span>{{ product.productStock }}</span>
                     </p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Berat : <span>50 gr</span>
+                      Berat : <span>{{ product.productForm.productWeight }}</span>
                     </p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Dimensi Barang : <span>1500 mL</span>
+                      Dimensi Barang : <span>{{ product.productForm.productVolume }}</span>
                     </p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Deskripsi barang : Lorem ipsum dolor
-                      sit amet consectetur adipisicing elit. Neque reiciendis eos, doloribus
-                      veniam nobis praesentium nesciunt, voluptatum voluptas corporis ipsam
-                      exercitationem fugit perferendis quisquam ab voluptates voluptate doloremque
-                      quibusdam accusamus.
+                      Deskripsi : {{ product.productForm.productDescription }}
                     </p>
                   </div>
                 </div>
@@ -102,7 +99,7 @@
         </div>
       </div>
     </div>
-    <div @click="ajukanBarter" class="bottom-ajukan box-shadow">
+    <div @click="editProduct" class="bottom-ajukan box-shadow">
       <div class="text-uppercase">Edit Produk</div>
     </div>
     <div class="overlay-loading d-flex align-items-center"
@@ -132,10 +129,16 @@ export default {
     return {
       slide: 0,
       isLoading: false,
+      product: {
+        productForm: {
+          productName: '',
+        },
+      },
     };
   },
   async created() {
     await this.checkLoginUser();
+    await this.getDetailProduct();
   },
   methods: {
     async checkLoginUser() {
@@ -160,28 +163,29 @@ export default {
         });
     },
     async getDetailProduct() {
-      const dataToken = Cookie.get('dataTokenMerchant');
-      await axios.get(`http://localhost:${this.port}/experience/api/merchant/productStocks`,
-        {
-          headers:
-          {
-            Authorization: `Bearer ${dataToken}`,
-          },
-        })
+      const dataId = Cookie.get('dataShopIdMerchant');
+      await axios.get(`http://localhost:${this.port}/experience/api/products?id=${this.$route.params.id}`)
         .then((response) => {
-          this.shopId = response.data.data.shopId;
+          response.data.data.productStockList.forEach((data) => {
+            if (data.shopForm.shopId === dataId) {
+              this.product = data;
+            }
+          });
         })
         .catch(() => {
           this.$router.push('/merchant/login');
         });
     },
-    ajukanBarter() {
-      // add logic checkout here
+    editProduct() {
       this.isLoading = true;
-      setTimeout(() => this.$router.push('/barter/pengajuan'), 1000);
+      setTimeout(() => this.$router.push(`/merchant/edit-barang/${this.$route.params.id}`), 100);
     },
     moveSlider(idx) {
       this.slide = idx;
+    },
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     },
   },
 };

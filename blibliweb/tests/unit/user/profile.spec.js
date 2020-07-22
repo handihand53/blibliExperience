@@ -4,7 +4,7 @@ import Vue from 'vue';
 import Cookie from 'vue-cookie';
 import flushPromises from 'flush-promises';
 
-Vue.config.ignoredElements = ['b-form-input', 'b-input-group', 'router-link', 'font-awesome-icon', 'b-button', 'b-carousel', 'b-carousel-slide', 'b-form-group', 'b-form-radio', 'b-alert', 'b-modal', 'b-spinner'];
+Vue.config.ignoredElements = ['b-spinner', 'b-form-input', 'b-input-group', 'router-link', 'font-awesome-icon', 'b-button', 'b-carousel', 'b-carousel-slide', 'b-form-group', 'b-form-radio', 'b-alert', 'b-modal', 'b-spinner'];
 
 Cookie.get = jest.fn().mockImplementation(() => 'ok');
 
@@ -29,7 +29,7 @@ jest.mock('axios', () => ({
   post: () => Promise.resolve({ data: [{ val: 1 }] }),
 }));
 
-Vue.config.ignoredElements = ['router-link', 'font-awesome-icon'];
+Vue.config.ignoredElements = ['router-link', 'font-awesome-icon', 'b-spinner'];
 
 describe('Profile.vue', () => {
   it('Profile page render correctly', () => {

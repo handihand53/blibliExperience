@@ -6,4 +6,15 @@ describe('DetailBarter.vue', () => {
     const wrapper = shallowMount(DetailBarter);
     expect(wrapper.exists()).toBe(true);
   });
+
+  it('formatPrice function work correctly', () => {
+    const wrapper = shallowMount(DetailBarter);
+    expect(wrapper.vm.formatPrice(12000)).toBe('12.000');
+  });
+
+  it('expand function work correctly', () => {
+    const wrapper = shallowMount(DetailBarter);
+    wrapper.vm.expand(1);
+    expect(wrapper.vm.formatPrice(12000)).toBe('12.000');
+  });
 });

@@ -96,7 +96,6 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response);
           this.isLoggedIn = true;
           if (response.data !== null) {
             this.$router.push('/');
@@ -137,7 +136,7 @@ export default {
         };
         axios.post(`http://localhost:${this.port}/experience/api/auth/login`, login)
           .then((response) => {
-            if (response.data.userRoles[0] === 'USER') {
+            if (response.data.userRoles[0] === 'ROLE_USER') {
               Cookie.set('dataId', response.data.userId, 1); // set cookies expired 1 hari
               Cookie.set('dataToken', response.data.accessToken, 1); // set cookies expired 1 hari
               setTimeout(() => this.$router.push('/'), 1000); // jika login berhasil maka akan dilempar ke halaman utama

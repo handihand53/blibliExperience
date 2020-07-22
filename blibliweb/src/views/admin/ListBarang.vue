@@ -81,7 +81,7 @@ export default {
       this.isLoggedIn = true;
       const dataToken = Cookie.get('dataTokenAdmin');
       const dataCount = 10;
-      await axios.get(`http://localhost:${this.port}/experience/api/products/getAll?count=${dataCount}`,
+      await axios.get(`http://localhost:${this.port}/experience/api/products/getAll?skipCount=${dataCount}`,
         {
           headers:
           {
@@ -89,6 +89,7 @@ export default {
           },
         })
         .then((response) => {
+          console.log(response);
           this.listOfData = response.data.data;
         });
     },

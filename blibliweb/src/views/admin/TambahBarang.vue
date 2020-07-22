@@ -169,8 +169,7 @@ export default {
       };
 
       axios.post(`http://localhost:${this.port}/experience/api/admin/productMasters`, masterData)
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           this.dismissCountDown = this.dismissSecs;
         });
     },

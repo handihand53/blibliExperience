@@ -33,7 +33,7 @@
             </div>
           </div>
         </router-link>
-        <b-button @click="addToBag()"
+        <b-button @click="addToBag()" id="addToBag"
         variant="primary" class="text-btn">Tambah Ke Keranjang</b-button>
       </div>
     </div>
@@ -147,12 +147,12 @@ export default {
     };
   },
   created() {
-    console.log(this.$route.params.name);
     this.getAllData();
   },
   computed: {
     ProductDetailsByCategory() {
-      return this.allProduct.filter((ele) => ele.productCategory === this.$route.params.name);
+      return this.allProduct.filter((ele) => ele.productForm.productCategory
+        === this.$route.params.name);
     },
   },
   methods: {
@@ -160,7 +160,6 @@ export default {
       axios.get(`http://localhost:${this.port}/experience/api/products/available?skipCount=${this.startingIndex}`)
         .then((response) => {
           this.allProduct = response.data.data;
-          console.log(this.allProduct);
         });
     },
     formatPrice(value) {

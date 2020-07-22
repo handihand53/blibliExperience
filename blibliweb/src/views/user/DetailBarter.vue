@@ -77,6 +77,14 @@ export default {
     HeaderWithCart,
     Footer,
   },
+  data() {
+    return {
+      isExpand: [
+        0,
+        0,
+      ],
+    };
+  },
   async created() {
     await this.checkUser();
   },

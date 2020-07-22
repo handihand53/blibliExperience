@@ -110,7 +110,7 @@ $break-large: 730px;
   width: 170px;
   color: black;
   height: fit-content;
-  z-index: 100;
+  z-index: 1000;
   border-radius: 0px 0px 10px 10px;
   box-shadow: 0px 0px 20px -9px rgba(0, 0, 0, 0.75);
   visibility: hidden;

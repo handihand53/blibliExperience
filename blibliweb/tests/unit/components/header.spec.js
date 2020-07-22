@@ -34,6 +34,7 @@ describe('Header.vue', () => {
     const wrapper = shallowMount(Header);
     wrapper.vm.getUserData();
     await flushPromises();
+    console.log(wrapper.vm.user);
     // expect(wrapper.vm.getFirstName).toBe('Handi');
     // expect(wrapper.vm.getName).toBe('Handi Hermawan');
   });

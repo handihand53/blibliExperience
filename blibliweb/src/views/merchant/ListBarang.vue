@@ -35,7 +35,7 @@
           <span class="stok">{{ product.productStock }}</span></p>
           <p class="deskripsi">Deskripsi:
             {{ getDescription(product.productForm.productDescription) }}</p>
-          <router-link :to='"/merchant/list-barang/detail/"+product.stockId'>
+          <router-link :to='"/merchant/list-barang/detail/"+product.productForm.productId'>
             <button class="btn btn-outline-primary pl-5 pr-5 float-right">Lihat</button>
           </router-link>
         </div>
@@ -90,7 +90,7 @@ export default {
     async getShopProduct() {
       const dataShopId = Cookie.get('dataShopIdMerchant');
       const dataToken = Cookie.get('dataTokenMerchant');
-      await axios.get(`http://localhost:${this.port}/experience//api/merchant/productStocks?shopId=${dataShopId}`,
+      await axios.get(`http://localhost:${this.port}/experience/api/merchant/productStocks?shopId=${dataShopId}`,
         {
           headers:
           {
@@ -98,7 +98,6 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response.data.data);
           this.productLists = response.data.data;
         })
         .catch(() => {

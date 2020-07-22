@@ -2,7 +2,7 @@ module.exports = {
   preset: '@vue/cli-plugin-unit-jest',
   collectCoverage: true,
   collectCoverageFrom: [
-    'src/store/*.js',
+    // 'src/store/*.js',
     'src/components/*.vue',
     'src/views/*.vue',
     'src/views/**/*.vue',
@@ -16,4 +16,8 @@ module.exports = {
     '<rootDir>/tests/unit/**/*.spec.(js)',
     // '<rootDir>/tests/unit/login.spec.(js)',
   ],
+  transformIgnorePatterns: ['/node_modules/'],
+  transform: {
+    '^.+\\.(js|jsx)?$': '<rootDir>/node_modules/babel-jest',
+  },
 };

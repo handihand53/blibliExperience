@@ -125,14 +125,10 @@ export default {
         })
         .then((response) => {
           this.isLoggedIn = true;
-          if (response.data !== null) {
             this.$router.push('/merchant/menu-utama');
-          } else {
             this.isLoading = false;
-          }
-        }).catch(() => {
-          this.isLoading = false;
         });
+      this.isLoading = false;
     },
     showPassword() {
       this.isContentVisible = !this.isContentVisible;
@@ -162,19 +158,15 @@ export default {
         axios.post(`http://localhost:${this.port}/experience/api/auth/login`, login)
           .then((response) => {
             this.isLoggedIn = true;
-            if (response.data.userRoles[0] === 'MERCHANT') {
+            if (response.data.userRoles[0] === 'ROLE_MERCHANT') {
               Cookie.set('dataIdMerchant', response.data.userId, 1); // set cookies expired 1 hari
               Cookie.set('dataShopIdMerchant', response.data.shopId, 1); // set cookies expired 1 hari
               Cookie.set('dataTokenMerchant', response.data.accessToken, 1); // set cookies expired 1 hari
               setTimeout(() => this.$router.push('/merchant/menu-utama'), 1000); // jika login berhasil maka akan dilempar ke halaman utama
-            } else {
-              this.isLoggedIn = false;
             }
-          })
-          .catch(() => {
             this.isLoggedIn = false;
-            this.isLoading = false;
           });
+        this.isLoggedIn = false;
         this.isLoading = false;
       }
     },

@@ -146,8 +146,7 @@ export default {
           } else {
             this.isLoading = false;
           }
-        }).catch((s) => {
-          console.log(s);
+        }).catch(() => {
           this.isLoading = false;
         });
     },
@@ -269,8 +268,7 @@ export default {
               setTimeout(() => this.$router.push('/'), 1000);
             });
         })
-        .catch((e) => {
-          console.log(e);
+        .catch(() => {
         });
     },
   },

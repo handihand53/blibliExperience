@@ -13,8 +13,20 @@ const $router = {
 Cookie.get = jest.fn().mockImplementation(() => 'ok');
 
 jest.mock('axios', () => ({
-  get: () => Promise.resolve({ data: [{ val: 1 }] }),
-  post: () => Promise.resolve({ data: [{ val: 1 }] }),
+  get: () => Promise.resolve({
+    data: {
+      userRoles: [
+        'ROLE_USER',
+      ],
+    },
+  }),
+  post: () => Promise.resolve({
+    data: {
+      userRoles: [
+        'ROLE_USER',
+      ],
+    },
+  }),
 }));
 
 
@@ -38,7 +50,7 @@ describe('Login.vue', () => {
         };
       },
     });
-    expect(wrapper.vm.isLoggedIn).toBe(false);
+    expect(wrapper.vm.isLoggedIn).toBe(true);
     expect(wrapper.vm.isLoading).toBe(true);
     wrapper.find('#login').trigger('click');
     await flushPromises();

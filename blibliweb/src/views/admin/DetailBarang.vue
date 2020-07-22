@@ -15,7 +15,8 @@
       <p class="brand-product">Ukuran produk: {{ listOfData.productVolume }}</p>
       <p class="brand-product mt-1">Berat produk: {{ listOfData.productWeight }}</p>
       <p class="brand-product mt-1">Barcode produk: {{ listOfData.productBarcode }}</p>
-      <router-link to='' class="ml-auto mr-auto mt-3 mb-2">
+      <router-link :to="'/admin/edit-barang/'+this.$route.params.id"
+      class="ml-auto mr-auto mt-3 mb-2">
         <b-button variant="outline-primary" class="px-3 py-1">
           Edit data produk
         </b-button>
