@@ -44,6 +44,57 @@
   </div>
 </template>
 
+<script>
+import axios from 'axios';
+import Cookie from 'vue-cookie';
+
+export default {
+  data() {
+    return {
+    };
+  },
+  async created() {
+    await this.checkLoginUser();
+    await this.getBarterSubmission();
+  },
+  methods: {
+    async checkLoginUser() {
+    // melakukan check apakah user masih login atau tidak
+    // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .catch(() => {
+          this.$router.push('/');
+        });
+    },
+    async getBarterSubmission() {
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/barterSubmission/user?userId=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((e) => {
+          console.log(e.response.status);
+        });
+    },
+  },
+};
+</script>
+
 <style scoped>
 .list-detail-tentang{
   padding: 10px;

@@ -15,25 +15,25 @@
     </div> -->
     <div class='content col-12 row no-margin pl-2 pr-2'>
       <div class='cst-card col-6'
-      v-for='product in this.ProductDetailsByCategory'
-      v-bind:key='product.productId'>
-        <router-link :to='"/detail-product/"+product.productId'>
+      v-for='product in allProduct'
+      v-bind:key='product.productDataForm.productId'>
+        <router-link :to='"/detail-product/"+product.productDataForm.productId'>
           <div class='align-items-start'>
             <div class="cont d-flex align-items-center">
-              <!-- <img :src='product.imgUrl[0]' :alt='product.productName'
-              class='img-product ml-auto mr-auto'/> -->
+              <img :src='getImage(product.productDataForm.productImagePaths[0])'
+              :alt='product.productName'
+              class='img-product ml-auto mr-auto'/>
             </div>
             <div class="mt-auto">
-              <p class='title-product'>{{product.productName}}</p>
+              <p class='title-product'>{{product.productDataForm.productName}}</p>
+              <p class="penawaran-text">Penawaran mulai dari</p>
               <p class='product-price' title=product.productPrice>
                 Rp.{{formatPrice(product.productPrice)}}
               </p>
-              <p class="penawaran-text">Penawaran mulai dari
-                Rp{{formatPrice(product.productPrice)}}</p>
             </div>
           </div>
         </router-link>
-        <b-button @click="addToBag()" id="addToBag"
+        <b-button @click="addToBag()" id="add"
         variant="primary" class="text-btn">Tambah Ke Keranjang</b-button>
       </div>
     </div>
@@ -151,13 +151,13 @@ export default {
   },
   computed: {
     ProductDetailsByCategory() {
-      return this.allProduct.filter((ele) => ele.productForm.productCategory
+      return this.allProduct.filter((ele) => ele.productDataForm.productCategory
         === this.$route.params.name);
     },
   },
   methods: {
     getAllData() {
-      axios.get(`http://localhost:${this.port}/experience/api/products/available?skipCount=${this.startingIndex}`)
+      axios.get(`http://localhost:${this.port}/experience/api/products/category?productCategory=${this.$route.params.name}&skipCount=${this.startingIndex}`)
         .then((response) => {
           this.allProduct = response.data.data;
         });
@@ -169,6 +169,10 @@ export default {
     addToBag() {
       this.alertMsg = 'Produk berhasil ditambahkan';
       this.dismissCountDown = this.dismissSecs;
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
     },
   },
 };

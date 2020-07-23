@@ -6,40 +6,52 @@
         <div class="custom-detail-card">
           <div class="p-2 pl-3 pr-3">
             <div>
-              <p class="detail-title-product float-left">Samsung A10</p>
-              <p class="tag float-right mt-1">Baru</p>
+              <p class="detail-title-product float-left">{{product.productBarterName}}</p>
+              <p class="tag float-right mt-1" v-if="product.productBarterCondition == 'NEW'">
+                {{product.productBarterCondition}}</p>
+              <p class="tag-orange float-right mt-1" v-else>{{product.productBarterCondition}}</p>
             </div>
             <div style="clear: both;">
               <p class="brand-detail-product">
                 Brand:
-                <span class="blue-brand">Samsung</span>
+                <span class="blue-brand">{{product.productBarterBrand}}</span>
               </p>
             </div>
           </div>
           <div class="overflow-y">
-            <div class="p-3 center">
+            <!-- <div class="p-3 center">
               <img src="@/assets/etc/aqua.png" alt class="detail-image-product p-3" />
+            </div> -->
+            <div class="p-3">
+              <b-carousel
+                id="carousel-1"
+                v-model="slide"
+                :interval="0"
+                indicators
+                class="product-img"
+                background="transparent"
+                style="text-shadow: 1px 1px 2px #333;"
+              >
+                <b-carousel-slide v-for="image in product.productBarterImagePaths"
+                  :key="image" :img-src="getImage(image)"
+                ></b-carousel-slide>
+              </b-carousel>
+              <div class="row m-0 p-0 mt-4">
+                <img :src="getImage(image)"
+                v-for="(image, idx) in product.productBarterImagePaths"
+                :key="image"
+                @click="moveSlider(idx)"
+                alt="" class="img-preview">
+              </div>
+
             </div>
             <div class="pl-3 pb-2">
               <table>
                 <tr>
-                  <td class="uang-text">Estimasi Harga</td>
-                  <td class="price-detail-text pl-4">Rp15.000</td>
-                </tr>
-                <tr>
                   <td class="uang-text">Barter Referensi</td>
-                  <td class="price-detail-text pl-4">Samsung Note 10</td>
+                  <td class="price-detail-text pl-4">{{product.productBarterPreference}}</td>
                 </tr>
               </table>
-            </div>
-            <div class="profile-pemilik pt-3">
-              <div class="pt-2 pb-2 bg-white pl-3 pr-3">
-                <p class="profile-text">Profile Pemilik Barang</p>
-                <p class="name-text">Nama : <span class="detail-name">Handi Hermawan</span></p>
-                <p class="address-text">Alamat : <span class="detail-address">Jl.
-                  Juadi No.29, Kotabaru, Kec. Gondokusuman, Kota Yogyakarta,
-                  Daerah Istimewa Yogyakarta 55224</span></p>
-              </div>
             </div>
             <div class="about-detail-product">
               <div class="p-3">
@@ -50,19 +62,24 @@
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
                       Status Barang :
-                      <span class="tag">Baru</span>
+                      <span class="tag">{{product.productBarterCondition}}</span>
                     </p>
                   </div>
                   <div class="list-detail-tentang">
-                    <p class="text-detail-product">Lama Pemakaian : 3 Tahun 6 bulan</p>
+                    <p class="text-detail-product">Kelengkapan Barter :
+                      <span>{{ product.productBarterPackage}}</span></p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">Ukuran barang :
+                      <span>{{ product.productBarterVolume}}</span></p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">Berat Barang Barter :
+                      <span>{{ product.productBarterWeight }} Kg</span></p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Deskripsi barang : Lorem ipsum dolor
-                      sit amet consectetur adipisicing elit. Neque reiciendis eos, doloribus
-                      veniam nobis praesentium nesciunt, voluptatum voluptas corporis ipsam
-                      exercitationem fugit perferendis quisquam ab voluptates voluptate doloremque
-                      quibusdam accusamus.
+                      Deskripsi barang : {{product.productBarterDescription}}
                     </p>
                   </div>
                 </div>
@@ -90,6 +107,7 @@
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
 
 export default {
   components: {
@@ -99,13 +117,32 @@ export default {
   data() {
     return {
       isLoading: false,
+      product: [],
+      slide: 0,
     };
   },
+  async created() {
+    await this.getBarterById();
+  },
   methods: {
+    async getBarterById() {
+      await axios.get(`http://localhost:${this.port}/experience/api/barter?productBarterId=${this.$route.params.id}`)
+        .then((response) => {
+          this.product = response.data.data;
+          console.log(this.product);
+        });
+    },
     ajukanBarter() {
       // add logic checkout here
       this.isLoading = true;
-      setTimeout(() => this.$router.push('/barter/pengajuan'), 1000);
+      setTimeout(() => this.$router.push(`/barter/pengajuan/${this.$route.params.id}`), 1000);
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/barterProductPhoto/${path[path.length - 1]}`;
+    },
+    moveSlider(idx) {
+      this.slide = idx;
     },
   },
 };
@@ -134,6 +171,16 @@ export default {
   width: 50px;
   height: 50px;
 }
+
+
+.product-img{
+  width: 100%;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
 
 .overlay-loading{
   z-index: 200;
@@ -225,6 +272,14 @@ p{
 
 .tag{
   background-color: #0095DA;
+  color: white;
+  font-size: 10px;
+  padding: 2px 10px;
+  border-radius: 10px;
+}
+
+.tag-orange{
+  background-color: orange;
   color: white;
   font-size: 10px;
   padding: 2px 10px;
@@ -436,9 +491,11 @@ p{
     color: #AEAEAE;
 }
 
-.active{
-    border-bottom: 2px #0095DA solid;
-    color: #0095DA;
+.img-preview{
+  width: 60px;
+  border: 0.8px gray solid;
+  padding: 5px;
+  margin-right: 10px;
 }
 
 </style>

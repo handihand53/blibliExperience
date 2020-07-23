@@ -14,39 +14,29 @@
     <label class="label-page pl-2">Kategori yang kamu suka</label>
     <div class="card ml-2 mr-2 pt-1 pb-2">
       <div class="overflow-x">
-        <span class="category mr-2 ml-2 active"
-        @click='getProductByCategoryName("")'>Semua</span>
+        <span class="category mr-2 ml-2 active">Semua</span>
         <span class='category mr-2'
-        :class="{'un-active':category.categoryName, active: !category.categoryName}"
-        v-for='category in CategoriesDetails.data' v-bind:key='category.categoryId'
-        @click='getProductByCategoryName(category.categoryName)' :ref='category.categoryName'
-        >{{category.categoryName}}</span>
+        :class="{'un-active':category, active: !category}"
+        v-for='category in category' v-bind:key='category'
+        :ref='category'
+        >{{category}}</span>
       </div>
     </div>
     <label class="label-page pl-2 pt-2">Barang ini menunggu buat kamu tukar loh</label>
     <div class="content col-12 row no-margin pl-2 pr-2">
-      <router-link to="/barter/detail" class="cst-card col-6">
+      <router-link :to="'/barter/detail/'+product.productBarterId" class="cst-card col-6"
+      v-for="product in barterProduct" v-bind:key='product.productBarterId'>
         <div class="">
-          <img src="@/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <span class="tag-label-baru">Baru</span>
-          <p class="title-product">Botol Minum Aqua Mineralasdkj lkjashlkjd haskhd askd</p>
-          <p class="product-price">Rp.3.000</p>
-        </div>
-      </router-link>
-      <router-link to="/barter/detail" class="cst-card col-6">
-        <div class="">
-          <img src="@/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <span class="tag-label-baru">Baru</span>
-          <p class="title-product">Botol Minum Aqua Mineralasdkj lkjashlkjd haskhd askd</p>
-          <p class="product-price">Rp.3.000</p>
-        </div>
-      </router-link>
-      <router-link to="/barter/detail" class="cst-card col-6">
-        <div class="">
-          <img src="@/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <span class="tag-label-bekas">Bekas</span>
-          <p class="title-product">Botol Minum Aqua Mineralasdkj lkjashlkjd haskhd askd</p>
-          <p class="product-price">Rp.3.000</p>
+          <div class="divimg d-flex align-items-center">
+            <img :src="getImage(product.productBarterImagePaths[0])"
+            alt="" class="img-product ml-auto mr-auto" />
+          </div>
+          <span class="tag-label-baru" v-if="product.productBarterCondition === 'NEW'">
+            {{product.productBarterCondition}}</span>
+          <span class="tag-label-bekas" v-if="product.productBarterCondition === 'SECOND'">
+            {{product.productBarterCondition}}</span>
+          <p class="title-product">{{ product.productBarterName }}</p>
+          <p class="product-price">Prefer {{ product.productBarterPreference }}</p>
         </div>
       </router-link>
     </div>
@@ -57,7 +47,8 @@
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
-import { mapGetters, mapActions } from 'vuex';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -67,30 +58,49 @@ export default {
   data() {
     return {
       catParam: '',
+      skipCount: 0,
+      category: [],
+      barterProduct: [],
     };
   },
-  created() {
-    const store = this.$store;
-    // store.dispatch('_cariBarang/getProducts');
-    store.dispatch('_barter/getCategory');
+  async created() {
+    await this.getProductBarter();
+    await this.getAllCategory();
   },
   computed: {
-    ...mapGetters([
-      // '_cariBarang/productList',
-      '_barter/categoryList',
-    ]),
-    CategoriesDetails() {
-      const store = this.$store;
-      return store.getters['_barter/categoryList'];
-    },
+    // ...mapGetters([
+    //   // '_cariBarang/productList',
+    //   '_barter/categoryList',
+    // ]),
+    // CategoriesDetails() {
+    //   const store = this.$store;
+    //   return store.getters['_barter/categoryList'];
+    // },
   },
   methods: {
-    ...mapActions([
-      // '_cariBarang/getProducts',
-      '_barter/getCategory',
-    ]),
-    getProductByCategoryName(category) {
-      this.catParam = category;
+    async getProductBarter() {
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/barter/available?skipCount=${this.skipCount}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((response) => {
+          this.barterProduct = response.data.data;
+          console.log(response);
+        });
+    },
+    async getAllCategory() {
+      await axios.get(`http://localhost:${this.port}/experience/api/products/enums/category`)
+        .then((response) => {
+          this.category = response.data.data.categories;
+        });
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/barterProductPhoto/${path[path.length - 1]}`;
     },
   },
 };
@@ -135,9 +145,14 @@ export default {
   margin-left: 5px;
 }
 
+.divimg{
+  min-width: 120px;
+  min-height: 120px;
+}
+
 .img-product {
-  width: 120px;
-  height: 120px;
+  max-width: 120px;
+  max-height: 120px;
   display: block;
 }
 

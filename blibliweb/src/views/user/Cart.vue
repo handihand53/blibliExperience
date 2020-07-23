@@ -2,7 +2,7 @@
   <div>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
     <PlainHeader />
-    <div class='p-3'>
+    <div class='p-3' v-if="!this.empty">
       <div class='cst-card'>
         <div class='row no-padding no-margin border-bottom pb-2'>
           <label class="container col-1 no-padding">
@@ -23,10 +23,10 @@
             </label>
             <div class='col-11 row no-margin no-padding mb-2'>
               <div class='col-4 no-padding'>
-                <img src='@/assets/etc/aqua.png' />
+                <img :src='getImage(cart.productDataForm.productImagePaths[0])' />
               </div>
               <div class='col-8 no-padding'>
-                <p class='title-product'>{{ cart.productForm.productName }}</p>
+                <p class='title-product'>{{ cart.productDataForm.productName }}</p>
                 <p class='product-price'>Rp.{{formatPrice(cart.productPrice) }}</p>
                 <p class="location">{{ cart.shopForm.shopName }}</p>
                 <p class="total-product">Jumlah</p>
@@ -53,7 +53,19 @@
         </div>
       </div>
     </div>
-    <div class="bottom-navigation p-2 row no-margin">
+    <div class="p-3 text-center" v-else>
+      <h4 class="">Upss!</h4>
+      <img src="\assets\etc\cartEmpty.jpg" alt=""
+      class="img-fluid cart-empty">
+      <h4 class="mt-1">Keranjang anda kosong nih!</h4>
+      <small>Mau diisi apa lagi ya Keranjang sebesar ini?
+        Coba masukkan produk yang sudah kebawa mimpi.</small>
+        <br>
+        <div class="mt-2">
+          <router-link to="/" class="mt-3">Cek mimpimu disini</router-link>
+        </div>
+    </div>
+    <div class="bottom-navigation p-2 row no-margin" v-if="!this.empty">
       <div class="col-6">
         <p class="text-total">Total Belanja({{ length }})</p>
         <p class="text-price">Rp{{ formatPrice(total) }}</p>
@@ -95,6 +107,7 @@ export default {
       total: 0,
       price: [],
       length: 0,
+      empty: false,
     };
   },
   created() {
@@ -127,8 +140,12 @@ export default {
           });
           this.countTotal();
         })
-        .catch(() => {
-          this.$router.replace('/');
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.empty = true;
+          } else {
+            this.$router.replace('/');
+          }
         })
         .finally(() => {
           this.isLoading = false;
@@ -176,6 +193,10 @@ export default {
       // add logic checkout here
       this.isLoading = true;
       setTimeout(() => this.$router.push('/confirm'), 1000);
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
     },
     addAmount(idx, stock, price) {
       // add logic change amount here
@@ -267,6 +288,10 @@ export default {
   margin: 0px;
   color: #ff7600;
   font-weight: 600;
+}
+
+.cart-empty{
+  max-width: 100%!important;
 }
 
 .overlay-loading{

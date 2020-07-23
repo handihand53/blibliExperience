@@ -6,13 +6,15 @@
         <div class="custom-detail-card">
           <div class="p-2 pl-3 pr-3">
             <div>
-              <p class="detail-title-product float-left">{{ product.productForm.productName }}</p>
-              <p class="tag float-right mt-1">Kategori {{product.productForm.productCategory}}</p>
+              <p class="detail-title-product float-left">
+                {{ product.productDataForm.productName }}</p>
+              <p class="tag float-right mt-1">Kategori
+                {{product.productDataForm.productCategory}}</p>
             </div>
             <div style="clear: both;">
               <p class="brand-detail-product">
                 Brand:
-                <span class="blue-brand">{{product.productForm.productBrand}}</span>
+                <span class="blue-brand">{{product.productDataForm.productBrand}}</span>
               </p>
             </div>
           </div>
@@ -30,25 +32,15 @@
               style="text-shadow: 1px 1px 2px #333;"
             >
               <!-- slides with image -->
-              <b-carousel-slide
-                img-src="/assets/etc/vit.png"
-              ></b-carousel-slide>
-              <b-carousel-slide
-                img-src="/assets/etc/vit.png"
-              ></b-carousel-slide>
-              <b-carousel-slide
-                img-src="/assets/etc/vit.png"
+              <b-carousel-slide v-for="image in product.productDataForm.productImagePaths"
+                :key="image" :img-src="getImage(image)"
               ></b-carousel-slide>
             </b-carousel>
             <div class="row m-0 p-0 mt-4 ml-3">
-              <img src="@/assets/etc/vit.png"
-              @click="moveSlider(0)"
-              alt="" class="img-preview">
-              <img src="@/assets/etc/vit.png"
-              @click="moveSlider(1)"
-              alt="" class="img-preview">
-              <img src="@/assets/etc/vit.png"
-              @click="moveSlider(2)"
+              <img :src="getImage(image)"
+              @click="moveSlider(idx)"
+              v-for="(image, idx) in product.productDataForm.productImagePaths"
+              :key="image"
               alt="" class="img-preview">
             </div>
             <hr>
@@ -65,11 +57,11 @@
                 <div class="box-shadow mb-2">
                   <div class="head-tentang">
                     <p class="text-detail-product">Tentang Produk
-                      {{ product.productForm.productName }}</p>
+                      {{ product.productDataForm.productName }}</p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Barcode : <span>{{ product.productForm.productBarcode }}</span>
+                      Barcode : <span>{{ product.productDataForm.productBarcode }}</span>
                     </p>
                   </div>
                   <div class="list-detail-tentang">
@@ -79,17 +71,17 @@
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Berat : <span>{{ product.productForm.productWeight }}</span>
+                      Berat : <span>{{ product.productDataForm.productWeight }}</span>
                     </p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Dimensi Barang : <span>{{ product.productForm.productVolume }}</span>
+                      Dimensi Barang : <span>{{ product.productDataForm.productVolume }}</span>
                     </p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Deskripsi : {{ product.productForm.productDescription }}
+                      Deskripsi : {{ product.productDataForm.productDescription }}
                     </p>
                   </div>
                 </div>
@@ -130,7 +122,7 @@ export default {
       slide: 0,
       isLoading: false,
       product: {
-        productForm: {
+        productDataForm: {
           productName: '',
         },
       },
@@ -175,6 +167,10 @@ export default {
         .catch(() => {
           this.$router.push('/merchant/login');
         });
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
     },
     editProduct() {
       this.isLoading = true;

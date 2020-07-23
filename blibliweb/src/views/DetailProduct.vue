@@ -6,7 +6,7 @@
         <p class="title-product">{{ allProduct.productName }}</p>
         <p class="brand-product">Brand:
           <span class="brand">{{ allProduct.productBrand }}</span></p>
-          <!-- <b-carousel
+          <b-carousel
             id="carousel-1"
             v-model="slide"
             :interval="0"
@@ -15,27 +15,17 @@
             background="transparent"
             style="text-shadow: 1px 1px 2px #333;"
           >
-            <b-carousel-slide
-              :img-src=ProductDetails.imgUrl[0]
+            <b-carousel-slide v-for="image in allProduct.productImagePaths"
+              :key="image" :img-src="getImage(image)"
             ></b-carousel-slide>
-             <b-carousel-slide
-              :img-src=ProductDetails.imgUrl[0]
-            ></b-carousel-slide>
-             <b-carousel-slide
-              :img-src=ProductDetails.imgUrl[0]
-            ></b-carousel-slide>
-          </b-carousel> -->
-        <!-- <div class="row m-0 p-0 mt-4">
-          <img :src="ProductDetails.imgUrl[0]"
-          @click="moveSlider(0)"
+          </b-carousel>
+        <div class="row m-0 p-0 mt-4">
+          <img :src="getImage(image)"
+          v-for="(image, idx) in allProduct.productImagePaths"
+          :key="image"
+          @click="moveSlider(idx)"
           alt="" class="img-preview">
-          <img :src="ProductDetails.imgUrl[0]"
-          @click="moveSlider(1)"
-          alt="" class="img-preview">
-          <img :src="ProductDetails.imgUrl[0]"
-          @click="moveSlider(2)"
-          alt="" class="img-preview">
-        </div> -->
+        </div>
         <p class="price-text"
         v-if="this.currentIdx !== null">Harga <span class="price">
           Rp{{ formatPrice(allProduct.productStockList[currentIdx].productPrice) }}</span></p>
@@ -264,6 +254,10 @@ export default {
       this.descActive = true;
       this.detailActive = false;
     },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
+    },
     detail() {
       this.descActive = false;
       this.detailActive = true;
@@ -314,7 +308,7 @@ export default {
       const dataId = Cookie.get('dataId');
       const dataToken = Cookie.get('dataToken');
       const cart = {
-        productId: this.allProduct.productStockList[this.currentIdx].productForm.productId,
+        productId: this.allProduct.productId,
         stockId: this.allProduct.productStockList[this.currentIdx].stockId,
         userId: dataId,
       };

@@ -23,19 +23,20 @@
       style="flex-direction: row!important;"
       v-for="product in productLists" v-bind:key="product.stockId">
         <div class="col-4">
-          <img src="@/assets/etc/aqua.png" alt="" class="img-product">
+          <img :src="getImage(product.productDataForm.productImagePaths[0])"
+          alt="" class="img-product">
         </div>
         <div class="col-8 column">
-          <p class="title-product">{{ product.productForm.productName }}</p>
+          <p class="title-product">{{ product.productDataForm.productName }}</p>
           <p class="brand-product">Brand:
-            <span class="brand">{{  product.productForm.productBrand  }}</span></p>
+            <span class="brand">{{  product.productDataForm.productBrand  }}</span></p>
           <p class="brand-product">Harga:
           <span class="price">Rp.{{ formatPrice(product.productPrice) }}</span></p>
           <p class="brand-product">Stok:
           <span class="stok">{{ product.productStock }}</span></p>
           <p class="deskripsi">Deskripsi:
-            {{ getDescription(product.productForm.productDescription) }}</p>
-          <router-link :to='"/merchant/list-barang/detail/"+product.productForm.productId'>
+            {{ getDescription(product.productDataForm.productDescription) }}</p>
+          <router-link :to='"/merchant/list-barang/detail/"+product.productDataForm.productId'>
             <button class="btn btn-outline-primary pl-5 pr-5 float-right">Lihat</button>
           </router-link>
         </div>
@@ -69,6 +70,10 @@ export default {
     await this.getShopProduct();
   },
   methods: {
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
+    },
     async checkLoginUser() {
       this.isLoggedIn = true;
       // melakukan check apakah user masih login atau tidak
@@ -99,6 +104,7 @@ export default {
         })
         .then((response) => {
           this.productLists = response.data.data;
+          console.log(this.productLists);
         })
         .catch(() => {
           this.$router.push('/merchant/login');

@@ -51,7 +51,7 @@
       </div> -->
       <button @click="edit" class="next-btn mt-4"
       :class="{'disable': !btnState, 'active-btn': btnState}"
-      ref='btn' disabled>Input Barang</button>
+      ref='btn' disabled>Edit Barang</button>
       <div class="fixed-alert text-center pl-3 pr-3">
         <b-alert
           :show="dismissCountDown"

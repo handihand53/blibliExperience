@@ -80,7 +80,7 @@ export default {
     async getListProduct() {
       this.isLoggedIn = true;
       const dataToken = Cookie.get('dataTokenAdmin');
-      const dataCount = 10;
+      const dataCount = 0;
       await axios.get(`http://localhost:${this.port}/experience/api/products/getAll?skipCount=${dataCount}`,
         {
           headers:

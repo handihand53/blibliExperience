@@ -103,7 +103,7 @@ export default {
               this.product = data;
             }
           });
-          this.namaBarang = this.product.productForm.productName;
+          this.namaBarang = this.product.productDataForm.productName;
         })
         .catch(() => {
           this.$router.push('/merchant/login');

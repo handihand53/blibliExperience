@@ -123,7 +123,7 @@ export default {
             Authorization: `Bearer ${dataToken}`,
           },
         })
-        .then((response) => {
+        .then(() => {
           this.isLoggedIn = true;
           this.$router.replace('/admin');
         })

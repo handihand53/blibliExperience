@@ -5,9 +5,9 @@
       <p>Detail Produk Scan</p>
     </div>
     <div class="p-3 bg-white mt-3">
-      <p class="title-product">{{ detailProduct.productForm.productName }}</p>
+      <p class="title-product">{{ detailProduct.productDataForm.productName }}</p>
       <p class="brand-product">Brand:
-        <span class="brand">{{ detailProduct.productForm.productBrand }}</span></p>
+        <span class="brand">{{ detailProduct.productDataForm.productBrand }}</span></p>
       <!-- <img src="@/assets/etc/aqua.png" alt="" class="product-img"> -->
       <b-carousel
             id="carousel-1"
@@ -19,25 +19,15 @@
             style="text-shadow: 1px 1px 2px #333;"
           >
             <b-carousel-slide
-              img-src="../../assets/etc/vit.png"
-            ></b-carousel-slide>
-             <b-carousel-slide
-              img-src="../../assets/etc/vit.png"
-            ></b-carousel-slide>
-             <b-carousel-slide
-              img-src="../../assets/etc/vit.png"
+              v-for="image in detailProduct.productDataForm.productImagePaths"
+              :key="image" :img-src="getImage(image)"
             ></b-carousel-slide>
           </b-carousel>
         <div class="row m-0 p-0 mt-4">
-          <img src="@/assets/etc/vit.png"
-          @click="moveSlider(0)"
-          alt="" class="img-preview">
-          <img src="@/assets/etc/vit.png"
-          @click="moveSlider(1)"
-          alt="" class="img-preview">
-          <img src="@/assets/etc/vit.png"
-          @click="moveSlider(2)"
-          alt="" class="img-preview">
+          <img :src="getImage(image)"
+            v-for="(image, idx) in detailProduct.productDataForm.productImagePaths"
+            :key="image" @click="moveSlider(idx)"
+            alt="" class="img-preview">
         </div>
       <p class="price-text">Harga
         <span class="price">Rp{{ formatPrice(detailProduct.productPrice) }}</span></p>
@@ -63,43 +53,52 @@
           </div>
         </div>
         <div class="desc p-2" v-if="descActive">
-          <p class="title-product2">{{ detailProduct.productForm.productName  }}</p>
+          <p class="title-product2">{{ detailProduct.productDataForm.productName  }}</p>
           <p class="desc-product">
-          {{ detailProduct.productForm.productDescription }}
+          {{ detailProduct.productDataForm.productDescription }}
           </p>
         </div>
         <table class="table table-striped border-0 m-0 p-0"
             :class="{'display-none': !detailActive}" v-else>
               <tr class="content-table">
                 <td>Kategori</td>
-                <td>{{detailProduct.productForm.productCategory}}</td>
+                <td>{{detailProduct.productDataForm.productCategory}}</td>
               </tr>
               <tr class="content-table">
                 <td>Dimensi</td>
-                <td>{{detailProduct.productForm.productVolume}}</td>
+                <td>{{detailProduct.productDataForm.productVolume}}</td>
               </tr>
               <tr class="content-table">
                 <td>Berat (gram)</td>
-                <td>{{detailProduct.productForm.productWeight}}</td>
+                <td>{{detailProduct.productDataForm.productWeight}}</td>
               </tr>
               <tr class="content-table">
                 <td>Kode barcode</td>
-                <td>{{detailProduct.productForm.productBarcode}}</td>
+                <td>{{detailProduct.productDataForm.productBarcode}}</td>
               </tr>
             </table>
       </div>
     </div>
-    <div class="bottom-navigation p-2 row no-margin">
-      <div class="col-8 no-padding-left">
-        <select name="" id="" class="form-control">
-          <option selected hidden>Metode Pengiriman</option>
-          <option value="">Bliblimart</option>
-          <option value="">Antar ke rumah</option>
-        </select>
+    <div class="bottom-nav">
+      <div class="row m-0 p-0">
+        <div class="buy-btn" @click="buyItem">
+          BELI SEKARANG
+        </div>
+        <div class="icon center" @click="addToBag">
+          <img src="@/assets/logo/blibli_wht_logoonly.png" alt="" class="blibli-icon">
+        </div>
       </div>
-      <div class="col-4 right no-padding">
-        <button class="btn-checkout">Tambah</button>
-      </div>
+    </div>
+    <div class="fixed-alert text-center pl-3 pr-3">
+      <b-alert
+        :show="dismissCountDown"
+        dismissible
+        variant="success"
+        @dismissed="dismissCountDown=0"
+        @dismiss-count-down="countDownChanged"
+      >
+        Berhasil ditambahkan ke bag
+      </b-alert>
     </div>
     <Footer/>
   </div>
@@ -109,6 +108,7 @@
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
 import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -120,8 +120,10 @@ export default {
       slide: 0,
       descActive: true,
       detailActive: false,
+      dismissSecs: 2,
+      dismissCountDown: 0,
       detailProduct: {
-        productForm: {
+        productDataForm: {
           productName: '',
         },
       },
@@ -135,11 +137,38 @@ export default {
       await axios.get(`http://localhost:${this.port}/experience/api/products/barcode?shopId=${this.$route.params.shopId}&productBarcode=${this.$route.params.barcode}`)
         .then((response) => {
           this.detailProduct = response.data.data;
+          console.log(this.detailProduct);
+        });
+    },
+    async checkLoginUser() {
+    // melakukan check apakah user masih login atau tidak
+    // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .catch(() => {
+          this.$router.push('/login');
         });
     },
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
+    },
+    addToBag() {
+      this.dismissCountDown = this.dismissSecs;
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
     },
     description() {
       this.descActive = true;
@@ -155,6 +184,35 @@ export default {
     moveSlider(idx) {
       this.slide = idx;
     },
+    async buyItem() {
+      // logic beli item
+      // post axios
+
+      this.isLoading = true;
+      await this.checkLoginUser();
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      const cart = {
+        productId: this.detailProduct.productDataForm.productId,
+        stockId: this.detailProduct.stockId,
+        userId: dataId,
+      };
+
+      await axios.post(`http://localhost:${this.port}/experience/api/carts`, cart,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then(() => {
+          setTimeout(() => this.$router.push('/cart'), 1000);
+        })
+        .catch(() => {
+          this.$router.push('/login');
+        });
+      this.isLoading = false;
+    },
   },
 };
 </script>
@@ -162,6 +220,75 @@ export default {
 <style scoped>
 .brand{
   color: #0088FF;
+}
+
+.blibli-icon{
+  width: 40px;
+  margin: 10px;
+}
+
+.icon{
+  display: inline-block;
+  background-color: #0095DA;
+  width: 20%;
+  cursor: pointer;
+  height: 60px;
+  transition: all 0.2s;
+}
+
+.fixed-alert{
+  z-index: 100;
+  position: fixed;
+  bottom: 15px;
+  margin: 5% auto; /* Will not center vertically and won't work in IE6/7. */
+  left: 0;
+  right: 0;
+}
+
+.icon:hover {
+  background: rgb(0, 154, 220) radial-gradient(circle, transparent 1%, rgb(0, 106, 152) 1%)
+    center/15000%;
+  color: white;
+}
+
+.icon:active {
+  background-color: rgb(0, 127, 181);
+  background-size: 100%;
+  transition: background 0s;
+}
+
+.bottom-nav{
+  height: 60px;
+  background-color: #F99401;
+  position: fixed;
+  bottom: 0;
+  display: block;
+  width: 100%;
+}
+
+.buy-btn{
+  width: 80%;
+  height: 100%;
+  display: inline-block;
+  height: 60px;
+  text-align: center;
+  padding-top: 17px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  background-color: #ff7f0f;
+}
+
+.buy-btn:hover {
+  background: #e86c00 radial-gradient(circle, transparent 1%, #e86c00 1%)
+    center/15000%;
+  color: white;
+}
+
+.buy-btn:active {
+  background-color: #ff973b;
+  background-size: 100%;
+  transition: background 1s;
 }
 
 .bottom-navigation{

@@ -40,16 +40,20 @@
         trim
         @keyup="checkAll"
       ></b-form-textarea>
-      <!-- <label for="foto" class="mt-2">Upload Foto Produk<span class="red">*</span></label> -->
-      <!-- <div class="input-group">
+      <label for="foto" class="mt-2 mb-0">Upload Foto Produk<span class="red">*</span></label>
+      <div class="input-group">
         <div class="custom-file">
-            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-            <input @change="processFile($event)" type="file" class="custom-file-input"
-            id="inputGroupFile01"
-            aria-describedby="inputGroupFileAddon01">
+          <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+          <input @change="onFileChange" type="file" class="custom-file-input"
+          id="inputGroupFile01"
+          aria-describedby="inputGroupFileAddon01">
         </div>
-      </div> -->
-      <button @click="post" class="next-btn mt-4"
+      </div>
+      <div class="mt-3">
+        <p class="m-0 p-0 fs-12" v-for="(name, idx) in imageName" :key="idx">{{name}}
+          <font-awesome-icon class="fs-icon" icon="times" @click="remove(idx)"/></p>
+      </div>
+      <button @click="post" class="next-btn mt-2"
       :class="{'disable': !btnState, 'active-btn': btnState}"
       ref='btn' disabled>Input Barang</button>
       <div class="fixed-alert text-center pl-3 pr-3">
@@ -94,6 +98,8 @@ export default {
         { value: null, text: 'Kategori' },
       ],
       btnState: false,
+      image: [],
+      imageName: [],
     };
   },
   async created() {
@@ -123,13 +129,6 @@ export default {
       this.dismissCountDown = dismissCountDown;
     },
     getCategory() {
-      // const config = {
-      //   headers:
-      //     {
-      //       Authorization: `Bearer ${dataToken}`,
-      //     },
-      // };
-
       axios.get(`http://localhost:${this.port}/experience/api/products/enums/category`)
         .then((response) => {
           response.data.data.categories.forEach((i) => {
@@ -148,6 +147,7 @@ export default {
         && this.dimensiBarang !== ''
         && this.deskripsi !== ''
         && this.kategori !== null
+        && this.image.length !== 0
       ) {
         this.btnState = true;
         this.$refs.btn.disabled = false;
@@ -157,21 +157,46 @@ export default {
       }
     },
     post() {
+      // productImage: this.image,
       const masterData = {
         productBarcode: this.barcode,
         productBrand: this.brand,
         productCategory: this.kategori,
-        productCreatedAt: '2020-07-12T15:09:25.044Z',
         productDescription: this.deskripsi,
         productName: this.namaBarang,
         productVolume: this.dimensiBarang,
         productWeight: this.beratBarang,
       };
-
-      axios.post(`http://localhost:${this.port}/experience/api/admin/productMasters`, masterData)
+      const formData = new FormData();
+      this.image.forEach((data) => {
+        formData.append('images', data);
+      });
+      formData.append('productMetaData', JSON.stringify(masterData));
+      const dataToken = Cookie.get('dataTokenAdmin');
+      axios.post(`http://localhost:${this.port}/experience/api/admin/productMasters`, formData, {
+        headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+      })
         .then(() => {
           this.dismissCountDown = this.dismissSecs;
         });
+    },
+    onFileChange(e) {
+      /* eslint-disable */
+      if (
+        e.target.files[0].type === "image/png"
+        || e.target.files[0].type === "image/jpeg"
+      ) {
+        this.imageName.push(e.target.files[0].name);
+        this.image.push(e.target.files[0]);
+      }
+      this.checkAll();
+    },
+    remove(idx) {
+      this.image.splice(idx, 1);
+      this.imageName.splice(idx, 1);
     },
   },
 };
@@ -186,6 +211,11 @@ export default {
   height: 100vh;
   top: 0;
   left: 0;
+}
+
+.fs-icon{
+  font-size: 10px;
+  color: red;
 }
 
 .hide{
@@ -237,6 +267,10 @@ label{
 
 .disable{
     cursor: not-allowed;
+}
+
+.fs-12{
+  font-size: 12px;
 }
 
 .active-btn{

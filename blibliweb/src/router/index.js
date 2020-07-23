@@ -192,7 +192,7 @@ const routes = [
     },
   },
   {
-    path: '/barter/detail',
+    path: '/barter/detail/:id',
     name: 'Detail Barter',
     component: () => import(/* webpackChunkName: "category" */ '../views/barter/DetailBarter.vue'),
     meta: {
@@ -200,7 +200,7 @@ const routes = [
     },
   },
   {
-    path: '/barter/pengajuan',
+    path: '/barter/pengajuan/:id',
     name: 'Pengajuan Barter',
     component: () => import(/* webpackChunkName: "category" */ '../views/barter/PengajuanBarter.vue'),
     meta: {

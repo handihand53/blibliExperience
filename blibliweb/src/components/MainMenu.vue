@@ -16,16 +16,18 @@
     :ref='category'>
       <p class="label-tag">{{category}}</p>
       <div class="overflow-x m-0 p-0">
-        <router-link :to='"/detail-product/"+product.productForm.productId' class='cst-card col-6'
+        <router-link :to='"/detail-product/"+product.productDataForm.productId'
+        class='cst-card col-6'
         v-for='product in allProduct'
         v-bind:key='product.productId'>
           <div class='align-items-start'>
             <div class="cont d-flex align-items-center">
-              <!-- <img :src='product.imgUrl[0]' :alt='product.productName'
-              class='img-product ml-auto mr-auto'/> -->
+              <img :src='getImage(product.productDataForm.productImagePaths[0])'
+              :alt='product.productName'
+              class='img-product ml-auto mr-auto'/>
             </div>
             <div class="mt-auto">
-              <p class='title-product'>{{product.productForm.productName}}</p>
+              <p class='title-product'>{{product.productDataForm.productName}}</p>
               <p class="start-from">Harga mulai dari</p>
               <p class='product-price' :title='product.productPrice'>
                 Rp.{{formatPrice(product.productPrice)}}
@@ -75,7 +77,12 @@ export default {
       axios.get(`http://localhost:${this.port}/experience/api/products/available?skipCount=${count}`)
         .then((response) => {
           this.allProduct = response.data.data;
+          console.log(this.allProduct);
         });
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
     },
   },
 };
