@@ -5,35 +5,59 @@
       <div class="modal-detail show-modal">
         <div class="bg-white d-flex justify-content-between p-2">
           <p class="brand-detail-product">Kode Transaksi:
-            <span class="blue-brand font-weight-bold">KDSW-e2314DS-55</span>
+            <span class="blue-brand font-weight-bold">{{order.orderTransactionId}}</span>
           </p>
-          <span class="status-tag success">Sudah Dikonfirmasi</span>
+          <span class="tag">
+            {{getStatus(product.barterSubmissionTargetBarter.availableStatus)}}</span>
         </div>
         <p class="fs-12 p-2">Barang yang didapatkan</p>
         <div class="custom-detail-card">
           <div class="p-2 pl-3 pr-3">
             <div>
-              <p class="detail-title-product float-left">Samsung A10</p>
-              <p class="tag float-right mt-1">Baru</p>
+              <p class="detail-title-product float-left">{{
+                product.barterSubmissionTargetBarter.productBarterName
+                }}</p>
+              <p class="status-tag success float-right mt-1">
+                {{
+                order.sellerItemStatus
+                }}
+              </p>
             </div>
             <div style="clear: both;">
               <p class="brand-detail-product">
                 Brand:
-                <span class="blue-brand">Samsung</span>
+                <span class="blue-brand">
+                {{
+                  product.barterSubmissionTargetBarter.productBarterBrand
+                }}
+                </span>
               </p>
             </div>
           </div>
           <div class="overflow-y">
-            <div class="p-3 center">
-              <img src="@/assets/etc/aqua.png" alt class="detail-image-product p-3" />
-            </div>
-            <div class="pl-3 pb-2">
-              <table>
-                <tr>
-                  <td class="uang-text">Estimasi Harga</td>
-                  <td class="price-detail-text pl-4">Rp15.000</td>
-                </tr>
-              </table>
+            <div class="p-3">
+              <b-carousel
+                id="carousel-1"
+                v-model="slide"
+                :interval="0"
+                indicators
+                class="product-img"
+                background="transparent"
+                style="text-shadow: 1px 1px 2px #333;"
+              >
+                <b-carousel-slide v-for="image in
+                product.barterSubmissionTargetBarter.productBarterImagePaths"
+                  :key="image" :img-src="getImage(image)"
+                ></b-carousel-slide>
+              </b-carousel>
+              <div class="row m-0 p-0 mt-4">
+                <img :src="getImage(image)"
+                v-for="(image, idx) in
+                product.barterSubmissionTargetBarter.productBarterImagePaths"
+                :key="image"
+                @click="moveSlider(idx)"
+                alt="" class="img-preview">
+              </div>
             </div>
             <div class="about-detail-product">
               <div class="pt-3 pl-3 pr-3">
@@ -44,19 +68,46 @@
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
                       Status Barang :
-                      <span class="tag">Baru</span>
+                      <span class="tag">
+                        {{
+                          product.barterSubmissionTargetBarter.productBarterCondition
+                        }}
+                      </span>
                     </p>
                   </div>
                   <div class="list-detail-tentang">
-                    <p class="text-detail-product">Lama Pemakaian : 3 Tahun 6 bulan</p>
+                    <p class="text-detail-product">Barter preferensi :
+                      {{
+                        product.barterSubmissionTargetBarter.productBarterPreference
+                      }}
+                    </p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">Kelengkapan paket :
+                      {{
+                        product.barterSubmissionTargetBarter.productBarterPackage
+                      }}
+                    </p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">Volume produk :
+                      {{
+                        product.barterSubmissionTargetBarter.productBarterVolume
+                      }}
+                    </p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">Berat produk :
+                      {{
+                        product.barterSubmissionTargetBarter.productBarterWeight
+                      }}
+                    </p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Deskripsi barang : Lorem ipsum dolor
-                      sit amet consectetur adipisicing elit. Neque reiciendis eos, doloribus
-                      veniam nobis praesentium nesciunt, voluptatum voluptas corporis ipsam
-                      exercitationem fugit perferendis quisquam ab voluptates voluptate doloremque
-                      quibusdam accusamus.
+                      Deskripsi barang : {{
+                        product.barterSubmissionTargetBarter.productBarterDescription
+                      }}
                     </p>
                   </div>
                 </div>
@@ -73,30 +124,45 @@
         <div class="custom-detail-card">
           <div class="p-2 pl-3 pr-3">
             <div>
-              <p class="detail-title-product float-left">Samsung A10</p>
-              <p class="tag float-right mt-1">Baru</p>
+              <p class="detail-title-product float-left">
+                {{product.barterSubmissionName}}</p>
+              <p class="status-tag success float-right mt-1">
+                {{order.buyerItemStatus}}</p>
             </div>
             <div style="clear: both;">
               <p class="brand-detail-product">
                 Brand:
-                <span class="blue-brand">Samsung</span>
+                <span class="blue-brand">{{product.barterSubmissionBrand}}</span>
               </p>
             </div>
           </div>
           <div class="overflow-y">
-            <div class="p-3 center">
-              <img src="@/assets/etc/aqua.png" alt class="detail-image-product p-3" />
-            </div>
-            <div class="pl-3 pb-2">
-              <table>
-                <tr>
-                  <td class="uang-text">Estimasi Harga</td>
-                  <td class="price-detail-text pl-4">Rp15.000</td>
-                </tr>
-              </table>
+            <div class="pl-3 pr-3 pb-3">
+              <b-carousel
+                id="carousel-1"
+                v-model="slide2"
+                :interval="0"
+                indicators
+                class="product-img"
+                background="transparent"
+                style="text-shadow: 1px 1px 2px #333;"
+              >
+                <b-carousel-slide v-for="image in
+                product.barterSubmissionImagePaths"
+                  :key="image" :img-src="getImage2(image)"
+                ></b-carousel-slide>
+              </b-carousel>
+              <div class="row m-0 p-0 mt-4">
+                <img :src="getImage2(image)"
+                v-for="(image, idx) in
+                product.barterSubmissionImagePaths"
+                :key="image"
+                @click="moveSlider2(idx)"
+                alt="" class="img-preview">
+              </div>
             </div>
             <div class="about-detail-product">
-              <div class="p-3">
+              <div class="pt-3 pl-3 pr-3 pb-3">
                 <div class="box-shadow mb-2">
                   <div class="head-tentang">
                     <p class="text-detail-product">Tentang Produk</p>
@@ -104,19 +170,39 @@
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
                       Status Barang :
-                      <span class="tag">Baru</span>
+                      <span class="tag">
+                        {{
+                          product.barterSubmissionCondition
+                        }}
+                      </span>
                     </p>
                   </div>
                   <div class="list-detail-tentang">
-                    <p class="text-detail-product">Lama Pemakaian : 3 Tahun 6 bulan</p>
+                    <p class="text-detail-product">Kelengkapan paket :
+                      {{
+                        product.barterSubmissionPackage
+                      }}
+                    </p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">Volume produk :
+                      {{
+                        product.barterSubmissionVolume
+                      }}
+                    </p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">Berat produk :
+                      {{
+                        product.barterSubmissionWeight
+                      }}
+                    </p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Deskripsi barang : Lorem ipsum dolor
-                      sit amet consectetur adipisicing elit. Neque reiciendis eos, doloribus
-                      veniam nobis praesentium nesciunt, voluptatum voluptas corporis ipsam
-                      exercitationem fugit perferendis quisquam ab voluptates voluptate doloremque
-                      quibusdam accusamus.
+                      Deskripsi barang : {{
+                        product.barterSubmissionDescription
+                      }}
                     </p>
                   </div>
                 </div>
@@ -125,6 +211,12 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="p-3" v-if="order.buyerItemStatus === 'IN_OWNER'">
+      <label for="">Masukan nomor resi</label>
+      <input type="text" v-model="resi" class="form-control">
+      <button class="btn btn-primary mt-2 btn-block"
+      @click="updateToWareHouse">Kirimkan</button>
     </div>
     <Footer/>
   </div>
@@ -141,8 +233,24 @@ export default {
     HeaderWithCart,
     Footer,
   },
+  data() {
+    return {
+      slide: 0,
+      slide2: 0,
+      product: {
+        barterSubmissionTargetBarter: {
+          availableStatus: '',
+        },
+      },
+      resi: '',
+      penawaran: false,
+      order: '',
+    };
+  },
   async created() {
     await this.checkUser();
+    await this.getBarterSubmission();
+    await this.getOrder();
   },
   methods: {
     checkUser() {
@@ -160,6 +268,88 @@ export default {
         .catch(() => {
           this.$router.replace('/');
         });
+    },
+    async getBarterSubmission() {
+      // const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/barterSubmission?barterSubmissionId=${this.$route.params.id}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          this.product = res.data.data;
+        })
+        .catch((e) => {
+          console.log(e.response.status);
+        });
+    },
+    async getOrder() {
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/barterOrder/user?userId=${dataId}&barterRoleEnum=BUYER`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          res.data.data.forEach((data) => {
+            if (data.buyingProduct.barterSubmissionId === this.$route.params.id) {
+              this.penawaran = true;
+              this.order = data;
+              console.log(this.order);
+            }
+          });
+        })
+        .catch(() => {
+          this.penawaran = false;
+        });
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/barterProductPhoto/${path[path.length - 1]}`;
+    },
+    getImage2(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/barterSubmissionPhoto/${path[path.length - 1]}`;
+    },
+    moveSlider(idx) {
+      this.slide = idx;
+    },
+    moveSlider2(idx) {
+      this.slide2 = idx;
+    },
+    async updateToWareHouse() {
+      const data = {
+        barterOrderId: this.order.barterOrderId,
+        barterRoleEnum: 'BUYER',
+        receipt: this.resi,
+      };
+
+      if (
+        this.resi !== ''
+        && this.resi !== undefined
+      ) {
+        const dataToken = Cookie.get('dataToken');
+        await axios.put(`http://localhost:${this.port}/experience/api/barterOrder/toWarehouse`, data,
+          {
+            headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            this.getOrder();
+          });
+      }
+    },
+    getStatus(str) {
+      return str === 'NOT_AVAILABLE' ? 'Sedang di proses' : 'belum di proses';
     },
   },
 };
@@ -206,6 +396,14 @@ export default {
   position: fixed;
 }
 
+.product-img{
+  width: 100%;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
 .list-detail-tentang{
   padding: 10px;
 }
@@ -221,6 +419,13 @@ export default {
   color: white;
   cursor: pointer;
   background-color: #ff7f0f;
+}
+
+.img-preview{
+  width: 60px;
+  border: 0.8px gray solid;
+  padding: 5px;
+  margin-right: 10px;
 }
 
 .text-detail-product{
@@ -477,11 +682,6 @@ p{
     padding-bottom: 2px;
     display: inline-block;
     color: #AEAEAE;
-}
-
-.active{
-    border-bottom: 2px #0095DA solid;
-    color: #0095DA;
 }
 
 .separator {

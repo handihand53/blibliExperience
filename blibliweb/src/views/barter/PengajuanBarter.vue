@@ -51,13 +51,16 @@
         <div class="custom-file">
             <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
             <input type="file" class="custom-file-input" id="inputGroupFile01"
-            aria-describedby="inputGroupFileAddon01">
+            aria-describedby="inputGroupFileAddon01" @change="onFileChange">
         </div>
       </div>
 
       <small class="text-suggest">Format foto yang diperbolehkan : png,
       jpeg, jpg</small><br>
-      <small class="text-suggest">Ukuran maks per foto adalah 5 mb</small><br>
+      <div class="mt-3">
+        <p class="m-0 p-0 fs-12" v-for="(name, idx) in imageName" :key="idx">{{name}}
+          <font-awesome-icon class="fs-icon" icon="times" @click="remove(idx)"/></p>
+      </div>
       <button class="ajukan-btn text-uppercase"
       @click="ajukanBarter">Ajukan</button>
       <small v-if="!formAllFilled" class="red">Silahkan isi semua form.</small>
@@ -88,7 +91,11 @@ export default {
   data() {
     return {
       isLoading: false,
-      product: '',
+      product: {
+        productBarterImagePaths: [
+          '',
+        ],
+      },
       namaProduk: '',
       brand: '',
       status: '',
@@ -97,6 +104,8 @@ export default {
       volume: '',
       berat: '',
       formAllFilled: true,
+      imageName: [],
+      image: [],
     };
   },
   async created() {
@@ -117,27 +126,24 @@ export default {
           },
         })
         .catch(() => {
-          this.$router.push('/');
+          this.$router.replace('/login');
         });
     },
     async getBarterById() {
       await axios.get(`http://localhost:${this.port}/experience/api/barter?productBarterId=${this.$route.params.id}`)
         .then((response) => {
           this.product = response.data.data;
-          console.log(this.product);
         });
     },
     async ajukanBarter() {
+      // add logic checkout here
       const dataToken = Cookie.get('dataToken');
       const dataId = Cookie.get('dataId');
 
-      const ajukan = {
+      const masterData = {
         barterSubmissionBrand: this.brand,
         barterSubmissionCondition: this.status,
         barterSubmissionDescription: this.deskripsi,
-        barterSubmissionImagePaths: [
-          'string',
-        ],
         barterSubmissionName: this.namaProduk,
         barterSubmissionPackage: this.kelengkapan,
         barterSubmissionVolume: this.volume,
@@ -145,7 +151,13 @@ export default {
         productBarterId: this.$route.params.id,
         userId: dataId,
       };
-      console.log(ajukan);
+
+      const formData = new FormData();
+      this.image.forEach((data) => {
+        formData.append('images', data);
+      });
+      formData.append('barterSubmissionMetaData', JSON.stringify(masterData));
+
       if (
         this.namaProduk !== ''
         && this.brand !== ''
@@ -154,9 +166,10 @@ export default {
         && this.kelengkapan !== ''
         && this.volume !== ''
         && this.berat !== ''
+        && this.image.length !== 0
       ) {
         this.isLoading = true;
-        await axios.post(`http://localhost:${this.port}/experience/api/barterSubmission`, ajukan,
+        await axios.post(`http://localhost:${this.port}/experience/api/barterSubmission`, formData,
           {
             headers:
             {
@@ -164,17 +177,29 @@ export default {
             },
           })
           .then(() => {
-            setTimeout(() => this.$router.push('/barter/pengajuan/berhasil'), 1000);
-            // this.category = response.data.data.categories;
+            setTimeout(() => this.$router.push('/barter/pengajuan/status/berhasil'), 1000);
           });
       } else {
         this.formAllFilled = false;
       }
-      // add logic checkout here
     },
     getImage(imagePath) {
       const path = imagePath.split('/');
       return `/assets/resources/uploads/barterProductPhoto/${path[path.length - 1]}`;
+    },
+    onFileChange(e) {
+      /* eslint-disable */
+      if (
+        e.target.files[0].type === "image/png"
+        || e.target.files[0].type === "image/jpeg"
+      ) {
+        this.imageName.push(e.target.files[0].name);
+        this.image.push(e.target.files[0]);
+      }
+    },
+    remove(idx) {
+      this.image.splice(idx, 1);
+      this.imageName.splice(idx, 1);
     },
   },
 };
@@ -282,6 +307,15 @@ p{
 
 .img-barter{
   max-width: 100px;
+}
+
+.fs-12{
+  font-size: 12px;
+}
+
+.fs-icon{
+  font-size: 10px;
+  color: red;
 }
 
 .barter-title{

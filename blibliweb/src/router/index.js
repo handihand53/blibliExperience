@@ -111,7 +111,7 @@ const routes = [
     },
   },
   {
-    path: '/daftar-penawaran/detail-barter',
+    path: '/daftar-penawaran/detail-barter/:id',
     name: 'Detail Penawaran Barter',
     component: () => import(/* webpackChunkName: "category" */ '../views/user/DetailPenawaranBarter.vue'),
     meta: {
@@ -160,9 +160,17 @@ const routes = [
     },
   },
   {
-    path: '/barter/detail-pengajuan',
-    name: 'Detail Pengajuan Barter',
+    path: '/barter/detail-pengajuan/:id',
+    name: 'Detail Barang Pengajuan Barter',
     component: () => import(/* webpackChunkName: "category" */ '../views/barter/DetailPengajuanBarter.vue'),
+    meta: {
+      title: 'Detail Barang yang di ajukan Barter',
+    },
+  },
+  {
+    path: '/barter/detail-pengajuan/detail-submit/:id',
+    name: 'Detail Pengajuan Barter',
+    component: () => import(/* webpackChunkName: "category" */ '../views/barter/DetailSubmission.vue'),
     meta: {
       title: 'Detail Pengajuan Barter',
     },
@@ -408,7 +416,7 @@ const routes = [
     },
   },
   {
-    path: '/barter/pengajuan/berhasil',
+    path: '/barter/pengajuan/status/berhasil',
     name: 'Pengajuan Berhasil Page',
     component: () => import(/* webpackChunkName: "category" */ '../views/barter/Berhasil.vue'),
     meta: {
@@ -440,7 +448,7 @@ const routes = [
     },
   },
   {
-    path: '/admin/konfirmasi-barter/detail',
+    path: '/admin/konfirmasi-barter/detail/:id',
     name: 'Detail Konfirmasi Barter Page',
     component: () => import(/* webpackChunkName: "category" */ '../views/admin/KonfirmasiBarter.vue'),
     meta: {

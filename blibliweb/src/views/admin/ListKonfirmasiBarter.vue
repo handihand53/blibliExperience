@@ -5,36 +5,50 @@
       <div class="p-2">
         <small style="color: #AEAEAE; font-weight: 600;">Konfirmasi Barter</small>
       </div>
-      <div class="d-flex justify-content-around mt-2 pb-2">
-        <div class="col-4">
-          <b-button pill variant="outline-primary" size="sm"
-          block @click="changeStatus(0)"
-          :class="{buttonActive : this.isActive[0]}">Menunggu</b-button>
-        </div>
-        <div class="col-4">
-          <b-button pill variant="outline-primary" size="sm"
-          block @click="changeStatus(1)"
-          :class="{buttonActive : this.isActive[1]}">Selesai</b-button>
-        </div>
-        <div class="col-4">
-          <b-button pill variant="outline-primary" size="sm"
-          block @click="changeStatus(2)"
-          :class="{buttonActive : this.isActive[2]}">Ditolak</b-button>
+      <div class="m-0 p-0 mt-2 pb-2">
+        <div class="overflow-x">
+          <span class="mx-1">
+            <b-button pill variant="outline-primary" size="sm"
+            @click="changeStatus(0, 'WAITING_IN_WAREHOUSE')"
+            :class="{buttonActive : this.isActive[0]}">Menunggu</b-button>
+          </span>
+          <span class="mx-1">
+            <b-button pill variant="outline-primary" size="sm"
+             @click="changeStatus(1, 'SENT_TO_WAREHOUSE')"
+            :class="{buttonActive : this.isActive[1]}">Dikirim</b-button>
+          </span>
+          <span class="mx-1">
+            <b-button pill variant="outline-primary" size="sm"
+             @click="changeStatus(2, 'VERIFIED_IN_WAREHOUSE')"
+            :class="{buttonActive : this.isActive[2]}">Verifikasi</b-button>
+          </span>
+          <span class="mx-1">
+            <b-button pill variant="outline-primary" size="sm"
+             @click="changeStatus(3, 'SENT_TO_CONSUMERS')"
+            :class="{buttonActive : this.isActive[3]}">Dikirim</b-button>
+          </span>
+          <span class="mx-1">
+            <b-button pill variant="outline-primary" size="sm"
+             @click="changeStatus(4, 'FINISHED')"
+            :class="{buttonActive : this.isActive[4]}">Selesai</b-button>
+          </span>
         </div>
       </div>
     </div>
     <div class="mt-3">
-      <div class="custom-card p-3 row shadow-sm m-2">
+      <div class="custom-card p-3 row shadow-sm m-2"
+      v-for="product in products" :key="product.barterOrderId">
         <div class="col-4 m-0 p-0">
-          <img src="@/assets/etc/aqua.png" alt="" class="img-product">
+          <img :src="getImage(product.sellingProduct.productBarterImagePaths[0])"
+          alt="" class="img-product">
         </div>
         <div class="col-8 m-0 p-0">
-          <p class="text-detail">No. Barter: 12034757560</p>
-          <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-          <p class="desc-product">Deskripsi: Lorem ipsum dolor, sit amet
-            consectetur adipisicing elit.</p>
-          <p class="status-product">Menunggu</p>
-          <router-link to="/admin/konfirmasi-barter/detail">
+          <p class="text-detail">No. Barter: {{product.orderTransactionId}}</p>
+          <p class="title-product">{{product.sellingProduct.productBarterName}}</p>
+          <p class="desc-product">Deskripsi:
+            {{getDeskripsi(product.sellingProduct.productBarterDescription)}}</p>
+          <!-- <p class="status-product">{{this.status}}</p> -->
+          <router-link :to="'/admin/konfirmasi-barter/detail/'+product.barterOrderId">
             <button class="buy-btn">Lihat Detail</button>
           </router-link>
         </div>
@@ -60,15 +74,20 @@ export default {
   },
   data() {
     return {
+      status: 'WAITING_IN_WAREHOUSE',
       isActive: [
         true,
         false,
         false,
+        false,
+        false,
       ],
+      products: '',
     };
   },
   async created() {
     await this.checkUser();
+    this.getAllListData();
   },
   methods: {
     checkUser() {
@@ -93,11 +112,37 @@ export default {
           this.$router.push('/admin/login');
         });
     },
-    changeStatus(idx) {
+    changeStatus(idx, str) {
       this.isActive.splice(idx, 1, true);
       for (let i = 0; i < this.isActive.length; i += 1) {
         if (i !== idx) this.isActive.splice(i, 1, false);
       }
+      this.status = str;
+      this.getAllListData();
+    },
+    getAllListData() {
+      const dataToken = Cookie.get('dataTokenAdmin');
+      axios.get(`http://localhost:${this.port}/experience/api/admin/barterOrder/orderStatus?request=${this.status}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((response) => {
+          this.products = response.data.data;
+          console.log(response);
+        });
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/barterProductPhoto/${path[path.length - 1]}`;
+    },
+    getDeskripsi(str) {
+      if (str.length > 100) {
+        return `${str.substr(0, 100)} ...`;
+      }
+      return str;
     },
   },
 };
@@ -179,5 +224,10 @@ export default {
   border: 0.5px solid rgba(208, 208, 208, 0.245);
   background-color: white;
   border-radius: 10px;
+}
+
+.overflow-x{
+  overflow-x: auto;
+  white-space: nowrap;
 }
 </style>

@@ -1,55 +1,115 @@
 <template>
   <div>
-    <div class="p-2 mb-1">
-      <div class="box-shadow">
-        <div class="background-gray2 p-2">
-          <small class="date-text">Tanggal : 04 Febuari 2019</small>
-        </div>
-        <div class="background-white">
-          <div class="p-3 row no-margin">
-            <div class="col-4 no-margin no-padding">
-                <img src="@/assets/etc/aqua.png" alt="" class="img-product">
-            </div>
-            <div class="col-8 no-margin no-padding">
-                <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-                <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-                <span class="status-tag success">Sudah Dikonfirmasi</span>
-                <p class="desc-product">Deskripsi: Lorem ipsum dolor, sit amet
-                  consectetur adipisicing elit.</p>
-                <router-link to="/daftar-penawaran/detail-barter">
-                  <button class="buy-btn">Lihat Detail</button>
-                </router-link>
+    <div v-if="products.length !== 0">
+      <div class="p-2 mb-1" v-for="product in products" :key="product.barterSubmissionId">
+        <div class="box-shadow">
+          <div class="background-gray2 p-2">
+            <small class="date-text">Tanggal : {{getMonthYear(product)}}</small>
+          </div>
+          <div class="background-white">
+            <div class="p-3 row no-margin">
+              <div class="col-4 no-margin no-padding">
+                <img
+                :src="getImage(product.barterSubmissionTargetBarter.productBarterImagePaths[0])"
+                alt="" class="img-product">
+              </div>
+              <div class="col-8 no-margin no-padding">
+                  <p class="title-product">
+                    {{ product.barterSubmissionTargetBarter.productBarterName }}</p>
+                  <p class="brand-product">Brand:
+                    <span class="brand">
+                    {{product.barterSubmissionTargetBarter.productBarterBrand}}</span></p>
+                  <span class="status-tag success">
+                    {{ product.barterSubmissionTargetBarter.availableStatus }}</span>
+                  <span class="status-tag second ml-1">
+                    {{ product.barterSubmissionTargetBarter.productBarterCondition }}</span>
+                  <p class="desc-product">
+                    {{ getDeskripsi(product
+                    .barterSubmissionTargetBarter.productBarterDescription) }}</p>
+                  <router-link :to="'/daftar-penawaran/detail-barter/'+product.barterSubmissionId">
+                    <button class="buy-btn">Lihat Detail</button>
+                  </router-link>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="p-2 mb-1">
-      <div class="box-shadow">
-        <div class="background-gray2 p-2">
-          <small class="date-text">Tanggal : 04 Febuari 2019</small>
-        </div>
-        <div class="background-white">
-          <div class="p-3 row no-margin">
-            <div class="col-4 no-margin no-padding">
-                <img src="@/assets/etc/aqua.png" alt="" class="img-product">
-            </div>
-            <div class="col-8 no-margin  no-padding">
-                <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-                <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-                <span class="status-tag success">Sudah Dikonfirmasi</span>
-                <p class="desc-product">Deskripsi: Lorem ipsum dolor, sit amet
-                  consectetur adipisicing elit.</p>
-                <router-link to="/daftar-penawaran/detail-barter">
-                  <button class="buy-btn">Lihat Detail</button>
-                </router-link>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div v-else>
+      <img src="" alt="">
     </div>
   </div>
 </template>
+
+<script>
+import axios from 'axios';
+import Cookie from 'vue-cookie';
+
+export default {
+  data() {
+    return {
+      products: [],
+      monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+      ],
+    };
+  },
+  async created() {
+    await this.checkLoginUser();
+    await this.getBarterSubmission();
+  },
+  methods: {
+    async checkLoginUser() {
+    // melakukan check apakah user masih login atau tidak
+    // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .catch(() => {
+          this.$router.push('/');
+        });
+    },
+    async getBarterSubmission() {
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/barterSubmission/user?userId=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          this.products = res.data.data;
+          console.log(this.products);
+        })
+        .catch((e) => {
+          console.log(e.response.status);
+        });
+    },
+    getDeskripsi(str) {
+      if (str.length > 100) {
+        return str.substr(0, 100);
+      }
+      return str;
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/barterProductPhoto/${path[path.length - 1]}`;
+    },
+    getMonthYear(date) {
+      const theDate = new Date(date.barterSubmissionCreatedAt);
+      return `${theDate.getDate()} ${this.monthNames[theDate.getMonth()]} ${theDate.getFullYear()}`;
+    },
+  },
+};
+</script>
 
 <style scoped>
 .no-margin{
@@ -115,6 +175,14 @@
 
 .success{
   background-color: #37C26A;
+}
+
+.new{
+  background-color: #0088FF;
+}
+
+.second{
+  background-color: #0095DA;
 }
 
 .fail{

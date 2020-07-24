@@ -1,27 +1,21 @@
 <template>
-  <div class="mb-5">
+  <div>
     <HeaderWithCart/>
-    <div class="overlay bg-gray">
-      <div class="modal-detail show-modal pt-3">
+    <div class="overlay">
+      <div class="modal-detail show-modal">
         <div class="custom-detail-card">
-          <div class="p-2 pl-3 pr-3">
+          <div class="p-2">
             <div>
-              <p class="detail-title-product float-left">{{product.productBarterName}}</p>
-              <p class="tag float-right mt-1" v-if="product.productBarterCondition == 'NEW'">
-                {{product.productBarterCondition}}</p>
-              <p class="tag-orange float-right mt-1" v-else>{{product.productBarterCondition}}</p>
+              <p class="detail-title-product float-left">{{product.barterSubmissionName}}</p>
             </div>
             <div style="clear: both;">
               <p class="brand-detail-product">
                 Brand:
-                <span class="blue-brand">{{product.productBarterBrand}}</span>
+                <span class="blue-brand">{{product.barterSubmissionBrand}}</span>
               </p>
             </div>
           </div>
           <div class="overflow-y">
-            <!-- <div class="p-3 center">
-              <img src="@/assets/etc/aqua.png" alt class="detail-image-product p-3" />
-            </div> -->
             <div class="p-3">
               <b-carousel
                 id="carousel-1"
@@ -32,26 +26,19 @@
                 background="transparent"
                 style="text-shadow: 1px 1px 2px #333;"
               >
-                <b-carousel-slide v-for="image in product.productBarterImagePaths"
+                <b-carousel-slide v-for="image in
+                product.barterSubmissionImagePaths"
                   :key="image" :img-src="getImage(image)"
                 ></b-carousel-slide>
               </b-carousel>
               <div class="row m-0 p-0 mt-4">
                 <img :src="getImage(image)"
-                v-for="(image, idx) in product.productBarterImagePaths"
+                v-for="(image, idx) in
+                product.barterSubmissionImagePaths"
                 :key="image"
                 @click="moveSlider(idx)"
                 alt="" class="img-preview">
               </div>
-
-            </div>
-            <div class="pl-3 pb-2">
-              <table>
-                <tr>
-                  <td class="uang-text">Barter Referensi</td>
-                  <td class="price-detail-text pl-4">{{product.productBarterPreference}}</td>
-                </tr>
-              </table>
             </div>
             <div class="about-detail-product">
               <div class="p-3">
@@ -62,24 +49,24 @@
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
                       Status Barang :
-                      <span class="tag">{{product.productBarterCondition}}</span>
+                      <span class="tag">{{ product.barterSubmissionCondition }}</span>
                     </p>
                   </div>
                   <div class="list-detail-tentang">
-                    <p class="text-detail-product">Kelengkapan Barter :
-                      <span>{{ product.productBarterPackage}}</span></p>
-                  </div>
-                  <div class="list-detail-tentang">
-                    <p class="text-detail-product">Ukuran barang :
-                      <span>{{ product.productBarterVolume}}</span></p>
-                  </div>
-                  <div class="list-detail-tentang">
-                    <p class="text-detail-product">Berat Barang Barter :
-                      <span>{{ product.productBarterWeight }} Kg</span></p>
+                    <p class="text-detail-product">
+                      Volume Barang :
+                      <span>{{ product.barterSubmissionVolume }}</span>
+                    </p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Deskripsi barang : {{product.productBarterDescription}}
+                      Berat Barang :
+                      <span>{{ product.barterSubmissionWeight }}</span>
+                    </p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">
+                      Deskripsi barang : {{ product.barterSubmissionDescription }}
                     </p>
                   </div>
                 </div>
@@ -89,16 +76,12 @@
         </div>
       </div>
     </div>
-    <div @click="ajukanBarter" class="bottom-ajukan box-shadow">
-      <div class="text-uppercase">ajukan barter</div>
-    </div>
-    <div class="overlay-loading d-flex align-items-center"
-    :class="{hide: !isLoading}">
-      <b-spinner
-      type="grow"
-      variant="primary"
-      class="ml-auto mr-auto spinner"
-      ></b-spinner>
+    <div class="bottom-nav">
+      <div class="row m-0 p-0">
+        <div class="buy-btn" @click="submitBarter">
+          TERIMA PENAWARAN
+        </div>
+      </div>
     </div>
     <Footer/>
   </div>
@@ -108,6 +91,7 @@
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
 import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -116,29 +100,73 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
-      product: [],
+      product: '',
+      suggest: '',
       slide: 0,
+      isExpand: [
+        false,
+        false,
+      ],
     };
   },
   async created() {
-    await this.getBarterById();
+    await this.checkLoginUser();
+    await this.getSubmissionDetail();
   },
   methods: {
-    async getBarterById() {
-      await axios.get(`http://localhost:${this.port}/experience/api/barter?productBarterId=${this.$route.params.id}`)
-        .then((response) => {
-          this.product = response.data.data;
+    async checkLoginUser() {
+    // melakukan check apakah user masih login atau tidak
+    // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .catch(() => {
+          this.$router.replace('/');
         });
     },
-    ajukanBarter() {
-      // add logic checkout here
-      this.isLoading = true;
-      setTimeout(() => this.$router.push(`/barter/pengajuan/${this.$route.params.id}`), 1000);
+    async getSubmissionDetail() {
+      // const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/barterSubmission?barterSubmissionId=${this.$route.params.id}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          this.product = res.data.data;
+        })
+        .catch((e) => {
+          console.log(e.response.status);
+        });
+    },
+    submitBarter() {
+      const submit = {
+        barterSubmissionId: this.product.barterSubmissionId,
+      };
+      const dataToken = Cookie.get('dataToken');
+      axios.post(`http://localhost:${this.port}/experience/api/barterOrder`, submit,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          this.$router.push('/daftar-pengajuan');
+        });
     },
     getImage(imagePath) {
       const path = imagePath.split('/');
-      return `/assets/resources/uploads/barterProductPhoto/${path[path.length - 1]}`;
+      return `/assets/resources/uploads/barterSubmissionPhoto/${path[path.length - 1]}`;
     },
     moveSlider(idx) {
       this.slide = idx;
@@ -148,61 +176,6 @@ export default {
 </script>
 
 <style scoped>
-.name-text{
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.detail-address{
-  color: #808080;
-}
-
-.address-text{
-  font-size: 13px;
-  text-align: justify;
-}
-
-.hide{
-  display: none!important;
-}
-
-.spinner{
-  width: 50px;
-  height: 50px;
-}
-
-
-.product-img{
-  width: 100%;
-  margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-}
-
-
-.overlay-loading{
-  z-index: 200;
-  background-color: #0000006a;
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-}
-
-.detail-name{
-  color: #0077FF;
-}
-
-.profile-text{
-  font-weight: 600;
-}
-
-.profile-pemilik{
-  background-color: #F3F3F3;
-}
-
 .bottom-buy{
   height: 60px;
   background-color: white;
@@ -211,19 +184,6 @@ export default {
 
 .list-detail-tentang{
   padding: 10px;
-}
-
-.bottom-ajukan{
-  position: fixed;
-  bottom: 0;
-  height: 60px;
-  width: 100%;
-  text-align: center;
-  padding-top: 17px;
-  font-weight: 600;
-  color: white;
-  cursor: pointer;
-  background-color: #ff7f0f;
 }
 
 .text-detail-product{
@@ -235,8 +195,8 @@ export default {
   background-color: rgb(224, 224, 224);
 }
 
-.bg-gray{
-    background-color: #f1f0f0;
+.blue{
+  color: #0088FF;
 }
 
 .head-tentang{
@@ -255,6 +215,14 @@ p{
 
 .float-right{
   float: right;
+}
+
+.product-img{
+  width: 100%;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
 
 .about-detail-product{
@@ -277,12 +245,45 @@ p{
   border-radius: 10px;
 }
 
-.tag-orange{
-  background-color: orange;
+.bottom-nav{
+  height: 60px;
+  background-color: #F99401;
+  position: fixed;
+  bottom: 0;
+  display: block;
+  width: 100%;
+}
+
+.buy-btn{
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  height: 60px;
+  text-align: center;
+  padding-top: 17px;
+  font-weight: 600;
   color: white;
-  font-size: 10px;
-  padding: 2px 10px;
-  border-radius: 10px;
+  cursor: pointer;
+  background-color: #ff7f0f;
+}
+
+.buy-btn:hover {
+  background: #e86c00 radial-gradient(circle, transparent 1%, #e86c00 1%)
+    center/15000%;
+  color: white;
+}
+
+.buy-btn:active {
+  background-color: #ff973b;
+  background-size: 100%;
+  transition: background 1s;
+}
+
+.img-preview{
+  width: 60px;
+  border: 0.8px gray solid;
+  padding: 5px;
+  margin-right: 10px;
 }
 
 .uang-text{
@@ -293,7 +294,7 @@ p{
 
 .price-detail-text{
   color: #FF7600;
-  font-size: 20px;
+  font-size: 25px;
 }
 
 .detail-barang-text{
@@ -323,10 +324,10 @@ p{
 }
 
 .detail-tag-product{
-  font-size: 11px;
-  background-color: #FF7600;
+  font-size: 10px;
+  background-color: #37C26A;
   color: white;
-  padding: 2px 15px;
+  padding: 2px 7px;
   border-radius: 10px;
   margin-bottom: 0px;
 }
@@ -363,7 +364,7 @@ p{
 }
 
 .success{
-  background-color: #37C26A;
+  background-color:rgb(0, 105, 209);
 }
 
 .fail{
@@ -373,6 +374,10 @@ p{
 .pending{
   background-color: #C5C5C5;
   color: #5A5A5A;
+}
+
+.hideIcon{
+  display: none;
 }
 
 .no-margin{
@@ -424,29 +429,9 @@ p{
   margin-bottom: 0px;
 }
 
-.buy-btn{
-    width: 100%;
-    background-color: rgb(0, 128, 255);
-    padding-top: 6px;
-    padding-bottom: 6px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-weight: 500;
-    transition: all 1s;
-    font-size: 13px;
-}
-
-.buy-btn:hover {
-  background: rgb(0, 128, 255) radial-gradient(circle, transparent 1%, rgb(0, 105, 209) 1%)
-    center/15000%;
-  color: white;
-}
-
-.buy-btn:active {
-  background-color: rgb(0, 112, 224);
-  background-size: 100%;
-  transition: background 0s;
+tr td{
+  padding: 0px;
+  margin: 0px;
 }
 
 .close{
@@ -490,11 +475,7 @@ p{
     color: #AEAEAE;
 }
 
-.img-preview{
-  width: 60px;
-  border: 0.8px gray solid;
-  padding: 5px;
-  margin-right: 10px;
+.img-product2{
+  width: 100%;
 }
-
 </style>
