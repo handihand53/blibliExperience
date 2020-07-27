@@ -4,15 +4,15 @@
     <div class="overlay">
       <div class="modal-detail show-modal">
         <div class="p-2 pl-2 detail-barang-text" id="modal-show">
-          <p class="detail-title-product">Detail Order Lelang</p>
+          <p class="detail-title-product">Detail Pengajuan Order Lelang</p>
         </div>
         <div class="custom-detail-card">
           <div class="p-2">
             <div>
               <p class="detail-title-product float-left">
                 {{product.productBiddingForm.productBiddingName}}</p>
-              <p class="detail-tag-product float-right mt-1">
-                {{getStatus(product.biddingOrderStatus)}}</p>
+              <p class="detail-tag-product float-right mt-1">{{
+                getStatus(product.biddingOrderStatus)}}</p>
             </div>
             <div style="clear: both;">
               <p class="brand-detail-product">
@@ -24,29 +24,25 @@
           </div>
           <div class="overflow-y">
             <div class="p-3">
-              <div class="d-flex justify-content-center">
-                <b-carousel
-                    id="carousel-1"
-                    v-model="slide"
-                    :interval="0"
-                    indicators
-                    background="transparent"
-                    style="text-shadow: 1px 1px 2px #333;"
-                  >
-                    <!-- Text slides with image -->
-                    <b-carousel-slide
-                    v-for="(image, idx) in
-                    product.productBiddingForm.productBiddingImagePaths"
-                    :key="image+idx"
-                      :img-src="getImage(image)"
-                    ></b-carousel-slide>
-                  </b-carousel>
-              </div>
+              <b-carousel
+                id="carousel-1"
+                v-model="slide"
+                :interval="0"
+                indicators
+                class="product-img"
+                background="transparent"
+                style="text-shadow: 1px 1px 2px #333;"
+              >
+                <b-carousel-slide v-for="(image, idx) in
+                product.productBiddingForm.productBiddingImagePaths"
+                  :key="image+idx" :img-src="getImage(image)"
+                ></b-carousel-slide>
+              </b-carousel>
               <div class="row m-0 p-0 mt-4">
-                <img
-                  v-for="(image, idx) in product.productBiddingForm.productBiddingImagePaths"
-                  :key="image+idx"
-                  :src="getImage(image)"
+                <img :src="getImage(image)"
+                v-for="(image, idx) in
+                 product.productBiddingForm.productBiddingImagePaths"
+                :key="image+idx"
                 @click="moveSlider(idx)"
                 alt="" class="img-preview">
               </div>
@@ -55,26 +51,27 @@
               <table>
                 <tr>
                   <td>
-                    <span class="uang-text">Bid</span>
+                    <span class="uang-text">Bid </span>
                   </td>
                   <td>
                     <span class="price-detail-text ml-2">
-                    Rp{{formatPrice(product.productBiddingForm.nextBid)}}</span>
+                      Rp{{formatPrice(product.productBiddingForm.nextBid)}}</span>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <span class="uang-text">Bid anda</span>
+                    <span class="uang-text">Current Bid </span>
                   </td>
                   <td>
                     <span class="price-detail-text ml-2">
-                      Rp{{formatPrice(product.productBiddingForm.currentPrice)}}
-                    </span>
+                      Rp{{formatPrice(product.productBiddingForm.currentPrice)}}</span>
                   </td>
                 </tr>
               </table>
             </div>
             <div class="about-detail-product">
+<!--  -->
+<!--  -->
               <div class="p-3">
                 <div class="box-shadow mb-2">
                   <div class="head-tentang">
@@ -82,38 +79,43 @@
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Status barang :
-                      <span class="tag">{{
-                        product.productBiddingForm.productBiddingCondition}}</span>
+                      Status Barang :
+                      <span class="tag">
+                        {{product.productBiddingForm.productBiddingCondition}}</span>
                     </p>
                   </div>
                   <div class="list-detail-tentang">
-                    <p class="text-detail-product">Kelengkapan barang
-                      : {{product.productBiddingForm.productBiddingPackage}}</p>
+                    <p class="text-detail-product">Kelengkapan paket :
+                      {{product.productBiddingForm.productBiddingPackage}}</p>
                   </div>
                   <div class="list-detail-tentang">
-                    <p class="text-detail-product">Volume barang
-                      : {{product.productBiddingForm.productBiddingVolume}}</p>
+                    <p class="text-detail-product">Volume barang :
+                      {{product.productBiddingForm.productBiddingVolume}}</p>
                   </div>
                   <div class="list-detail-tentang">
-                    <p class="text-detail-product">Kelengkapan barang
-                      : {{product.productBiddingForm.productBiddingWeight}}</p>
+                    <p class="text-detail-product">Berat barang : {{
+                      product.productBiddingForm.productBiddingWeight}}</p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Deskripsi barang :
-                      {{product.productBiddingForm.productBiddingDescription}}
+                      Deskripsi barang : {{
+                        product.productBiddingForm.productBiddingDescription
+                      }}
                     </p>
                   </div>
                 </div>
                 <div
                 v-if="product.biddingOrderStatus
-                === 'PAID'">
-                  <small>Masukkan no resi pengiriman anda</small>
-                  <b-input v-model="resi" placeholder="No. Resi"></b-input>
-                  <small v-if="resiMsg" class="red">Masukkan no resi!</small>
-                  <b-button variant="primary" block class="mt-2"
-                  @click="sendProduct">Kirimkan Resi</b-button>
+                === 'WAITING_FOR_PAYMENT_FROM_BIDDING_WINNER'">
+                  <router-link :to='"/pay/lelang/"+product.biddingOrderId'>
+                    <b-button variant="primary" block>Bayar</b-button>
+                  </router-link>
+                </div>
+                <div
+                v-if="product.biddingOrderStatus
+                === 'DELIVERED_TO_BIDDING_OWNER'">
+                  <b-button variant="primary" block @click="confirmProduct">
+                    Barang diterima</b-button>
                 </div>
               </div>
             </div>
@@ -138,21 +140,70 @@ export default {
   },
   data() {
     return {
+      isExpand: [
+        false,
+        false,
+        false,
+      ],
       product: {
         productBiddingForm: {
           productBiddingName: '',
         },
       },
       slide: 0,
-      resi: '',
-      resiMsg: false,
+      monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+      ],
+      biddingInfo: [],
     };
   },
   async created() {
     await this.checkUser();
-    this.getDetail();
+    await this.getDetailPengajuan();
   },
   methods: {
+    checkUser() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .catch(() => {
+          this.$router.replace('/');
+        });
+    },
+    async getDetailPengajuan() {
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/biddingOrder?biddingOrderId=${this.$route.params.id}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          let count = 0;
+          this.product = res.data.data;
+          console.log(res);
+          for (let index = this.product.biddingForms.length - 1; index >= 0; index -= 1) {
+            if (count <= 2) {
+              this.biddingInfo.push(this.product.biddingForms[index]);
+            } else {
+              break;
+            }
+            count += 1;
+          }
+        })
+        .catch(() => {
+          // this.$router.push('/');
+        });
+    },
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -160,43 +211,24 @@ export default {
     expand(idx) {
       this.isExpand.splice(idx, 1, !this.isExpand[idx]);
     },
-    async checkUser() {
-      // melakukan check apakah user masih login atau tidak
-      // jika user masih login, maka akan dilempar ke halaman utama
-      const dataId = Cookie.get('dataId');
-      const dataToken = Cookie.get('dataToken');
-      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
-        {
-          headers:
-            {
-              Authorization: `Bearer ${dataToken}`,
-            },
-        })
-        .catch(() => {
-          this.$router.replace('/');
-        });
+    moveSlider(idx) {
+      this.slide = idx;
     },
-    getDetail() {
-      const dataToken = Cookie.get('dataToken');
-      axios.get(`http://localhost:${this.port}/experience/api/biddingOrder?biddingOrderId=${this.$route.params.id}`,
-        {
-          headers:
-            {
-              Authorization: `Bearer ${dataToken}`,
-            },
-        })
-        .then((res) => {
-          this.product = res.data.data;
-          console.log(res);
-        })
-        .catch(() => {
-          this.$router.replace('/');
-        });
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/biddingProductPhoto/${path[path.length - 1]}`;
+    },
+    getMonthYear(date) {
+      const theDate = new Date(date);
+      return `${theDate.getDate()} ${this.monthNames[theDate.getMonth()]} ${theDate.getFullYear()}`;
+    },
+    getTime(date) {
+      const theDate = new Date(date).toLocaleTimeString();
+      return `${theDate}`;
     },
     getStatus(str) {
-      console.log(str);
       if (str === 'WAITING_FOR_PAYMENT_FROM_BIDDING_WINNER') {
-        return 'Menunggu pembayaran';
+        return 'Menunggu pembayaran anda';
       }
 
       if (str === 'PAID') {
@@ -210,41 +242,25 @@ export default {
       if (str === 'PAID_TO_WINNER') {
         return 'Barang sudah diterima';
       }
-
       return '';
     },
-    sendProduct() {
-      console.log(this.resi);
-      if (this.resi !== '') {
-        const resi = {
-          biddingOrderId: this.product.biddingOrderId,
-          deliveryReceipt: this.resi,
-        };
-        const dataToken = Cookie.get('dataToken');
-        axios.put(`http://localhost:${this.port}/experience/api/biddingOrder/deliveryReceipt`, resi,
+    confirmProduct() {
+      const dataToken = Cookie.get('dataToken');
+      axios.put(`http://localhost:${this.port}/experience/api/biddingOrder/confirmation?biddingOrderId=${this.$route.params.id}`,
+        {
+          headers:
           {
-            headers:
-              {
-                Authorization: `Bearer ${dataToken}`,
-              },
-          })
-          .then((res) => {
-            console.log(res);
-            this.getDetail();
-          })
-          .catch(() => {
-            this.$router.replace('/');
-          });
-      } else {
-        this.resiMsg = true;
-      }
-    },
-    getImage(imagePath) {
-      const path = imagePath.split('/');
-      return `/assets/resources/uploads/biddingProductPhoto/${path[path.length - 1]}`;
-    },
-    moveSlider(idx) {
-      this.slide = idx;
+            Authorization: `Bearer ${dataToken}`,
+          },
+          _method: 'patch',
+        })
+        .then((res) => {
+          this.getDetailPengajuan();
+          console.log(res);
+        })
+        .catch(() => {
+          // this.$router.push('/');
+        });
     },
   },
 };
@@ -253,13 +269,6 @@ export default {
 <style scoped>
 .hideIcon{
   display: none;
-}
-
-.img-preview{
-  width: 60px;
-  border: 0.8px gray solid;
-  padding: 5px;
-  margin-right: 10px;
 }
 
 .bottom-buy{
@@ -318,6 +327,17 @@ tr td{
   margin: 0px;
 }
 
+.img-preview{
+  width: 60px;
+  border: 0.8px gray solid;
+  padding: 5px;
+  margin-right: 10px;
+}
+
+.s>tr td{
+  font-size: 12px;
+}
+
 .detail-image-product{
   max-width: 320px;
 }
@@ -338,10 +358,6 @@ tr td{
   margin-right: 30px;
   color: #5A5A5A;
   font-size: 14px;
-}
-
-.red{
-  color: red;
 }
 
 .price-detail-text{
@@ -452,6 +468,14 @@ tr td{
   border: 0.5px solid rgba(208, 208, 208, 0.245);
 }
 
+.product-img{
+  width: 100%;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
 .bid-product{
   margin-top: 7px;
   margin-bottom: 0px;
@@ -542,5 +566,4 @@ tr td{
     display: inline-block;
     color: #AEAEAE;
 }
-
 </style>

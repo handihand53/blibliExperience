@@ -1,24 +1,96 @@
 <template>
   <div class="p-2">
-    <div class="custom-card box-shadow p-3 row no-margin"
-    v-for="product in product" :key="product.productBiddingId">
-      <div class="col-4 no-margin no-padding">
-        <img :src="getImage(product.productBiddingImagePaths[0])"
-        alt="" class="img-product">
+    <div class="d-flex justify-content-between mt-2 pb-2">
+      <div class="overflow-x">
+        <span class="mx-2">
+          <b-button pill variant="outline-primary"
+          class="px-3" @click="changeStatus(0, 'AVAILABLE')" size="sm" id="changeStat0"
+          :class="{buttonActive : this.isActive[0]}">Lelang aktif</b-button>
+        </span>
+        <span class="mx-2">
+          <b-button pill variant="outline-primary"
+          class="px-3" @click="changeStatus(1, 'FINISHED')" size="sm" id="changeStat1"
+          :class="{buttonActive : this.isActive[1]}">Lelang selesai</b-button>
+        </span>
+        <span class="mx-2">
+          <b-button pill variant="outline-primary"
+          class="px-3" @click="changeStatus(2, 'ORDER_GENERATED')"
+          size="sm" id="changeStat2"
+          :class="{buttonActive : this.isActive[2]}">Transaksi</b-button>
+        </span>
       </div>
-      <div class="col-8 no-margin  no-padding">
-        <p class="title-product">{{product.productBiddingName}}</p>
-        <p class="brand-product">Brand: <span class="brand">
-          {{product.productBiddingBrand}}</span></p>
-        <p class="deadline">Berakhir {{getMonthYear(product.closeBidDate)}},
-          {{getTime(product.closeBidDate)}}</p>
-        <p class="bid-product">Bid terakhir</p>
-        <p class="bid-product m-0">
-            <span class="bid-price-product">Rp{{formatPrice(product.currentPrice)}}</span></p>
-        <router-link :to="'/detail-pengajuan-barang/'+product.productBiddingId">
-          <button @click="showDetail" class="buy-btn"
-          id="showDetail">Lihat Detail</button>
-        </router-link>
+    </div>
+    <div v-if="currentState === 'AVAILABLE'">
+      <div class="custom-card box-shadow p-3 row no-margin"
+      v-for="product in product" :key="product.productBiddingId"
+      >
+        <div class="col-4 no-margin no-padding">
+          <img :src="getImage(product.productBiddingImagePaths[0])"
+          alt="" class="img-product">
+        </div>
+        <div class="col-8 no-margin  no-padding">
+          <p class="title-product">{{product.productBiddingName}}</p>
+          <p class="brand-product">Brand: <span class="brand">
+            {{product.productBiddingBrand}}</span></p>
+          <p class="deadline">Berakhir {{getMonthYear(product.closeBidDate)}},
+            {{getTime(product.closeBidDate)}}</p>
+          <p class="bid-product">Bid terakhir</p>
+          <p class="bid-product m-0">
+              <span class="bid-price-product">Rp{{formatPrice(product.currentPrice)}}</span></p>
+          <router-link :to="'/detail-pengajuan-barang/'+product.productBiddingId">
+            <button @click="showDetail" class="buy-btn"
+            id="showDetail">Lihat Detail</button>
+          </router-link>
+        </div>
+      </div>
+    </div>
+    <div v-if="currentState === 'FINISHED'">
+      <div class="custom-card box-shadow p-3 row no-margin"
+      v-for="product in product" :key="product.productBiddingId"
+      >
+        <div class="col-4 no-margin no-padding">
+          <img :src="getImage(product.productBiddingImagePaths[0])"
+          alt="" class="img-product">
+        </div>
+        <div class="col-8 no-margin  no-padding">
+          <p class="title-product">{{product.productBiddingName}}</p>
+          <p class="brand-product">Brand: <span class="brand">
+            {{product.productBiddingBrand}}</span></p>
+          <p class="deadline">Berakhir {{getMonthYear(product.closeBidDate)}},
+            {{getTime(product.closeBidDate)}}</p>
+          <p class="bid-product">Bid terakhir</p>
+          <p class="bid-product m-0">
+              <span class="bid-price-product">Rp{{formatPrice(product.currentPrice)}}</span></p>
+          <router-link :to="'/detail-pengajuan-finished/'+product.productBiddingId">
+            <button @click="showDetail" class="buy-btn"
+            id="showDetail">Lihat Detail</button>
+          </router-link>
+        </div>
+      </div>
+    </div>
+    <div v-if="currentState === 'ORDER_GENERATED'">
+      <div class="custom-card box-shadow p-3 row no-margin"
+      v-for="product in product" :key="product.biddingOrderId">
+        <div class="col-4 no-margin no-padding">
+          <img :src="getImage(product.productBiddingForm.productBiddingImagePaths[0])"
+          alt="" class="img-product">
+        </div>
+        <div class="col-8 no-margin  no-padding">
+          <p class="title-product">{{product.productBiddingForm.productBiddingName}}</p>
+          <p class="brand-product">Brand: <span class="brand">
+            {{product.productBiddingForm.productBiddingBrand}}</span></p>
+          <p class="deadline">Berakhir {{getMonthYear(product.productBiddingForm.closeBidDate)}},
+            {{getTime(product.productBiddingForm.closeBidDate)}}</p>
+          <p class="bid-product">Bid terakhir</p>
+          <p class="bid-product m-0">
+              <span class="bid-price-product">
+                Rp{{formatPrice(product.productBiddingForm.currentPrice)}}</span></p>
+          <router-link
+          :to="'/detail-pengajuan-order/'+product.biddingOrderId">
+            <button @click="showDetail" class="buy-btn"
+            id="showDetail">Lihat Detail</button>
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -31,11 +103,22 @@ import Cookie from 'vue-cookie';
 export default {
   data() {
     return {
+      isActive: [
+        true,
+        false,
+        false,
+        false,
+      ],
       display: true,
-      product: '',
+      product: {
+        productBiddingForm: {
+          productBiddingName: '',
+        },
+      },
       monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
       ],
+      currentState: 'AVAILABLE',
     };
   },
   async created() {
@@ -63,11 +146,9 @@ export default {
         });
     },
     async getListPengajuan() {
-    // melakukan check apakah user masih login atau tidak
-    // jika user masih login, maka akan dilempar ke halaman utama
       const dataId = Cookie.get('dataId');
       const dataToken = Cookie.get('dataToken');
-      await axios.get(`http://localhost:${this.port}/experience/api/bidding/user?userId=${dataId}`,
+      await axios.get(`http://localhost:${this.port}/experience/api/products/bidding/user?userId=${dataId}`,
         {
           headers:
           {
@@ -79,7 +160,43 @@ export default {
           console.log(res);
         })
         .catch(() => {
-          this.$router.push('/');
+          // this.$router.push('/');
+        });
+    },
+    async getListPengajuanFinished() {
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/products/bidding/user/finished?userId=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          this.product = res.data.data;
+          console.log(res);
+        })
+        .catch(() => {
+          // this.$router.push('/');
+        });
+    },
+    async getListPengajuanOrderCreated() {
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/biddingOrder/owner?userId=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          this.product = res.data.data;
+          console.log(res);
+        })
+        .catch(() => {
+          // this.$router.push('/');
         });
     },
     formatPrice(value) {
@@ -97,6 +214,22 @@ export default {
     getTime(date) {
       const theDate = new Date(date).toLocaleTimeString();
       return `${theDate}`;
+    },
+    changeStatus(idx, stat) {
+      this.product = [];
+      this.currentState = stat;
+      this.isActive.splice(idx, 1, true);
+      for (let i = 0; i < this.isActive.length; i += 1) {
+        if (i !== idx) this.isActive.splice(i, 1, false);
+      }
+      if (this.currentState === 'AVAILABLE') {
+        this.getListPengajuan();
+      } else if (this.currentState === 'FINISHED') {
+        this.getListPengajuanFinished();
+        console.log('selesai');
+      } else {
+        this.getListPengajuanOrderCreated();
+      }
     },
   },
 };
@@ -249,6 +382,11 @@ p{
   border-radius: 15px;
 }
 
+.buttonActive{
+  background-color: rgb(0, 123, 255);
+  color: white!important;
+}
+
 .success{
   background-color: #37C26A;
 }
@@ -344,6 +482,16 @@ p{
 .background-gray2{
   background-color: #E3E3E3;
 }
+
+.overflow-x{
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.overflow-x::-webkit-scrollbar {
+  display: none;
+}
+
 
 .img-product{
   width: 100px;

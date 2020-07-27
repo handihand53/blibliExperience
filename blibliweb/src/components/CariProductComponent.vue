@@ -183,7 +183,7 @@ export default {
         && this.kategori !== ''
         && this.image.length !== 0
       ) {
-        axios.post(`http://localhost:${this.port}/experience/api/bidding`, formData, {
+        axios.post(`http://localhost:${this.port}/experience/api/products/bidding`, formData, {
           headers:
             {
               Authorization: `Bearer ${dataToken}`,

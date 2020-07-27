@@ -33,18 +33,24 @@
                 v-model="noTlp">
                 <small class="text-suggest">Contoh: 082120393939</small><br>
                 <!-- kenis kelamin -->
-                <label for="jk" class="detail-label">
-                    Jenis Kelamin<span class="red">*</span></label><br>
-                <input type="radio" class="form-input" id="pria" name="jk">
-                <label for="pria" class="jk">Pria</label>
-                <input type="radio" class="form-input" id="wanita" name="jk">
-                <label for="wanita" class="jk">Wanita</label><br>
+                <label class="detail-label">
+                  Jenis Kelamin<span class="red">*</span></label><br>
+                <select class="form-control form-input" v-model="jk">
+                    <option value="" hidden selected disabled>--- Pilih jenis kelamin ---</option>
+                    <option value="PRIA">Pria</option>
+                    <option value="WANITA">Wanita</option>
+                </select>
+                <!-- alamat -->
+                <label class="detail-label">
+                  Alamat<span class="red">*</span></label><br>
+                <textarea class="form-control" cols="30" rows="4"
+                v-model="address"></textarea>
                 <!-- opsi -->
                 <label for="nohp" class="detail-label">Opsi</label><br>
                 <router-link to="/change-password">
                     <button class="change-password-btn">Ubah Kata Sandi</button>
                 </router-link><br>
-                <button class="save-btn">Simpan</button>
+                <button class="save-btn" @click="updateUser">Simpan</button>
             </div>
         </div>
         <Footer/>
@@ -80,9 +86,12 @@ export default {
       gender: null,
       createdAt: null,
       isLoading: true,
+      address: '',
       monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
       ],
+      jk: '',
+      data: [],
     };
   },
   async created() {
@@ -105,6 +114,7 @@ export default {
           if (response.data === null) {
             this.$router.push('/');
           }
+          this.data = response.data.data;
           this.isLoading = false;
           this.nama = response.data.data.userName;
           this.email = response.data.data.userEmail;
@@ -112,9 +122,50 @@ export default {
           this.noTlp = response.data.data.userPhoneNumber;
           this.tglLahir = response.data.data.userBirthDate;
           this.createdAt = response.data.data.userCreatedAt;
+          if (this.data.userAddressForms !== null) {
+            this.address = this.data.userAddressForms.detail;
+          }
+          console.log(this.data);
         })
         .catch(() => {
           this.$router.replace('/');
+        });
+    },
+    updateUser() {
+      const dataToken = Cookie.get('dataToken');
+
+      const update = {
+        userAddressForms: [
+          {
+            detail: this.address,
+            kecamatan: 'string',
+            kelurahan: 'string',
+            kota: 'string',
+            provinsi: 'string',
+            rt: 'string',
+            rw: 'string',
+          },
+        ],
+        userBirthDate: this.tglLahir,
+        userGender: this.jk,
+        userId: this.data.userId,
+        userIdentityId: '123412',
+        userPhoneNumber: this.noTlp,
+      };
+      console.log(update);
+      axios.put(`http://localhost:${this.port}/experience/api/users`, update,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((e) => {
+          console.log(e.response);
+          // this.$router.replace('/');
         });
     },
   },

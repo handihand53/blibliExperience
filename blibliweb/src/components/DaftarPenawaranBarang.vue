@@ -1,22 +1,51 @@
 <template>
   <div>
-    <div class="p-2 mb-1">
+    <div class="d-flex justify-content-between mt-2 pb-2">
+        <div class="overflow-x">
+          <span class="mx-2">
+            <b-button pill variant="outline-primary"
+            class="px-3" @click="changeStatus(0, 'WAITING_FOR_PAYMENT')" size="sm" id="changeStat0"
+            :class="{buttonActive : this.isActive[0]}">Menunggu</b-button>
+          </span>
+          <span class="mx-2">
+            <b-button pill variant="outline-primary"
+            class="px-3" @click="changeStatus(1, 'WIN')" size="sm" id="changeStat1"
+            :class="{buttonActive : this.isActive[1]}">Menang</b-button>
+          </span>
+          <span class="mx-2">
+            <b-button pill variant="outline-primary"
+            class="px-3" @click="changeStatus(2, 'DELIVERED_TO_CONSUMER')"
+            size="sm" id="changeStat2"
+            :class="{buttonActive : this.isActive[2]}">Sedang dikirim</b-button>
+          </span>
+          <span class="mx-2">
+            <b-button pill variant="outline-primary"
+            class="px-3" @click="changeStatus(3, 'FINISHED')"
+            size="sm" id="changeStat3"
+            :class="{buttonActive : this.isActive[3]}">Diterima</b-button>
+          </span>
+        </div>
+      </div>
+    <div class="p-2 mb-1"
+    v-for="product in product" :key="product.orderTransactionId">
         <div class="box-shadow">
-          <div class="background-gray2 p-2">
-            <small class="date-text">Tanggal : 04 Febuari 2019</small>
-          </div>
+          <!-- <div class="background-gray2 p-2">
+            <small class="date-text">Tanggal : {{getMonthYear}}</small>
+          </div> -->
           <div class="background-white">
             <div class="p-3 row no-margin">
               <div class="col-4 no-margin no-padding">
-                  <img src="@/assets/etc/aqua.png" alt="" class="img-product">
+              <!-- <img :src="getImage(product.productBiddingForm.)" alt="" class="img-product"> -->
               </div>
               <div class="col-8 no-margin  no-padding">
-                  <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-                  <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
+                  <p class="title-product">{{product.productBiddingForm.productBiddingName}}</p>
+                  <p class="brand-product">Brand: <span class="brand">
+                    {{product.productBiddingForm.productBiddingBrand}}</span></p>
                   <p class="brand-product">Penawar: <span class="brand">Handi Hermawan</span></p>
                   <p class="bid-product">Bid:
-                    <span class="bid-price-product">Rp13.000.000</span></p>
-                  <router-link to="/daftar-penawaran/detail-lelang">
+                    <span class="bid-price-product">Rp
+                      {{formatPrice(product.productBiddingForm.currentPrice)}}</span></p>
+                  <router-link :to="'/daftar-penawaran/detail-lelang/'+product.biddingOrderId">
                     <button class="buy-btn">Lihat Detail</button>
                   </router-link>
               </div>
@@ -26,6 +55,97 @@
       </div>
   </div>
 </template>
+
+<script>
+import axios from 'axios';
+import Cookie from 'vue-cookie';
+
+export default {
+  data() {
+    return {
+      display: true,
+      product: '',
+      monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+      ],
+      isActive: [
+        true,
+        false,
+        false,
+        false,
+      ],
+      currentState: 'WIN',
+    };
+  },
+  async created() {
+    await this.checkLoginUser();
+  },
+  methods: {
+    async checkLoginUser() {
+    // melakukan check apakah user masih login atau tidak
+    // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .catch(() => {
+          // this.$router.push('/');
+        });
+    },
+    async getListPenawaran() {
+    // melakukan check apakah user masih login atau tidak
+    // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/biddingOrder/winner?userId=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          this.product = res.data.data;
+          console.log(res);
+        })
+        .catch(() => {
+          // this.$router.push('/');
+        });
+    },
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/biddingProductPhoto/${path[path.length - 1]}`;
+    },
+    getMonthYear(date) {
+      const theDate = new Date(date);
+      return `${theDate.getDate()} ${this.monthNames[theDate.getMonth()]} ${theDate.getFullYear()}`;
+    },
+    getTime(date) {
+      const theDate = new Date(date).toLocaleTimeString();
+      return `${theDate}`;
+    },
+    changeStatus(idx, stat) {
+      this.currentState = stat;
+      if (this.currentState === 'WIN') {
+        this.getListPenawaran();
+      }
+      this.isActive.splice(idx, 1, true);
+      for (let i = 0; i < this.isActive.length; i += 1) {
+        if (i !== idx) this.isActive.splice(i, 1, false);
+      }
+    },
+  },
+};
+</script>
 
 <style scoped>
 .no-margin{
@@ -81,6 +201,11 @@
   margin-bottom: 0px;
 }
 
+.buttonActive{
+  background-color: rgb(0, 123, 255);
+  color: white!important;
+}
+
 .buy-btn{
     width: 100%;
     background-color: rgb(0, 128, 255);
@@ -98,6 +223,16 @@
   background: rgb(0, 128, 255) radial-gradient(circle, transparent 1%, rgb(0, 105, 209) 1%)
     center/15000%;
   color: white;
+}
+
+.overflow-x{
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+
+.overflow-x::-webkit-scrollbar {
+  display: none;
 }
 
 .buy-btn:active {

@@ -62,7 +62,14 @@ export default {
       location: {
         id: 0,
       },
-      layers: [],
+      layers: [
+        {
+          id: 0,
+          city: 'Bandung',
+          active: true,
+          features: [],
+        },
+      ],
       daerah: [],
     };
   },
@@ -75,19 +82,14 @@ export default {
         .then((response) => {
           response.data.data.forEach((data) => {
             if (data.shopAddress.kota === 'Bandung') {
-              this.layers.push({
-                id: 0,
-                city: data.shopAddress.kota,
-                active: true,
-                features: [
-                  {
-                    id: data.shopId,
-                    name: data.shopName,
-                    type: 'marker',
-                    coords: [data.shopLocation[0], data.shopLocation[1]],
-                  },
-                ],
-              });
+              this.layers[0].features.push(
+                {
+                  id: data.shopId,
+                  name: data.shopName,
+                  type: 'marker',
+                  coords: [data.shopLocation[0], data.shopLocation[1]],
+                },
+              );
             }
           });
         });

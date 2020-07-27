@@ -23,18 +23,21 @@
         <div class="d-flex justify-content-between">
           <p class="address-label pt-2">
           <font-awesome-icon icon="map-marker-alt" /> Alamat Pengiriman</p>
-          <p class="change-label pt-2" v-b-modal.modal-sm>ubah</p>
+          <router-link to="/profile">
+            <p class="change-label pt-2" v-b-modal.modal-sm>ubah</p>
+          </router-link>
         </div>
         <div class="cst-card pl-3 pr-3 pt-2">
           <p class="name-text">Handi Hermawan</p>
           <p class="address-text">Alamat :
-            <span class="color-gray">Jl. Juadi No.29, Kotabaru, Kec.
-            Gondokusuman, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55224</span>
+            <span class="color-gray" v-if="user.userAddressForms === null">-</span>
+            <span class="color-gray" v-else>{{user.userAddressForms[0].detail}}</span>
           </p>
-          <p class="name-text">0821203585645</p>
         </div>
+        <p class="p-1 fs-red mt-2" v-if="addressIsEmpty"
+        >Alamat tidak boleh kosong</p>
       </div>
-      <div class="cst-card mt-3 pt-2">
+      <div class="cst-card mt-2 pt-2">
         <p class=" shop-name border-bottom pl-3 pb-3 pt-1">List Produk</p>
         <div class="col-12 row no-margin no-padding border-bottom"
         v-for="product in product" :key="product.stockForm.stockId">
@@ -80,7 +83,8 @@
           <p class="price">Rp{{formatPrice(price)}}</p>
         </div>
         <div class="col-5 no-padding right">
-          <button @click="confirmProduct" class="btn-checkout">Lanjut</button>
+          <button @click="confirmProduct" class="btn-checkout"
+          :disabled="addressIsEmpty">Lanjut</button>
         </div>
       </div>
     </div>
@@ -149,6 +153,8 @@ export default {
       cartId: '',
       price: 0,
       productList: [],
+      user: '',
+      addressIsEmpty: false,
     };
   },
   async created() {
@@ -180,6 +186,10 @@ export default {
             {
               Authorization: `Bearer ${dataToken}`,
             },
+        })
+        .then((res) => {
+          this.user = res.data.data;
+          console.log(this.user);
         })
         .catch(() => {
           this.$router.replace('/');
@@ -221,6 +231,12 @@ export default {
         // }
       } else {
         this.isDelivery = false;
+        if (this.user.userAddressForms === null) {
+          console.log('sad');
+          this.addressIsEmpty = true;
+        } else {
+          this.addressIsEmpty = false;
+        }
         // if (this.methode !== 'SELF_SERVICE') {
         //   this.price += 13000;
         // }
@@ -260,6 +276,11 @@ export default {
 
 .mb-cst{
   margin-bottom: 75px;
+}
+
+.fs-red{
+  font-size: 12px;
+  color: red;
 }
 
 .mod-bod{

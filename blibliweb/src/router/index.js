@@ -103,7 +103,7 @@ const routes = [
     },
   },
   {
-    path: '/daftar-penawaran/detail-lelang',
+    path: '/daftar-penawaran/detail-lelang/:id',
     name: 'Detail Penawaran Lelang',
     component: () => import(/* webpackChunkName: "category" */ '../views/user/DetailPenawaranBarang.vue'),
     meta: {
@@ -144,11 +144,27 @@ const routes = [
     },
   },
   {
+    path: '/detail-pengajuan-order/:id',
+    name: 'Detail Pengajuan Order',
+    component: () => import(/* webpackChunkName: "category" */ '../views/user/DetailPengajuanOrder.vue'),
+    meta: {
+      title: 'Detail Pengajuan Order',
+    },
+  },
+  {
     path: '/detail-pengajuan-barang/:id',
     name: 'Detail Pengajuan Barang',
     component: () => import(/* webpackChunkName: "category" */ '../views/user/DetailPengajuanBarang.vue'),
     meta: {
       title: 'Detail Pengajuan Barang',
+    },
+  },
+  {
+    path: '/detail-pengajuan-finished/:id',
+    name: 'Detail Pengajuan Finish Barang',
+    component: () => import(/* webpackChunkName: "category" */ '../views/user/DetailPengajuanFinished.vue'),
+    meta: {
+      title: 'Detail Pengajuan Finish Barang',
     },
   },
   {
@@ -197,6 +213,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "category" */ '../views/user/Payment.vue'),
     meta: {
       title: 'Pembayaran',
+    },
+  },
+  {
+    path: '/pay/lelang/:id',
+    name: 'Pembayaran Lelang',
+    component: () => import(/* webpackChunkName: "category" */ '../views/user/PaymentLelang.vue'),
+    meta: {
+      title: 'Pembayaran Lelang',
     },
   },
   {

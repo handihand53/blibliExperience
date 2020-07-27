@@ -5,7 +5,7 @@
       <div>
         <div class="background-white border-bottom box-shadow">
           <div class="p-2">
-            <small style="color: #AEAEAE; font-weight: 600;">Daftar Pengajuan Masuk</small>
+            <small style="color: #AEAEAE; font-weight: 600;">Daftar Pengajuan anda</small>
           </div>
           <div class="pl-2">
             <span @click="pengajuanBarter" class="pengajuan-barter"
@@ -70,19 +70,6 @@ export default {
     },
   },
 };
-// console.log(this.$route.query.page);
-// const urlParams = new URLSearchParams(window.location.search);
-// console.log(urlParams);
-// console.log(urlParams.has('page'));
-// const urls = 'http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5';
-// const url = new URL(urls);
-// console.log(url);
-// const page = url.searchParams.get('page');
-// console.log(page);
-// if (page === 'pengajuanBarang') {
-//   document.getElementById('pengajuanBarang').click();
-//   console.log('ada');
-// }
 </script>
 
 <style scoped>

@@ -26,16 +26,10 @@
           @click="moveSlider(idx)"
           alt="" class="img-preview">
         </div>
+        <hr class="mt-3">
         <p class="price-text"
         v-if="this.currentIdx !== null">Harga <span class="price">
           Rp{{ formatPrice(allProduct.productStockList[currentIdx].productPrice) }}</span></p>
-        <hr>
-        <p @click="addToWishList"
-          class="wishlist-text">
-          <font-awesome-icon
-          class="f-icon"
-          icon="heart"/>
-           Wishlist</p>
       </div>
       <div class="bg-white mt-3 p-3">
         <p class="pilih-lokasi">Pilih Lokasi
@@ -44,71 +38,28 @@
       </div>
       <div class="bg-white mt-3 pb-2" v-if="this.currentIdx !== null">
         <div class="p-3">
-          <div class="row no-margin no-padding col-12">
-            <b-form-group label="Metode Pengiriman">
-              <b-form-radio v-model="selected"
-              :disabled="allProduct.productStockList[currentIdx].productStock === 0"
-              name="some-radios" value="A">
-                <div class="no-padding">
-                  <div class="d-flex justify-content-between row p-0 m-0">
-                   <table class="table m-0 p-0">
-                     <tr class="stock-item">
-                       <td>
-                        <p class="radio-text">Ambil langsung
-                          <img src="@/assets/logo/bliblimart2.png"
-                          class="blimart-icon" alt="">
-                        </p>
-                      </td>
-                      <td class="stock-table">
-                        <span v-if="allProduct.productStockList[currentIdx].productStock
-                        > 0"
-                        class="stock ml-auto display-content">Stock Ada
-                          <font-awesome-icon
-                          class="f-icon"
-                          icon="check-circle"/>
-                        </span>
-                        <span v-else
-                        class="stock-red display-content ml-auto">Tidak Ada
-                          <font-awesome-icon
-                          class="f-icon"
-                          icon="times-circle"/>
-                        </span>
-                      </td>
-                     </tr>
-                   </table>
-                  </div>
-                </div>
-                <p class="radio-text-desc">Ambil barang langsung di bliblimart</p>
-              </b-form-radio>
-              <b-form-radio v-model="selected" name="some-radios"
-              :disabled="allProduct.productStockList[currentIdx].productStock === 0" value="B">
-                <div class="no-padding">
-                  <div class="d-flex justify-content-between row p-0 m-0">
-                   <table class="table m-0 p-0">
-                     <tr class="stock-item">
-                       <td>
-                        <p class="radio-text">Pengiriman Langsung</p>
-                      </td>
-                      <td class="text-right">
-                        <span v-if="allProduct.productStockList[currentIdx].productStock
-                        > 0" class="stock">Stock Ada
-                          <font-awesome-icon
-                          class="f-icon"
-                          icon="check-circle"/>
-                        </span>
-                        <span v-else class="stock-red">Tidak Ada
-                          <font-awesome-icon
-                          class="f-icon-red"
-                          icon="times-circle"/>
-                        </span>
-                      </td>
-                     </tr>
-                   </table>
-                  </div>
-                </div>
-                <p class="radio-text-desc">Barang akan dikirim langsung ke tempat anda</p>
-              </b-form-radio>
-            </b-form-group>
+          <label for="">Ketersediaan Barang</label>
+          <hr>
+          <div class="no-margin no-padding">
+            <span v-if="allProduct.productStockList[currentIdx].productStock
+              > 0"
+              class="stock">Stock Ada
+                <font-awesome-icon
+                class="f-icon"
+                icon="check-circle"/>
+              </span>
+              <span v-else
+              class="stock-red display-content ml-auto">Tidak Ada
+                <font-awesome-icon
+                class="f-icon"
+                icon="times-circle"/>
+              </span>
+            <p class="radio-text-desc"
+            v-if="allProduct.productStockList[currentIdx].productStock
+              > 0">Barang siap untuk diambil/dikirim
+              langsung ke alamat anda</p>
+              <p class="radio-text-desc"
+            v-else>Barang tidak tersedia</p>
           </div>
         </div>
       </div>
@@ -454,10 +405,6 @@ export default {
     addToBag() {
       this.getCart();
     },
-    addToWishList() {
-      this.alertMsg = 'Berhasil masuk wishlist';
-      this.dismissCountDown = this.dismissSecs;
-    },
     moveSlider(idx) {
       this.slide = idx;
     },
@@ -726,7 +673,7 @@ hr{
 
 .price-text{
   font-size: 12px;
-  margin-top: 20px;
+  margin-top: 5px;
 }
 
 .price{

@@ -29,14 +29,9 @@
             :key="image" @click="moveSlider(idx)"
             alt="" class="img-preview">
         </div>
+      <hr class="mt-3">
       <p class="price-text">Harga
         <span class="price">Rp{{ formatPrice(detailProduct.productPrice) }}</span></p>
-      <hr>
-      <p class="wishlist-text">
-        <font-awesome-icon
-        class="f-icon"
-        icon="heart"/>
-          Wishlist</p>
     </div>
     <div class="p-3">
       <div class="bg-white mt-1 shadow">
@@ -84,7 +79,7 @@
         <div class="buy-btn" @click="buyItem">
           BELI SEKARANG
         </div>
-        <div class="icon center" @click="addToBag">
+        <div class="icon center" @click="getCart">
           <img src="@/assets/logo/blibli_wht_logoonly.png" alt="" class="blibli-icon">
         </div>
       </div>
@@ -127,6 +122,7 @@ export default {
           productName: '',
         },
       },
+      sama: false,
     };
   },
   async created() {
@@ -164,9 +160,6 @@ export default {
       const path = imagePath.split('/');
       return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
     },
-    addToBag() {
-      this.dismissCountDown = this.dismissSecs;
-    },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
     },
@@ -184,10 +177,107 @@ export default {
     moveSlider(idx) {
       this.slide = idx;
     },
+    getCart() {
+      this.sama = false;
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/carts?userId=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((response) => {
+          if (response.data.data.cartForms.length === 0) {
+            this.addToCart();
+          } else {
+            response.data.data.cartForms.forEach((element) => {
+              if (element.stockForm.stockId
+              === this.detailProduct.stockId) {
+                this.addAmount(element.amount, element.stockForm.stockId,
+                  element.stockForm.productStock, response.data.data.cartId);
+                this.sama = true;
+              }
+            });
+
+            if (this.sama === false) {
+              this.addToCart();
+            }
+          }
+        })
+        .catch((er) => {
+          if (er.response.status === 500) {
+            this.addToCart();
+          } else {
+            this.$router.replace('/');
+          }
+        });
+    },
+    async addToCart() {
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      const cart = {
+        productId: this.detailProduct.productDataForm.productId,
+        stockId: this.detailProduct.stockId,
+        userId: dataId,
+      };
+
+      await axios.post(`http://localhost:${this.port}/experience/api/carts`, cart,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then(() => {
+          this.alertMsg = 'Produk berhasil ditambahkan';
+          this.dismissCountDown = this.dismissSecs;
+        })
+        .catch(() => {
+          this.$router.push('/login');
+        });
+    },
     async buyItem() {
       // logic beli item
       // post axios
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/carts?userId=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((response) => {
+          if (response.data.data.cartForms.length === 0) {
+            this.doDuyItem();
+          } else {
+            response.data.data.cartForms.forEach((element) => {
+              if (element.stockForm.stockId
+              === this.detailProduct.stockId) {
+                this.addAmount(element.amount, element.stockForm.stockId,
+                  element.stockForm.productStock, response.data.data.cartId);
+                this.sama = true;
+                setTimeout(() => this.$router.push('/cart'), 1000);
+              }
+            });
 
+            if (this.sama === false) {
+              this.doDuyItem();
+            }
+          }
+        })
+        .catch((er) => {
+          if (er.response.status === 500) {
+            this.doDuyItem();
+          } else {
+            this.$router.replace('/');
+          }
+        });
+    },
+    async doDuyItem() {
       this.isLoading = true;
       await this.checkLoginUser();
       const dataId = Cookie.get('dataId');
@@ -212,6 +302,28 @@ export default {
           this.$router.push('/login');
         });
       this.isLoading = false;
+    },
+    addAmount(amt, stockIds, stock, idCart) {
+      // add logic change amount here
+      if (amt + 1 <= stock) {
+        const request = {
+          amount: 1,
+          cartId: idCart,
+          stockId: stockIds,
+        };
+        const dataToken = Cookie.get('dataToken');
+        axios.put(`http://localhost:${this.port}/experience/api/carts/updateAmount`, request,
+          {
+            headers:
+              {
+                Authorization: `Bearer ${dataToken}`,
+              },
+          })
+          .then(() => {
+            this.alertMsg = 'Produk berhasil ditambahkan';
+            this.dismissCountDown = this.dismissSecs;
+          });
+      }
     },
   },
 };
@@ -406,7 +518,7 @@ hr{
 
 .price-text{
   font-size: 12px;
-  margin-top: 20px;
+  margin-top: 5px;
 }
 
 .price{

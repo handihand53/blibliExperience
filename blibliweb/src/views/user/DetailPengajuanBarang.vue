@@ -71,17 +71,17 @@
                 <div class="custom-card box-shadow px-3 py-2 mb-2 mt-2"
                 v-for="(data, idx) in biddingInfo" :key="idx">
                   <table class="table table-borderless mb-0">
-                    <tr @click="expand(0)">
+                    <tr @click="expand(idx)">
                       <td>
                         <span
-                          :class="{hideIcon: isExpand[0]}">
+                          :class="{hideIcon: isExpand[idx]}">
                           <font-awesome-icon
                           class="blue"
                           icon="plus"
                           />
                         </span>
                         <span
-                        :class="{hideIcon: !isExpand[0]}">
+                        :class="{hideIcon: !isExpand[idx]}">
                           <font-awesome-icon
                           class="blue"
                           icon="minus"
@@ -94,7 +94,7 @@
                     </tr>
                   </table>
                   <div
-                  :class="{hideIcon: !isExpand[0]}">
+                  :class="{hideIcon: !isExpand[idx]}">
                     <hr class="my-2">
                     <div class="no-gutters">
                       <table class="s">
@@ -141,9 +141,6 @@
                       product.productBiddingWeight}}</p>
                   </div>
                   <div class="list-detail-tentang">
-                    <p class="text-detail-product">Lama Pemakaian : 3 Tahun 6 bulan</p>
-                  </div>
-                  <div class="list-detail-tentang">
                     <p class="text-detail-product">
                       Deskripsi barang : {{
                         product.productBiddingDescription
@@ -180,6 +177,7 @@ export default {
       isExpand: [
         false,
         false,
+        false,
       ],
       product: '',
       slide: 0,
@@ -211,10 +209,8 @@ export default {
         });
     },
     async getDetailPengajuan() {
-    // melakukan check apakah user masih login atau tidak
-    // jika user masih login, maka akan dilempar ke halaman utama
       const dataToken = Cookie.get('dataToken');
-      await axios.get(`http://localhost:${this.port}/experience/api/bidding?productBiddingId=${this.$route.params.id}`,
+      await axios.get(`http://localhost:${this.port}/experience/api/products/bidding?productBiddingId=${this.$route.params.id}`,
         {
           headers:
           {
@@ -224,6 +220,7 @@ export default {
         .then((res) => {
           let count = 0;
           this.product = res.data.data;
+          console.log(res);
           for (let index = this.product.biddingForms.length - 1; index >= 0; index -= 1) {
             if (count <= 2) {
               this.biddingInfo.push(this.product.biddingForms[index]);

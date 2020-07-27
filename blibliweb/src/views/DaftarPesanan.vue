@@ -345,13 +345,15 @@ export default {
   white-space: nowrap;
 }
 
-a:hover{
-  text-decoration: none;
-}
 
 .overflow-x::-webkit-scrollbar {
   display: none;
 }
+
+a:hover{
+  text-decoration: none;
+}
+
 
 .cat-sticky{
   position: sticky;

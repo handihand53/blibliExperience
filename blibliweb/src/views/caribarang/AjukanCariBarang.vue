@@ -5,7 +5,8 @@
         <p class="pl-2 pr-2 pt-2">Tawarkan Harga</p>
         <div class="row no-margin pt-3 pb-2 bg-white mt-1 border">
           <div class="col-4 no-margin no-padding">
-            <img src="@/assets/etc/aqua.png" alt="" class="img-product">
+            <img :src="getImage(product.productBiddingImagePaths[0])"
+            alt="" class="img-product p-2">
           </div>
           <div class="col-8 no-margin no-padding">
             <p class="title-product">{{product.productBiddingName}}</p>
@@ -67,10 +68,8 @@ export default {
   },
   methods: {
     async getBiddingDetail() {
-      // melakukan check apakah user masih login atau tidak
-      // jika user masih login, maka akan dilempar ke halaman utama
       const dataToken = Cookie.get('dataToken');
-      await axios.get(`http://localhost:${this.port}/experience/api/bidding?productBiddingId=${this.$route.params.id}`,
+      await axios.get(`http://localhost:${this.port}/experience/api/products/bidding?productBiddingId=${this.$route.params.id}`,
         {
           headers:
           {
@@ -103,7 +102,7 @@ export default {
         userId: dataId,
       };
 
-      axios.put(`http://localhost:${this.port}/experience/api/bidding/bid`, bid,
+      axios.put(`http://localhost:${this.port}/experience/api/products/bidding/bid`, bid,
         {
           headers:
           {

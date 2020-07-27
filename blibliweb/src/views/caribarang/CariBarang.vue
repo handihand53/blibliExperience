@@ -84,7 +84,7 @@ export default {
       // melakukan check apakah user masih login atau tidak
       // jika user masih login, maka akan dilempar ke halaman utama
       const dataToken = Cookie.get('dataToken');
-      await axios.get(`http://localhost:${this.port}/experience/api/bidding/available?skipCount=${this.count}`,
+      await axios.get(`http://localhost:${this.port}/experience/api/products/bidding/available?skipCount=${this.count}`,
         {
           headers:
           {
