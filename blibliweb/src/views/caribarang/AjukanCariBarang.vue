@@ -8,12 +8,13 @@
             <img src="@/assets/etc/aqua.png" alt="" class="img-product">
           </div>
           <div class="col-8 no-margin no-padding">
-            <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-            <p class="brand-product border-bottom pb-1">Brand: <span class="brand">Aqua</span></p>
-            <p class="high-price mt-1">Harga Penawaran Tertinggi:</p>
-            <p class="price">Rp13.500.000</p>
+            <p class="title-product">{{product.productBiddingName}}</p>
+            <p class="brand-product border-bottom pb-1">Brand: <span class="brand">
+              {{product.productBiddingBrand}}</span></p>
+            <p class="high-price mt-1">Harga penawaran terendah:</p>
+            <p class="price">Rp{{formatPrice(product.currentPrice)}}</p>
             <p class="high-price mt-1">Minimal bid:</p>
-            <p class="price">Rp100.000</p>
+            <p class="price">Rp{{formatPrice(product.nextBid)}}</p>
           </div>
         </div>
       </div>
@@ -46,23 +47,77 @@
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
     HeaderWithCart,
     Footer,
   },
-  created() {
+  async created() {
+    await this.getBiddingDetail();
   },
   data() {
     return {
       check: false,
       amount: window.localStorage.getItem('price'),
+      product: '',
     };
   },
   methods: {
+    async getBiddingDetail() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/bidding?productBiddingId=${this.$route.params.id}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          this.product = res.data.data;
+          console.log(this.product);
+        })
+        .catch(() => {
+          this.$router.replace('/');
+        });
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/biddingProductPhoto/${path[path.length - 1]}`;
+    },
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
     ajukan() {
-      this.$router.push('konfirmasi');
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+
+      const bid = {
+        bid: this.amount,
+        productBiddingId: this.product.productBiddingId,
+        userId: dataId,
+      };
+
+      axios.put(`http://localhost:${this.port}/experience/api/bidding/bid`, bid,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          localStorage.clear();
+          this.$router.replace('/lelang/berhasil');
+        })
+        .catch(() => {
+          this.$router.replace('/');
+        });
     },
   },
 };

@@ -144,7 +144,7 @@ const routes = [
     },
   },
   {
-    path: '/detail-pengajuan-barang',
+    path: '/detail-pengajuan-barang/:id',
     name: 'Detail Pengajuan Barang',
     component: () => import(/* webpackChunkName: "category" */ '../views/user/DetailPengajuanBarang.vue'),
     meta: {
@@ -184,7 +184,15 @@ const routes = [
     },
   },
   {
-    path: '/pay',
+    path: '/sukses',
+    name: 'Pembayaran berhasil',
+    component: () => import(/* webpackChunkName: "category" */ '../views/Sukses.vue'),
+    meta: {
+      title: 'Sukses',
+    },
+  },
+  {
+    path: '/pay/:id',
     name: 'Pembayaran',
     component: () => import(/* webpackChunkName: "category" */ '../views/user/Payment.vue'),
     meta: {
@@ -240,7 +248,7 @@ const routes = [
     },
   },
   {
-    path: '/lelang/ajukan',
+    path: '/lelang/ajukan/:id',
     name: 'Ajukan Lelang',
     component: () => import(/* webpackChunkName: "category" */ '../views/caribarang/AjukanCariBarang.vue'),
     meta: {
@@ -253,6 +261,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "category" */ '../views/caribarang/KonfirmasiPengajuanCariBarang.vue'),
     meta: {
       title: 'Konfirmasi lelang',
+    },
+  },
+  {
+    path: '/lelang/berhasil',
+    name: 'Berhasil lelang',
+    component: () => import(/* webpackChunkName: "category" */ '../views/caribarang/Berhasil.vue'),
+    meta: {
+      title: 'Berhasil',
     },
   },
   {
@@ -336,7 +352,7 @@ const routes = [
     },
   },
   {
-    path: '/merchant/pemberitahuan/detail-pesanan',
+    path: '/merchant/pemberitahuan/detail-pesanan/:id',
     name: 'Detail Pesanan Masuk Blibli mart',
     component: () => import(/* webpackChunkName: "category" */ '../views/merchant/DetailPesananMasuk.vue'),
     meta: {
@@ -392,7 +408,7 @@ const routes = [
     },
   },
   {
-    path: '/daftar-pesanan/detail',
+    path: '/daftar-pesanan/detail/:id',
     name: 'Detail Daftar Pesanan Page',
     component: () => import(/* webpackChunkName: "category" */ '../views/DetailDaftarPesanan.vue'),
     meta: {

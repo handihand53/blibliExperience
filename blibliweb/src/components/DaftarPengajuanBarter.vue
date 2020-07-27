@@ -22,6 +22,15 @@
         </router-link>
       </div>
     </div>
+    <div class="text-align-center" v-if="show">
+      <img src="/assets/etc/people.png" alt=""
+      class="img-empty">
+      <h4 class="mt-1">Belum ada barang lagi nih!</h4>
+      <small>Mau tukar apa lagi ya ?<br>
+        Coba masukkan produk yang mau kamu tukar.</small>
+      <br>
+      <router-link to="/post-product" class="mt-3">Disini</router-link>
+    </div>
   </div>
 </template>
 
@@ -32,6 +41,7 @@ import Cookie from 'vue-cookie';
 export default {
   data() {
     return {
+      show: false,
       product: '',
     };
   },
@@ -68,10 +78,9 @@ export default {
         })
         .then((res) => {
           this.product = res.data.data;
-          console.log(res);
         })
-        .catch((e) => {
-          console.log(e.response.status);
+        .catch(() => {
+          this.show = true;
         });
     },
     getDeskripsi(str) {
@@ -151,6 +160,10 @@ p{
   font-size: 25px;
 }
 
+.img-empty{
+  width: 40%;
+}
+
 .detail-barang-text{
   background-color: white;
   border-bottom: solid 10px rgb(204, 204, 204);
@@ -171,6 +184,11 @@ p{
   font-size: 15px;
   font-weight: 500;
   margin-bottom: 0px;
+}
+
+.text-align-center{
+  text-align: center;
+  margin-top: 40px;
 }
 
 .detail-title-product::after{

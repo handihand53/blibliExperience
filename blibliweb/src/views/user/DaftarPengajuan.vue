@@ -16,7 +16,6 @@
         </div>
         <component :is="currentComponent"></component>
       </div>
-      <!--  -->
     </div>
     <Footer/>
   </div>

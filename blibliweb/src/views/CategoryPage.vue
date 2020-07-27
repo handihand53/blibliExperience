@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HeaderWithCart :title='this.$route.params.name'/>
+    <HeaderWithCart/>
     <!-- <div class='card mt-2 ml-2 mr-2 pt-1 pb-1 cat-sticky'>
       <div class='overflow-x'>
         <span class='category mr-2 ml-2'
@@ -13,6 +13,7 @@
         >{{category.categoryName}}</span>
       </div>
     </div> -->
+    <div class="p-2">Pilihan kategori {{this.$route.params.name}}</div>
     <div class='content col-12 row no-margin pl-2 pr-2'>
       <div class='cst-card col-6'
       v-for='product in allProduct'
@@ -33,8 +34,6 @@
             </div>
           </div>
         </router-link>
-        <b-button @click="addToBag()" id="add"
-        variant="primary" class="text-btn">Tambah Ke Keranjang</b-button>
       </div>
     </div>
     <div class="mt-3">
@@ -97,7 +96,7 @@
               -
             </b-col>
             <b-col cols="5" class="m-0 p-0">
-              <b-form-input id="input-small" size="sm"
+              <b-form-input id="input-maks" size="sm"
               placeholder="Maksimum"></b-form-input>
             </b-col>
           </b-row>
@@ -124,7 +123,6 @@
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
-// import { mapGetters, mapActions } from 'vuex';
 import axios from 'axios';
 
 export default {
@@ -138,12 +136,13 @@ export default {
       catParam: '',
       sortPage: false,
       filterPage: false,
-      rows: 2000, // 20 rows in 1 page
+      rows: 200, // 20 rows in 1 page
       currentPage: 1,
       dismissSecs: 2,
       dismissCountDown: 0,
       alertMsg: '',
       startingIndex: 0,
+      sama: false,
     };
   },
   created() {
@@ -160,19 +159,22 @@ export default {
       axios.get(`http://localhost:${this.port}/experience/api/products/category?productCategory=${this.$route.params.name}&skipCount=${this.startingIndex}`)
         .then((response) => {
           this.allProduct = response.data.data;
+          console.log(this.allProduct);
         });
     },
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     },
-    addToBag() {
-      this.alertMsg = 'Produk berhasil ditambahkan';
-      this.dismissCountDown = this.dismissSecs;
-    },
     getImage(imagePath) {
       const path = imagePath.split('/');
       return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
+    },
+  },
+  watch: {
+    currentPage(newValue) {
+      this.startingIndex = 20 * (newValue - 1);
+      this.getAllData();
     },
   },
 };

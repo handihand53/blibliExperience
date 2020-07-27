@@ -104,12 +104,12 @@ export default {
         })
         .then((response) => {
           if (response.data === null) {
-            this.$router.push('/admin/login');
+            this.$router.replace('/admin/login');
           }
         })
         .catch(() => {
           this.isLogin = false;
-          this.$router.push('/admin/login');
+          this.$router.replace('/admin/login');
         });
     },
     changeStatus(idx, str) {

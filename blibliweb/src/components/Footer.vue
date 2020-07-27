@@ -9,8 +9,8 @@
         Copyright &copy; 2011- 2020 Blibli.com toko online dengan
         sensasi belanja online store ala mall
         <p>All Rights Reserved</p>
-        <p><router-link to="/">Syarat & Ketentuan </router-link>|
-        <router-link to="/">Kebijakan Privasi</router-link> </p>
+        <!-- <p><router-link to="/">Syarat & Ketentuan </router-link>|
+        <router-link to="/">Kebijakan Privasi</router-link> </p> -->
       </div>
     </div>
   </footer>

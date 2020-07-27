@@ -3,15 +3,16 @@
     <HeaderWithCart/>
     <div class="mt-2 bg-white p-2 pl-3 pr-3">
       <div class="d-flex justify-content-between">
-        <p class="detail-title-product">{{ProductDetail.productName}}</p>
-        <p class="tag mt-1 align-self-center" v-if="ProductDetail.status === 'Baru'"
-        >{{ProductDetail.status}}</p>
-        <p class="tag-bekas mt-1 align-self-center" v-else>{{ProductDetail.status}}</p>
+        <p class="detail-title-product">{{product.productBiddingName}}</p>
+        <p class="tag mt-1 align-self-center"
+        v-if="product.productBiddingCondition === 'NEW'"
+        >Baru</p>
+        <p class="tag-bekas mt-1 align-self-center" v-else>Lama</p>
       </div>
       <div>
         <p class="brand-detail-product">
           Brand:
-          <span class="blue-brand">{{ProductDetail.brand}}</span>
+          <span class="blue-brand">{{product.productBiddingBrand}}</span>
         </p>
       </div>
       <div class="p-3 d-flex justify-content-center">
@@ -22,30 +23,21 @@
             indicators
             background="transparent"
             style="text-shadow: 1px 1px 2px #333;"
-            @sliding-start="onSlideStart"
-            @sliding-end="onSlideEnd"
           >
             <!-- Text slides with image -->
             <b-carousel-slide
-              :img-src=ProductDetail.imgUrl[0]
-            ></b-carousel-slide>
-             <b-carousel-slide
-              :img-src=ProductDetail.imgUrl[0]
-            ></b-carousel-slide>
-             <b-carousel-slide
-              :img-src=ProductDetail.imgUrl[0]
+            v-for="(image, idx) in product.productBiddingImagePaths"
+            :key="image+idx"
+              :img-src="getImage(image)"
             ></b-carousel-slide>
           </b-carousel>
       </div>
       <div class="row m-0 p-0 mt-4">
-        <img :src="ProductDetail.imgUrl[0]"
-        @click="moveSlider(0)"
-        alt="" class="img-preview">
-        <img :src="ProductDetail.imgUrl[0]"
-        @click="moveSlider(1)"
-        alt="" class="img-preview">
-        <img :src="ProductDetail.imgUrl[0]"
-        @click="moveSlider(2)"
+        <img
+          v-for="(image, idx) in product.productBiddingImagePaths"
+          :key="image+idx"
+          :src="getImage(image)"
+        @click="moveSlider(idx)"
         alt="" class="img-preview">
       </div>
        <div class="pb-2">
@@ -53,37 +45,38 @@
           <tr>
             <td class="sub-text border-top-none">Harga awal</td>
             <td colspan="2" class="price-detail-text border-top-none">
-              Rp{{formatPrice(ProductDetail.productPrice)}}</td>
+              Rp{{formatPrice(product.startPrice)}}</td>
           </tr>
           <tr>
             <td class="sub-text">Bid</td>
-            <td colspan="2" class="price-detail-text">Rp{{formatPrice(ProductDetail.bid)}}</td>
+            <td colspan="2" class="price-detail-text">Rp{{formatPrice(product.nextBid)}}</td>
           </tr>
           <tr>
             <td class="sub-text">Penawaran Terendah</td>
-            <td class="price-detail-text">Rp{{formatPrice(ProductDetail.currentBid)}}</td>
+            <td class="price-detail-text">Rp{{formatPrice(product.currentPrice)}}</td>
           </tr>
         </table>
         <p class="count-people justify-content-center d-flex border-top-none pl-2">
-         {{ProductDetail.historyBid.length}} Orang sudah
+         {{product.biddingForms.length}} Orang sudah
             melakukan penawaran</p>
       </div>
     </div>
     <div class="mt-3 bg-white p-3">
       <p class="profile-text mb-1">Profile Pemilik Barang</p>
-      <p class="name-text mb-1">Nama : <span class="detail-name">Handi Hermawan</span></p>
-      <p class="address-text mb-1">Alamat : <span class="detail-address">Jl.
+      <p class="name-text mb-1">Nama : <span class="detail-name">
+        {{product.userData.userName}}</span></p>
+      <!-- <p class="address-text mb-1">Alamat : <span class="detail-address">Jl.
         Juadi No.29, Kotabaru, Kec. Gondokusuman, Kota Yogyakarta,
-        Daerah Istimewa Yogyakarta 55224</span></p>
+        Daerah Istimewa Yogyakarta 55224</span></p> -->
     </div>
-    <div class="mt-3 bg-white p-3">
+    <!-- <div class="mt-3 bg-white p-3">
       <p class="riwayat-text">Riwayat Penawaran</p>
       <p class="riwayat-list" title="Handi Hermawan"
       v-for='history in this.ProductDetail.historyBid'
       v-bind:key='history.id'>{{history.name}} menawarkan harga
         <span class="bid-price">Rp{{formatPrice(history.bidding)}}</span></p>
       <p class="lainnya-text">Riwayat hanya menampilkan 3 penawar teratas</p>
-    </div>
+    </div> -->
     <div class="about-detail-product">
       <div class="p-3">
         <div class="box-shadow mb-2">
@@ -94,35 +87,37 @@
             <div class="list-detail-tentang">
               <p class="text-detail-product">
                 Status Barang :
-                <span class="tag" v-if="ProductDetail.status === 'Baru'">
-                  {{ProductDetail.status}}</span>
-                <span class="tag-bekas" v-else>{{ProductDetail.status}}</span>
+                <span class="tag" v-if="product.productBiddingCondition === 'NEW'">
+                  Baru</span>
+                <span class="tag-bekas" v-else>Lama</span>
               </p>
             </div>
             <div class="list-detail-tentang">
-              <p class="text-detail-product">Lama Pemakaian : {{ProductDetail.lamaPemakaian}}</p>
+              <p class="text-detail-product">Berakhir tanggal :
+                {{getMonthYear(product.closeBidDate)}},
+                 {{getTime(product.closeBidDate)}}</p>
             </div>
             <div class="list-detail-tentang">
               <p class="text-detail-product">
-                Deskripsi barang : {{ProductDetail.description}}
+                Deskripsi barang : {{product.productBiddingDescription}}
               </p>
               <h5 class="fs-14 bt-top">Detail Barang</h5>
               <table class="table table-striped border-0 m-0 p-0">
                 <tr class="content-table">
                   <td>Kelengkapan paket</td>
-                  <td>{{ProductDetail.packetSet}}</td>
+                  <td>{{product.productBiddingPackage}}</td>
                 </tr>
                 <tr class="content-table">
                   <td>Dimensi</td>
-                  <td>{{ProductDetail.volume}}</td>
+                  <td>{{product.productBiddingVolume}}</td>
                 </tr>
                 <tr class="content-table">
                   <td>Berat</td>
-                  <td>{{ProductDetail.weight}}</td>
+                  <td>{{product.productBiddingWeight}}</td>
                 </tr>
                 <tr class="content-table">
-                  <td>Kode barcode</td>
-                  <td>{{this.ProductDetail.barcode}}</td>
+                  <td>Kategori</td>
+                  <td>{{product.productCategory}}</td>
                 </tr>
               </table>
             </div>
@@ -133,7 +128,6 @@
     <div v-b-modal.modal1 @click="setAmount" class="bottom-tawar box-shadow">
       <div class="text-uppercase">Tawarkan Harga</div>
     </div>
-
     <b-modal id="modal1"
     v-model="show"
     title="Tawarkan harga"
@@ -155,7 +149,7 @@
       </b-input-group>
       <p class="text-left mt-2 fs-12">
         Minmal Bid tertinggi <span class="blue-text">
-          Rp.{{this.formatPrice(this.ProductDetail.currentBid - this.ProductDetail.bid)}}
+          Rp.{{this.formatPrice(product.currentPrice - product.nextBid)}}
         </span>
       </p>
       <button class="rounded orange-button"
@@ -168,17 +162,16 @@
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
-import { mapGetters, mapActions } from 'vuex';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
     HeaderWithCart,
     Footer,
   },
-  created() {
-    const store = this.$store;
-    store.dispatch('_detailCariBarang/getItem');
-    this.scrollToTop();
+  async created() {
+    await this.getBiddingDetail();
   },
   data() {
     return {
@@ -189,24 +182,39 @@ export default {
       slide: 0,
       dismissSecs: 3,
       dismissCountDown: 0,
+      product: {
+        biddingForms: {
+          length: 0,
+        },
+        userData: {
+          userName: '',
+        },
+      },
+      monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+      ],
     };
   },
-  computed: {
-    ...mapGetters([
-      '_detailCariBarang/dataProduct',
-    ]),
-    ProductDetail() {
-      const store = this.$store;
-      if (store.getters['_detailCariBarang/dataProduct'].data !== undefined) {
-        return store.getters['_detailCariBarang/dataProduct'].data.find((product) => product.id === this.$route.params.id);
-      }
-      return true;
-    },
-  },
   methods: {
-    ...mapActions([
-      '_detailCariBarang/getItem',
-    ]),
+    async getBiddingDetail() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/bidding?productBiddingId=${this.$route.params.id}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          this.product = res.data.data;
+          console.log(this.product);
+        })
+        .catch(() => {
+          this.$router.replace('/');
+        });
+    },
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -214,17 +222,21 @@ export default {
     scrollToTop() {
       window.scrollTo(0, 0);
     },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/biddingProductPhoto/${path[path.length - 1]}`;
+    },
     setAmount() {
-      this.amount = this.ProductDetail.currentBid - this.ProductDetail.bid;
+      this.amount = this.product.currentPrice - this.product.nextBid;
     },
     addBid() {
-      if (this.amount + this.ProductDetail.bid < this.ProductDetail.currentBid) {
-        this.amount += this.ProductDetail.bid;
+      if (this.amount + this.product.nextBid < this.product.currentPrice) {
+        this.amount += this.product.nextBid;
       }
     },
     minBid() {
-      if (this.amount - this.ProductDetail.bid > 0) {
-        this.amount -= this.ProductDetail.bid;
+      if (this.amount - this.product.nextBid > 0) {
+        this.amount -= this.product.nextBid;
       }
     },
     moveSlider(idx) {
@@ -232,7 +244,15 @@ export default {
     },
     tawarkan() {
       window.localStorage.setItem('price', this.amount);
-      this.$router.push('/lelang/ajukan');
+      this.$router.push(`/lelang/ajukan/${this.$route.params.id}`);
+    },
+    getMonthYear(date) {
+      const theDate = new Date(date);
+      return `${theDate.getDate()} ${this.monthNames[theDate.getMonth()]} ${theDate.getFullYear()}`;
+    },
+    getTime(date) {
+      const theDate = new Date(date).toLocaleTimeString();
+      return `${theDate}`;
     },
   },
 };

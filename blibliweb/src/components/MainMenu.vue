@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class='card mt-2 ml-2 mr-2 pt-1 pb-1'>
+    <!-- <div class='card mt-2 ml-2 mr-2 pt-1 pb-1'>
       <div class='overflow-x'>
         <span class='category mr-2 ml-2'
         :class="{'un-active':true, active: !true}"
@@ -11,14 +11,20 @@
         @click='getProductByCategoryName(category)' :ref='category'
         >{{category}}</span>
       </div>
-    </div>
-    <div class="p-2" v-for='category in this.category' v-bind:key='category'
+    </div> -->
+    <p class="label-tag font-weight-bold p-2">Produk Pilihan</p>
+    <div class="p-2" v-for='(category, idx) in this.category' v-bind:key='category'
     :ref='category'>
-      <p class="label-tag">{{category}}</p>
+      <div class="d-flex justify-content-between">
+        <p class="label-tag">{{category}}</p>
+        <router-link :to="'/c/'+category">
+          <p class="label-tag">Lihat Semua</p>
+        </router-link>
+      </div>
       <div class="overflow-x m-0 p-0">
         <router-link :to='"/detail-product/"+product.productDataForm.productId'
         class='cst-card col-6'
-        v-for='product in allProduct'
+        v-for='product in product[idx]'
         v-bind:key='product.productId'>
           <div class='align-items-start'>
             <div class="cont d-flex align-items-center">
@@ -50,10 +56,11 @@ export default {
       category: '',
       categoryNames: null,
       allProduct: null,
+      product: [],
+      startingIndex: 0,
     };
   },
   created() {
-    this.getAllData();
     this.getAllCategory();
   },
   computed: {
@@ -63,23 +70,31 @@ export default {
       const val = (value / 1).toFixed(0).replace('.', ',');
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     },
-    // getProductByCategoryName(category) {
-    //   this.catParam = category;
-    // },
-    getAllCategory() {
-      axios.get(`http://localhost:${this.port}/experience/api/products/enums/category`)
+    async getAllDataByCategory(cat) {
+      await axios.get(`http://localhost:${this.port}/experience/api/products/category?productCategory=${cat}&skipCount=${this.startingIndex}`)
+        .then((response) => {
+          this.product.push(response.data.data);
+        });
+      console.log(this.product);
+    },
+    async getAllCategory() {
+      await axios.get(`http://localhost:${this.port}/experience/api/products/enums/category`)
         .then((response) => {
           this.category = response.data.data.categories;
         });
+      console.log(this.category);
+      this.category.forEach((element) => {
+        this.getAllDataByCategory(element);
+      });
     },
-    getAllData() {
-      const count = 0;
-      axios.get(`http://localhost:${this.port}/experience/api/products/available?skipCount=${count}`)
-        .then((response) => {
-          this.allProduct = response.data.data;
-          console.log(this.allProduct);
-        });
-    },
+    // getAllData() {
+    //   const count = 0;
+    //   axios.get(`http://localhost:${this.port}/experience/api/products/available?skipCount=${count}`)
+    //     .then((response) => {
+    //       this.allProduct = response.data.data;
+    //       console.log(this.allProduct);
+    //     });
+    // },
     getImage(imagePath) {
       const path = imagePath.split('/');
       return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;

@@ -35,8 +35,16 @@
         </div>
       </div>
     </div>
-    <div v-else>
-      <img src="" alt="">
+    <div v-if="show">
+      <div class="text-align-center">
+        <img src="/assets/etc/people.png" alt=""
+        class="img-empty">
+        <h4 class="mt-1">Belum ada barang lagi nih!</h4>
+        <small>Mau tukar apa lagi ya ?<br>
+          Coba cari produk yang mau kamu tukar.</small>
+        <br>
+        <router-link to="/barter" class="mt-3">Disini</router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -52,6 +60,7 @@ export default {
       monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
       ],
+      show: false,
     };
   },
   async created() {
@@ -87,10 +96,10 @@ export default {
         })
         .then((res) => {
           this.products = res.data.data;
-          console.log(this.products);
         })
         .catch((e) => {
           console.log(e.response.status);
+          this.show = true;
         });
     },
     getDeskripsi(str) {
@@ -263,6 +272,15 @@ export default {
 .active{
     border-bottom: 2px #0095DA solid;
     color: #0095DA;
+}
+
+.text-align-center{
+  text-align: center;
+  margin-top: 40px;
+}
+
+.img-empty{
+  width: 40%;
 }
 
 </style>

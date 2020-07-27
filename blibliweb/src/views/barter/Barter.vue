@@ -11,7 +11,7 @@
       <hr class="m-0 p-0 mb-3">
       <img src="@/assets/icon/bliblibarter.png" alt="" class="img-fluid mb-3">
     </div>
-    <label class="label-page pl-2">Kategori yang kamu suka</label>
+    <!-- <label class="label-page pl-2">Kategori yang kamu suka</label>
     <div class="card ml-2 mr-2 pt-1 pb-2">
       <div class="overflow-x">
         <span class="category mr-2 ml-2 active">Semua</span>
@@ -21,24 +21,37 @@
         :ref='category'
         >{{category}}</span>
       </div>
-    </div>
-    <label class="label-page pl-2 pt-2">Barang ini menunggu buat kamu tukar loh</label>
-    <div class="content col-12 row no-margin pl-2 pr-2">
-      <router-link :to="'/barter/detail/'+product.productBarterId" class="cst-card col-6"
-      v-for="product in barterProduct" v-bind:key='product.productBarterId'>
-        <div class="">
-          <div class="divimg d-flex align-items-center">
-            <img :src="getImage(product.productBarterImagePaths[0])"
-            alt="" class="img-product ml-auto mr-auto" />
+    </div> -->
+    <div v-if="!empty">
+      <label class="label-page pl-2 pt-2">Barang ini menunggu buat kamu tukar loh</label>
+      <div class="content col-12 row no-margin pl-2 pr-2">
+        <router-link :to="'/barter/detail/'+product.productBarterId" class="cst-card col-6"
+        v-for="product in barterProduct" v-bind:key='product.productBarterId'>
+          <div class="">
+            <div class="divimg d-flex align-items-center">
+              <img :src="getImage(product.productBarterImagePaths[0])"
+              alt="" class="img-product ml-auto mr-auto" />
+            </div>
+            <span class="tag-label-baru" v-if="product.productBarterCondition === 'NEW'">
+              {{product.productBarterCondition}}</span>
+            <span class="tag-label-bekas" v-if="product.productBarterCondition === 'SECOND'">
+              {{product.productBarterCondition}}</span>
+            <p class="title-product">{{ product.productBarterName }}</p>
+            <p class="product-price">Prefer {{ product.productBarterPreference }}</p>
           </div>
-          <span class="tag-label-baru" v-if="product.productBarterCondition === 'NEW'">
-            {{product.productBarterCondition}}</span>
-          <span class="tag-label-bekas" v-if="product.productBarterCondition === 'SECOND'">
-            {{product.productBarterCondition}}</span>
-          <p class="title-product">{{ product.productBarterName }}</p>
-          <p class="product-price">Prefer {{ product.productBarterPreference }}</p>
-        </div>
-      </router-link>
+        </router-link>
+      </div>
+    </div>
+    <div v-if="empty">
+      <div class="text-align-center">
+        <img src="/assets/etc/people.png" alt=""
+        class="img-empty">
+        <h4 class="mt-1">Belum ada barang lagi nih!</h4>
+        <small>Mau tukar apa lagi ya ?<br>
+          Coba masukkan produk yang mau kamu tukar.</small>
+        <br>
+        <router-link to="/post-product" class="mt-3">Disini</router-link>
+      </div>
     </div>
     <Footer/>
   </div>
@@ -61,21 +74,12 @@ export default {
       skipCount: 0,
       category: [],
       barterProduct: [],
+      empty: false,
     };
   },
   async created() {
     await this.getProductBarter();
     await this.getAllCategory();
-  },
-  computed: {
-    // ...mapGetters([
-    //   // '_cariBarang/productList',
-    //   '_barter/categoryList',
-    // ]),
-    // CategoriesDetails() {
-    //   const store = this.$store;
-    //   return store.getters['_barter/categoryList'];
-    // },
   },
   methods: {
     async getProductBarter() {
@@ -90,6 +94,9 @@ export default {
         .then((response) => {
           this.barterProduct = response.data.data;
           console.log(response);
+        })
+        .catch(() => {
+          this.empty = true;
         });
     },
     async getAllCategory() {
@@ -107,6 +114,15 @@ export default {
 </script>
 
 <style scoped>
+.text-align-center{
+  text-align: center;
+  margin-top: 40px;
+}
+
+.img-empty{
+  width: 40%;
+}
+
 .tag-label-baru {
   background-color: #0095DA;
   color: white;

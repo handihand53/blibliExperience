@@ -190,7 +190,6 @@ export default {
         this.imageName.push(e.target.files[0].name);
         this.image.push(e.target.files[0]);
       }
-      this.checkAll();
     },
     remove(idx) {
       this.image.splice(idx, 1);

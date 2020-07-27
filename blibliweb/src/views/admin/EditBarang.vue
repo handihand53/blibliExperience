@@ -116,7 +116,7 @@ export default {
           },
         })
         .catch(() => {
-          this.$router.push('/merchant/login');
+          this.$router.replace('/admin/login');
         });
     },
     // Untuk notifikasi ketika berhasil menambah product

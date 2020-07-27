@@ -9,7 +9,7 @@
       <img src="@/assets/icon/bliblicaribarang.png" alt="" class="img-fluid">
     </div>
     <label class="label-page pl-2">Kategori yang kamu suka</label>
-    <div class="card ml-2 mr-2 pt-1 pb-2">
+    <!-- <div class="card ml-2 mr-2 pt-1 pb-2">
       <div class="overflow-x">
         <span class="category mr-2 ml-2 un-active"
         @click='getProductByCategoryName("")'
@@ -20,28 +20,31 @@
         @click='getProductByCategoryName(category.categoryName)' :ref='category.categoryName'
         >{{category.categoryName}}</span>
       </div>
-    </div>
+    </div> -->
     <label class="label-page pl-2 pt-2">Barang ini lagi di cari-cari nih</label>
     <div
     class="content col-12 row no-margin pl-2 pr-2"
-    v-for='product in this.ProductDetails' v-bind:key='product.id'>
+    v-for='product in product' v-bind:key='product.productBiddingId'>
       <div class="card pl-2 pr-2 pb-3 col-12 mb-3">
         <div class="row no-margin">
           <div class="col-4 pr-2 no-margin no-padding pt-3
           d-flex align-items-center">
-            <img :src=product.imgUrl[0] alt="" class="img-product ml-auto mr-auto">
+            <img :src="getImage(product.productBiddingImagePaths[0])" alt=""
+            class="img-product ml-auto mr-auto">
           </div>
           <div class="col-8 no-margin no-padding pt-2">
-            <span class="tag-label-baru" v-if="product.status === 'Baru'">
-              {{product.status}}</span>
+            <span class="tag-label-baru"
+            v-if="product.productBiddingCondition === 'NEW'">
+              Baru</span>
             <span class="tag-label-bekas" v-else>
-              {{product.status}}</span>
-            <p class="title-product">{{product.productName}}</p>
-            <p class="price-product">Rp.{{formatPrice(product.productPrice)}}</p>
-            <p class="penawaran">{{product.historyBid.length}} Penawaran</p>
-            <p class="mt-2 bid"><span class="color-blue">Bid</span> dimulai dari
-            <span class="color-blue">Rp.{{formatPrice(product.bid)}}</span></p>
-            <router-link :to='"/lelang/detail/"+product.id'>
+              Lama</span>
+            <p class="title-product">{{product.productBiddingName}}</p>
+            <p class="price-product">Rp.{{formatPrice(product.startPrice)}}</p>
+            <p class="penawaran">Berakhir {{getMonthYear(product.closeBidDate)}},
+               {{getTime(product.closeBidDate)}}</p>
+            <p class="mt-2 bid"><span class="color-blue">Bid</span> terakhir
+            <span class="color-blue">Rp.{{formatPrice(product.currentPrice)}}</span></p>
+            <router-link :to='"/lelang/detail/"+product.productBiddingId'>
               <button class="buy-btn">Lihat Detail</button>
             </router-link>
           </div>
@@ -55,7 +58,8 @@
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
-import { mapGetters, mapActions } from 'vuex';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -65,41 +69,51 @@ export default {
   data() {
     return {
       catParam: '',
+      product: '',
+      count: 0,
+      monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+      ],
     };
   },
-  created() {
-    const store = this.$store;
-    store.dispatch('_cariBarang/getProducts');
-    store.dispatch('_cariBarang/getCategory');
-  },
-  computed: {
-    ...mapGetters([
-      '_cariBarang/productList',
-      '_cariBarang/categoryList',
-    ]),
-    ProductDetails() {
-      const store = this.$store;
-      if (this.catParam === '') {
-        return store.getters['_cariBarang/productList'].data;
-      }
-      return store.getters['_cariBarang/productList'].data.filter((ele) => ele.category === this.catParam);
-    },
-    CategoriesDetails() {
-      const store = this.$store;
-      return store.getters['_cariBarang/categoryList'];
-    },
+  async created() {
+    await this.getBiddingAvailable();
   },
   methods: {
-    ...mapActions([
-      '_cariBarang/getProducts',
-      '_cariBarang/getCategory',
-    ]),
-    getProductByCategoryName(category) {
-      this.catParam = category;
+    async getBiddingAvailable() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/bidding/available?skipCount=${this.count}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          this.product = res.data.data;
+          console.log(this.product);
+        })
+        .catch(() => {
+          this.$router.replace('/');
+        });
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/biddingProductPhoto/${path[path.length - 1]}`;
     },
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
+    getMonthYear(date) {
+      const theDate = new Date(date);
+      return `${theDate.getDate()} ${this.monthNames[theDate.getMonth()]} ${theDate.getFullYear()}`;
+    },
+    getTime(date) {
+      const theDate = new Date(date).toLocaleTimeString();
+      return `${theDate}`;
     },
   },
 };

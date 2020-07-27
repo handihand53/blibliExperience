@@ -6,36 +6,61 @@
         <p style="color: #AEAEAE; font-weight: 400;">Pesanan</p>
       </div>
       <div class="d-flex justify-content-between mt-2 pb-2">
-        <div class="col-4">
-          <b-button pill block variant="outline-primary"
-          class="p-1" @click="changeStatus(0)" size="sm" id="changeStat0"
-          :class="{buttonActive : this.isActive[0]}">Proses</b-button>
-        </div>
-        <div class="col-4">
-          <b-button pill block variant="outline-primary"
-          class="p-1" @click="changeStatus(1)" size="sm" id="changeStat1"
-          :class="{buttonActive : this.isActive[1]}">Selesai</b-button>
-        </div>
-        <div class="col-4">
-          <b-button pill block variant="outline-primary"
-          class="p-1" @click="changeStatus(2)" size="sm" id="changeStat2"
-          :class="{buttonActive : this.isActive[2]}">Batal</b-button>
+        <div class="overflow-x">
+          <span class="mx-2">
+            <b-button pill variant="outline-primary"
+            class="px-3" @click="changeStatus(0, 'WAITING_FOR_PAYMENT')" size="sm" id="changeStat0"
+            :class="{buttonActive : this.isActive[0]}">Menunggu pembayaran</b-button>
+          </span>
+          <span class="mx-2">
+            <b-button pill variant="outline-primary"
+            class="px-3" @click="changeStatus(1, 'PAID')" size="sm" id="changeStat1"
+            :class="{buttonActive : this.isActive[1]}">Dibayar</b-button>
+          </span>
+          <span class="mx-2">
+            <b-button pill variant="outline-primary"
+            class="px-3" @click="changeStatus(2, 'DELIVERED_TO_CONSUMER')"
+            size="sm" id="changeStat2"
+            :class="{buttonActive : this.isActive[2]}">Sedang dikirim</b-button>
+          </span>
+          <span class="mx-2">
+            <b-button pill variant="outline-primary"
+            class="px-3" @click="changeStatus(3, 'FINISHED')"
+            size="sm" id="changeStat3"
+            :class="{buttonActive : this.isActive[3]}">Diterima</b-button>
+          </span>
         </div>
       </div>
     </div>
-    <div class="mt-3">
-      <div class="custom-card box-shadow p-3 row shadow-sm m-2">
-        <div class="col-4 no-margin no-padding">
-          <img src="@/assets/etc/aqua.png" alt="" class="img-product">
-        </div>
-        <div class="col-8 no-margin  no-padding">
-          <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-          <p class="desc-product">Deskripsi: Lorem ipsum dolor, sit amet
-            consectetur adipisicing elit.</p>
-          <p class="status-product">Diproses</p>
-          <router-link to="/daftar-pesanan/detail">
-            <button class="buy-btn">Lihat Detail</button>
-          </router-link>
+    <div class="bg-gray"
+    v-for="(product, idx) in product" :key="product.orderId">
+      <div class="p-2">
+        <div class="card shadow-sm border-0 rounded-0">
+          <div class="p-2 bg-gray-card">
+            <p class="m-0 text-title-card">Tanggal pemesanan :
+              {{getMonthYear(product.orderCreatedAt)}}</p>
+          </div>
+          <div class="p-2">
+            <p class="text-title-card m-0">Kode Pemesanan
+              <span class="cl-blue">{{ product.orderTransactionId }}</span></p>
+            <p class="text-card m-0">Total Harga
+              <span class="price">Rp{{ formatPrice(total[idx])}}</span></p>
+            <p class="text-card m-0">Metode
+              <span class="cl-blue">{{ getStatus(product.deliveryType) }}</span></p>
+            <div class="d-flex align-items-end row pt-2 no-gutters">
+              <div class="col-7 row no-gutters">
+                <img :src="getImage(picture)"
+                v-for="(picture, i) in picture[idx]"
+                :key="picture+i"
+                alt="" class="img-preview border">
+              </div>
+              <div class="col-5 column ml-auto no-gutters">
+                <router-link :to="'/daftar-pesanan/detail/'+product.orderId">
+                  <b-button class="pl-5 pr-5" variant="outline-primary">Lihat</b-button>
+                </router-link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -60,18 +85,29 @@ export default {
         true,
         false,
         false,
+        false,
+      ],
+      product: [],
+      total: [],
+      picture: [],
+      currentState: 'WAITING_FOR_PAYMENT',
+      monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
       ],
     };
   },
   async created() {
     await this.checkUser();
+    this.getPesanan();
   },
   methods: {
-    changeStatus(idx) {
+    changeStatus(idx, stat) {
+      this.currentState = stat;
       this.isActive.splice(idx, 1, true);
       for (let i = 0; i < this.isActive.length; i += 1) {
         if (i !== idx) this.isActive.splice(i, 1, false);
       }
+      this.getPesanan();
     },
     checkUser() {
       // melakukan check apakah user masih login atau tidak
@@ -96,6 +132,65 @@ export default {
         .catch(() => {
           this.isLogin = false;
         });
+    },
+    getPesanan() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/order/user?userId=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((response) => {
+          this.product = [];
+          this.picture = [];
+          this.total = [];
+          response.data.data.forEach((x) => {
+            if (x.orderStatus === this.currentState) {
+              this.product.push(x);
+            }
+          });
+          let idx = 0;
+          this.product.forEach((s) => {
+            const imageProduct = [];
+            let p = 0;
+            s.cartForms.forEach((d) => {
+              if (idx <= 2) {
+                imageProduct.push(d.stockForm.productDataForm.productImagePaths[0]);
+              }
+              idx += 1;
+              p += d.amount * d.stockForm.productPrice;
+            });
+            this.total.push(p);
+            this.picture.push(imageProduct);
+            idx = 0;
+          });
+        })
+        .catch(() => {
+          this.isLogin = false;
+        });
+    },
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
+    getStatus(str) {
+      if (str === 'SELF_SERVICE') {
+        return 'Ambil langsung';
+      }
+      return 'Dikirim ke rumah';
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
+    },
+    getMonthYear(date) {
+      const theDate = new Date(date);
+      return `${theDate.getDate()} ${this.monthNames[theDate.getMonth()]} ${theDate.getFullYear()}`;
     },
   },
 };
@@ -126,6 +221,26 @@ export default {
   margin-bottom: 0px;
 }
 
+.bg-gray-card{
+  background-color: #E3E3E3;
+}
+
+.bg-gray{
+  background-color: #F6F6F6;
+}
+
+.cl-blue{
+  color: #3594FF;
+}
+
+.bg-gray-card{
+  background-color: #E3E3E3;
+}
+
+.price{
+  color: #FF7600;
+}
+
 .status-product{
   padding-top: 5px;
   padding-bottom: 5px;
@@ -140,6 +255,20 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 0px;
+}
+
+.text-title-card{
+  font-size: 14px;
+}
+
+.img-preview{
+  width: 50px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.cl-blue{
+  color: #3594FF;
 }
 
 .buy-btn{
@@ -343,6 +472,10 @@ p {
   border-radius: 27px;
   color: gray;
   padding: 10px;
+}
+
+.overflow-x{
+  overflow-x: scroll;
 }
 
 // .active {

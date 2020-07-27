@@ -224,6 +224,12 @@
                   <button class="btn btn-primary btn-block mt-2"
                   @click="postResi">Masukkan resi</button>
                 </div>
+                <div v-if="order.buyerItemStatus === 'SENT_TO_CONSUMERS'"
+                class="">
+                  <hr>
+                  <button class="btn btn-primary btn-block mt-2"
+                  @click="confirmProduct">Barang sudah diterima</button>
+                </div>
               </div>
             </div>
           </div>
@@ -383,6 +389,24 @@ export default {
             this.getOrder();
           });
       }
+    },
+    confirmProduct() {
+      const updateData = {
+        barterOrderId: this.order.barterOrderId,
+        barterRoleEnum: 'BUYER',
+      };
+
+      const dataToken = Cookie.get('dataToken');
+      axios.put(`http://localhost:${this.port}/experience/api/barterOrder/inConsumers`, updateData,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then(() => {
+          this.getOrder();
+        });
     },
   },
 };

@@ -1,60 +1,102 @@
 <template>
   <div class="p-2">
-    <div class="custom-card box-shadow p-3 row no-margin">
+    <div class="custom-card box-shadow p-3 row no-margin"
+    v-for="product in product" :key="product.productBiddingId">
       <div class="col-4 no-margin no-padding">
-        <img src="@/assets/etc/aqua.png" alt="" class="img-product">
+        <img :src="getImage(product.productBiddingImagePaths[0])"
+        alt="" class="img-product">
       </div>
       <div class="col-8 no-margin  no-padding">
-        <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-        <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-        <!-- <span class="status-tag success">Sudah Dikonfirmasi</span> -->
-        <p class="bid-product">Bid:
-            <span class="bid-price-product">Rp13.000.000</span></p>
-        <router-link to="/detail-pengajuan-barang">
+        <p class="title-product">{{product.productBiddingName}}</p>
+        <p class="brand-product">Brand: <span class="brand">
+          {{product.productBiddingBrand}}</span></p>
+        <p class="deadline">Berakhir {{getMonthYear(product.closeBidDate)}},
+          {{getTime(product.closeBidDate)}}</p>
+        <p class="bid-product">Bid terakhir</p>
+        <p class="bid-product m-0">
+            <span class="bid-price-product">Rp{{formatPrice(product.currentPrice)}}</span></p>
+        <router-link :to="'/detail-pengajuan-barang/'+product.productBiddingId">
           <button @click="showDetail" class="buy-btn"
           id="showDetail">Lihat Detail</button>
         </router-link>
-      </div>
-    </div>
-    <div class="custom-card box-shadow p-3 row no-margin">
-      <div class="col-4 no-margin no-padding">
-        <img src="@/assets/etc/aqua.png" alt="" class="img-product">
-      </div>
-      <div class="col-8 no-margin  no-padding">
-        <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-        <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-        <!-- <span class="status-tag pending">Menunggu Konfirmasi</span> -->
-        <p class="bid-product">Bid:
-            <span class="bid-price-product">Rp13.000.000</span></p>
-        <button class="buy-btn">Lihat Detail</button>
-      </div>
-    </div>
-    <div class="custom-card box-shadow p-3 row no-margin">
-      <div class="col-4 no-margin no-padding">
-        <img src="@/assets/etc/aqua.png" alt="" class="img-product">
-      </div>
-      <div class="col-8 no-margin  no-padding">
-        <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-        <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-        <!-- <span class="status-tag fail">Ditolak</span> -->
-        <p class="bid-product">Bid:
-            <span class="bid-price-product">Rp13.000.000</span></p>
-        <button class="buy-btn">Lihat Detail</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+import Cookie from 'vue-cookie';
+
 export default {
   data() {
     return {
       display: true,
+      product: '',
+      monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+      ],
     };
+  },
+  async created() {
+    await this.checkLoginUser();
+    await this.getListPengajuan();
   },
   methods: {
     showDetail() {
       this.display = false;
+    },
+    async checkLoginUser() {
+    // melakukan check apakah user masih login atau tidak
+    // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .catch(() => {
+          this.$router.push('/');
+        });
+    },
+    async getListPengajuan() {
+    // melakukan check apakah user masih login atau tidak
+    // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/bidding/user?userId=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          this.product = res.data.data;
+          console.log(res);
+        })
+        .catch(() => {
+          this.$router.push('/');
+        });
+    },
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/biddingProductPhoto/${path[path.length - 1]}`;
+    },
+    getMonthYear(date) {
+      const theDate = new Date(date);
+      return `${theDate.getDate()} ${this.monthNames[theDate.getMonth()]} ${theDate.getFullYear()}`;
+    },
+    getTime(date) {
+      const theDate = new Date(date).toLocaleTimeString();
+      return `${theDate}`;
     },
   },
 };
@@ -134,6 +176,11 @@ p{
 .price-detail-text{
   color: #FF7600;
   font-size: 25px;
+}
+
+.deadline{
+  font-size: 12px;
+  color: #7c7c7c;
 }
 
 .detail-barang-text{

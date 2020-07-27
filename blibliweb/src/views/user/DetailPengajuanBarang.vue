@@ -4,33 +4,72 @@
     <div class="overlay">
       <div class="modal-detail show-modal">
         <div class="p-2 pl-2 detail-barang-text" id="modal-show">
-          <p class="detail-title-product">Detail Pengajuan Barang</p>
+          <p class="detail-title-product">Detail Pengajuan Lelang</p>
         </div>
         <div class="custom-detail-card">
           <div class="p-2">
             <div>
-              <p class="detail-title-product float-left">Samsung A10</p>
+              <p class="detail-title-product float-left">{{product.productBiddingName}}</p>
               <!-- <p class="detail-tag-product float-right mt-1">Sudah dikonfirmasi</p> -->
             </div>
             <div style="clear: both;">
               <p class="brand-detail-product">
                 Brand:
-                <span class="blue-brand">Samsung</span>
+                <span class="blue-brand">{{product.productBiddingBrand}}</span>
               </p>
             </div>
           </div>
           <div class="overflow-y">
-            <div class="p-3 center">
-              <img src="@/assets/etc/aqua.png" alt class="detail-image-product p-3" />
+            <div class="p-3">
+              <b-carousel
+                id="carousel-1"
+                v-model="slide"
+                :interval="0"
+                indicators
+                class="product-img"
+                background="transparent"
+                style="text-shadow: 1px 1px 2px #333;"
+              >
+                <b-carousel-slide v-for="(image, idx) in
+                product.productBiddingImagePaths"
+                  :key="image+idx" :img-src="getImage(image)"
+                ></b-carousel-slide>
+              </b-carousel>
+              <div class="row m-0 p-0 mt-4">
+                <img :src="getImage(image)"
+                v-for="(image, idx) in
+                 product.productBiddingImagePaths"
+                :key="image+idx"
+                @click="moveSlider(idx)"
+                alt="" class="img-preview">
+              </div>
             </div>
             <div class="pl-3 mb-2">
-              <span class="uang-text">Bid </span>
-              <span class="price-detail-text ml-2">Rp13.000.000</span>
+              <table>
+                <tr>
+                  <td>
+                    <span class="uang-text">Bid </span>
+                  </td>
+                  <td>
+                    <span class="price-detail-text ml-2">Rp{{formatPrice(product.nextBid)}}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="uang-text">Current Bid </span>
+                  </td>
+                  <td>
+                    <span class="price-detail-text ml-2">Rp
+                      {{formatPrice(product.currentPrice)}}</span>
+                  </td>
+                </tr>
+              </table>
             </div>
             <div class="about-detail-product">
 <!--  -->
               <div class="p-3">
-                <div class="custom-card box-shadow px-3 py-2 mb-2 mt-2">
+                <div class="custom-card box-shadow px-3 py-2 mb-2 mt-2"
+                v-for="(data, idx) in biddingInfo" :key="idx">
                   <table class="table table-borderless mb-0">
                     <tr @click="expand(0)">
                       <td>
@@ -50,27 +89,29 @@
                         </span>
                       </td>
                       <td>
-                        <p class="title-product col-9 m-0 p-0">Samsung Note 10</p>
+                        <p class="title-product col-9 m-0 p-0">Detail bid</p>
                       </td>
                     </tr>
                   </table>
                   <div
                   :class="{hideIcon: !isExpand[0]}">
                     <hr class="my-2">
-                    <div class="row no-gutters">
-                      <div class="col-3 no-margin no-padding">
-                        <img src="@/assets/etc/aqua.png" alt="" class="img-product2">
-                      </div>
-                      <div class="col-9 no-margin no-padding">
-                        <p class="brand-product">Brand: <span class="brand">Samsung</span></p>
-                        <p class="brand-product">Status:
-                          <span class="status-tag success">Baru</span></p>
-                        <p class="brand-product">Estimasi Harga:
-                          <span class="price">Rp{{formatPrice(150000)}}</span></p>
-                        <router-link to="/detail-pengajuan-barter/12398123">
-                          <button class="buy-btn mt-1">Lihat Detail</button>
-                        </router-link>
-                      </div>
+                    <div class="no-gutters">
+                      <table class="s">
+                        <tr>
+                          <td>Nama</td>
+                          <td class="pl-2">: {{data.userDataForm.userName}}</td>
+                        </tr>
+                        <tr>
+                          <td>Waktu</td>
+                          <td class="pl-2">: {{getMonthYear(data.createdAt)}},
+                            {{getTime(data.createdAt)}}</td>
+                        </tr>
+                        <tr>
+                          <td>Last bid</td>
+                          <td class="pl-2">: Rp{{formatPrice(data.biddingPrice)}}</td>
+                        </tr>
+                      </table>
                     </div>
                   </div>
                 </div>
@@ -84,19 +125,29 @@
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
                       Status Barang :
-                      <span class="tag">Baru</span>
+                      <span class="tag">{{product.productBiddingCondition}}</span>
                     </p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">Kelengkapan paket :
+                      {{product.productBiddingPackage}}</p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">Volume barang :
+                      {{product.productBiddingVolume}}</p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">Berat barang : {{
+                      product.productBiddingWeight}}</p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">Lama Pemakaian : 3 Tahun 6 bulan</p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Deskripsi barang : Lorem ipsum dolor
-                      sit amet consectetur adipisicing elit. Neque reiciendis eos, doloribus
-                      veniam nobis praesentium nesciunt, voluptatum voluptas corporis ipsam
-                      exercitationem fugit perferendis quisquam ab voluptates voluptate doloremque
-                      quibusdam accusamus.
+                      Deskripsi barang : {{
+                        product.productBiddingDescription
+                      }}
                     </p>
                   </div>
                 </div>
@@ -130,19 +181,19 @@ export default {
         false,
         false,
       ],
+      product: '',
+      slide: 0,
+      monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+      ],
+      biddingInfo: [],
     };
   },
   async created() {
     await this.checkUser();
+    await this.getDetailPengajuan();
   },
   methods: {
-    formatPrice(value) {
-      const val = (value / 1).toFixed(0).replace('.', ',');
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    },
-    expand(idx) {
-      this.isExpand.splice(idx, 1, !this.isExpand[idx]);
-    },
     checkUser() {
       // melakukan check apakah user masih login atau tidak
       // jika user masih login, maka akan dilempar ke halaman utama
@@ -158,6 +209,55 @@ export default {
         .catch(() => {
           this.$router.replace('/');
         });
+    },
+    async getDetailPengajuan() {
+    // melakukan check apakah user masih login atau tidak
+    // jika user masih login, maka akan dilempar ke halaman utama
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/bidding?productBiddingId=${this.$route.params.id}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          let count = 0;
+          this.product = res.data.data;
+          for (let index = this.product.biddingForms.length - 1; index >= 0; index -= 1) {
+            if (count <= 2) {
+              this.biddingInfo.push(this.product.biddingForms[index]);
+            } else {
+              break;
+            }
+            count += 1;
+          }
+        })
+        .catch(() => {
+          // this.$router.push('/');
+        });
+    },
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
+    expand(idx) {
+      this.isExpand.splice(idx, 1, !this.isExpand[idx]);
+    },
+    moveSlider(idx) {
+      this.slide = idx;
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/biddingProductPhoto/${path[path.length - 1]}`;
+    },
+    getMonthYear(date) {
+      const theDate = new Date(date);
+      return `${theDate.getDate()} ${this.monthNames[theDate.getMonth()]} ${theDate.getFullYear()}`;
+    },
+    getTime(date) {
+      const theDate = new Date(date).toLocaleTimeString();
+      return `${theDate}`;
     },
   },
 };
@@ -222,6 +322,17 @@ p{
 tr td{
   padding: 0px;
   margin: 0px;
+}
+
+.img-preview{
+  width: 60px;
+  border: 0.8px gray solid;
+  padding: 5px;
+  margin-right: 10px;
+}
+
+.s>tr td{
+  font-size: 12px;
 }
 
 .detail-image-product{
@@ -354,6 +465,14 @@ tr td{
   border: 0.5px solid rgba(208, 208, 208, 0.245);
 }
 
+.product-img{
+  width: 100%;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
 .bid-product{
   margin-top: 7px;
   margin-bottom: 0px;
@@ -444,10 +563,4 @@ tr td{
     display: inline-block;
     color: #AEAEAE;
 }
-
-.active{
-    border-bottom: 2px #0095DA solid;
-    color: #0095DA;
-}
-
 </style>

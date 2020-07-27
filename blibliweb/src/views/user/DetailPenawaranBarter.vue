@@ -7,8 +7,8 @@
           <p class="brand-detail-product">Kode Transaksi:
             <span class="blue-brand font-weight-bold">{{order.orderTransactionId}}</span>
           </p>
-          <span class="tag">
-            {{getStatus(product.barterSubmissionTargetBarter.availableStatus)}}</span>
+          <!-- <span class="tag">
+            {{getStatus(product.barterSubmissionTargetBarter.availableStatus)}}</span> -->
         </div>
         <p class="fs-12 p-2">Barang yang didapatkan</p>
         <div class="custom-detail-card">
@@ -212,6 +212,11 @@
         </div>
       </div>
     </div>
+    <div v-if="order.sellerItemStatus === 'SENT_TO_CONSUMERS'">
+      <hr>
+      <button class="btn btn-primary btn-block mt-2"
+      @click="confirmProduct">Barang sudah diterima</button>
+    </div>
     <div class="p-3" v-if="order.buyerItemStatus === 'IN_OWNER'">
       <label for="">Masukan nomor resi</label>
       <input type="text" v-model="resi" class="form-control">
@@ -350,6 +355,24 @@ export default {
     },
     getStatus(str) {
       return str === 'NOT_AVAILABLE' ? 'Sedang di proses' : 'belum di proses';
+    },
+    confirmProduct() {
+      const updateData = {
+        barterOrderId: this.order.barterOrderId,
+        barterRoleEnum: 'SELLER',
+      };
+
+      const dataToken = Cookie.get('dataToken');
+      axios.put(`http://localhost:${this.port}/experience/api/barterOrder/inConsumers`, updateData,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then(() => {
+          this.getOrder();
+        });
     },
   },
 };

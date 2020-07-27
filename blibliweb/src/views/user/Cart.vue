@@ -15,7 +15,7 @@
         <div class='row no-padding no-margin'>
           <!--  -->
           <div class='col-12 no-margin no-padding row mt-3 border-bottom'
-          v-for='(cart, idx) in cartProduct' v-bind:key='cart.stockId'>
+          v-for='(cart, idx) in cartProduct' v-bind:key='cart.stockForm.stockId'>
             <label class="container col-1" style="padding: 0px!important; margin: 0px!important;">
               <input type="checkbox" checked="checked" class="check toko1"
               @click="checkItem('toko1', idx)">
@@ -23,25 +23,30 @@
             </label>
             <div class='col-11 row no-margin no-padding mb-2'>
               <div class='col-4 no-padding'>
-                <img :src='getImage(cart.productDataForm.productImagePaths[0])' />
+                <img :src='getImage(cart.stockForm.productDataForm.productImagePaths[0])' />
               </div>
               <div class='col-8 no-padding'>
-                <p class='title-product'>{{ cart.productDataForm.productName }}</p>
-                <p class='product-price'>Rp.{{formatPrice(cart.productPrice) }}</p>
-                <p class="location">{{ cart.shopForm.shopName }}</p>
+                <p class='title-product'>{{ cart.stockForm.productDataForm.productName }}</p>
+                <p class='product-price'>Rp.{{formatPrice(cart.stockForm.productPrice) }}</p>
+                <p class="location">{{ cart.stockForm.shopForm.shopName }}</p>
                 <p class="total-product">Jumlah</p>
                 <div class="col-12 row no-margin no-padding">
                   <div class="no-margin no-padding col-8">
-                    <button @click="minAmount(idx, cart.productPrice)"
+                    <button @click="minAmount(
+                      cart.amount, cart.stockForm.stockId,
+                      idx, cart.stockForm.productPrice
+                      )"
                     class="stock-btn">-</button>
-                    <span class="stock-product">{{ amount[idx] }}</span>
-                    <button @click="addAmount(idx, cart.productStock, cart.productPrice)"
+                    <span class="stock-product">{{ cart.amount }}</span>
+                    <button @click="addAmount(cart.amount, cart.stockForm.stockId,
+                    idx, cart.stockForm.productStock,
+                    cart.stockForm.productPrice)"
                     class="stock-btn">+</button>
                   </div>
                   <div class="col-4 no-margin no-padding p-1">
                       <font-awesome-icon
                       class="float-right f-icon mt-auto mb-auto"
-                      icon="trash"/>
+                      icon="trash" @click="deleteProduct(cart.stockForm.stockId)"/>
                       <font-awesome-icon
                       class="float-right f-icon mt-auto mb-auto"
                       icon="heart"/>
@@ -76,6 +81,17 @@
       </div>
     </div>
     <Footer />
+    <div class="fixed-alert text-center pl-3 pr-3">
+      <b-alert
+        :show="dismissCountDown"
+        dismissible
+        variant="danger"
+        @dismissed="dismissCountDown=0"
+        @dismiss-count-down="countDownChanged"
+      >
+        {{alertMsg}}
+      </b-alert>
+    </div>
     <div class="overlay-loading d-flex align-items-center"
     :class="{hide: !isLoading}">
       <b-spinner
@@ -108,14 +124,21 @@ export default {
       price: [],
       length: 0,
       empty: false,
+      cartId: '',
+      dismissSecs: 2,
+      dismissCountDown: 0,
+      alertMsg: '',
     };
   },
   created() {
-    this.checkUser();
+    this.getCart();
     this.scrollToTop();
   },
   methods: {
-    checkUser() {
+    getCart() {
+      this.amount = [];
+      this.price = [];
+      this.cartProduct = [];
       this.isLoading = true;
       const dataId = Cookie.get('dataId');
       const dataToken = Cookie.get('dataToken');
@@ -123,25 +146,30 @@ export default {
         {
           headers:
             {
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
               Authorization: `Bearer ${dataToken}`,
             },
         })
         .then((response) => {
-          this.cartProduct = response.data.data.cartStockForms;
-          this.amount = new Array(this.cartProduct.length);
-          this.amount.fill(1);
-          this.cartProduct.forEach((res) => {
-            this.price.push({
-              price: res.productPrice,
-              status: true,
+          if (response.data.data.cartForms.length === 0) {
+            this.empty = true;
+          } else {
+            this.empty = false;
+            this.cartId = response.data.data.cartId;
+            response.data.data.cartForms.forEach((res) => {
+              this.amount.push(res.amount);
             });
-          });
-          this.countTotal();
+            this.cartProduct = response.data.data.cartForms;
+            this.cartProduct.forEach((res) => {
+              this.price.push({
+                price: res.stockForm.productPrice * res.amount,
+                status: true,
+              });
+            });
+            this.countTotal();
+          }
         })
-        .catch((error) => {
-          if (error.response.status === 500) {
+        .catch((er) => {
+          if (er.response.status === 500) {
             this.empty = true;
           } else {
             this.$router.replace('/');
@@ -190,26 +218,84 @@ export default {
       window.scrollTo(0, 0);
     },
     checkOut() {
+      let status = true;
+      let match = false;
+      let shopId = '';
       // add logic checkout here
-      this.isLoading = true;
-      setTimeout(() => this.$router.push('/confirm'), 1000);
+      const id = [];
+      for (let i = 0; i < this.price.length; i += 1) {
+        if (this.price[i].status) {
+          if (!match) {
+            shopId = this.cartProduct[i].stockForm.shopForm.shopId;
+            match = true;
+          }
+
+          if (shopId !== this.cartProduct[i].stockForm.shopForm.shopId) {
+            status = false;
+          }
+          id.push(this.cartProduct[i]);
+        }
+      }
+
+      if (id.length === 0) {
+        this.alertMsg = 'Silahkan pilih produk';
+        this.dismissCountDown = this.dismissSecs;
+      } else if (status) {
+        localStorage.setItem('data', JSON.stringify(id));
+        localStorage.setItem('cartId', JSON.stringify(this.cartId));
+        this.isLoading = true;
+        setTimeout(() => this.$router.push('/confirm'), 1000);
+      } else {
+        this.alertMsg = 'Toko tidak boleh beda';
+        this.dismissCountDown = this.dismissSecs;
+      }
     },
     getImage(imagePath) {
       const path = imagePath.split('/');
       return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
     },
-    addAmount(idx, stock, price) {
+    addAmount(amt, stockIds, idx, stock, price) {
       // add logic change amount here
-      if (this.amount[idx] + 1 <= stock) {
-        this.amount.splice(idx, 1, this.amount[idx] += 1);
+      if (amt + 1 <= stock) {
+        const request = {
+          amount: 1,
+          cartId: this.cartId,
+          stockId: stockIds,
+        };
+        const dataToken = Cookie.get('dataToken');
+        axios.put(`http://localhost:${this.port}/experience/api/carts/updateAmount`, request,
+          {
+            headers:
+              {
+                Authorization: `Bearer ${dataToken}`,
+              },
+          })
+          .then(() => {
+            this.getCart();
+          });
         this.price[idx].price += price;
         this.countTotal();
       }
     },
-    minAmount(idx, price) {
+    minAmount(amt, stockIds, idx, price) {
       // add logic change amount here
-      if (this.amount[idx] - 1 > 0) {
-        this.amount.splice(idx, 1, this.amount[idx] -= 1);
+      if (amt - 1 > 0) {
+        const request = {
+          amount: -1,
+          cartId: this.cartId,
+          stockId: stockIds,
+        };
+        const dataToken = Cookie.get('dataToken');
+        axios.put(`http://localhost:${this.port}/experience/api/carts/updateAmount`, request,
+          {
+            headers:
+              {
+                Authorization: `Bearer ${dataToken}`,
+              },
+          })
+          .then(() => {
+            this.getCart();
+          });
         this.price[idx].price -= price;
         this.countTotal();
       }
@@ -223,6 +309,27 @@ export default {
           this.length += 1;
         }
       });
+    },
+    deleteProduct(id) {
+      const request = {
+        cartId: this.cartId,
+        stockId: id,
+      };
+      const dataToken = Cookie.get('dataToken');
+      axios.put(`http://localhost:${this.port}/experience/api/carts/deleteProduct`, request,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then(() => {
+          this.getCart();
+        });
+    },
+    // Untuk notifikasi ketika user menekan 'beli sekarang'
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
     },
   },
 };
@@ -288,6 +395,15 @@ export default {
   margin: 0px;
   color: #ff7600;
   font-weight: 600;
+}
+
+.fixed-alert{
+  z-index: 100;
+  position: fixed;
+  bottom: 15px;
+  margin: 5% auto; /* Will not center vertically and won't work in IE6/7. */
+  left: 0;
+  right: 0;
 }
 
 .cart-empty{
