@@ -20,7 +20,10 @@
             </p>
             <p class="text-card m-0">Nama Pemesan
               <span class="cl-blue">{{product.userDataForm.userName}}</span></p>
+              <p class="text-card2 m-0">Alamat Pengiriman:
+              <span class="">{{product.userDataForm.userAddressForms[0].detail}}</span></p>
           </div>
+          <hr>
           <div class="d-flex align-items-start p-2 no-gutters"
           v-for="product in product.cartForms"
           :key="product.stockForm.productDataForm.productId">
@@ -77,7 +80,11 @@ export default {
   data() {
     return {
       isLoading: false,
-      product: [],
+      product: {
+        userDataForm: {
+          userName: '',
+        },
+      },
       monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
       ],
@@ -263,6 +270,10 @@ hr{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.text-card2{
+  font-size: 13px;
 }
 
 .bg-gray-card{

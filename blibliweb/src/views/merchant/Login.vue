@@ -36,7 +36,7 @@
           </div>
           <button @click="login" class="btn rounded shadow-lg bg-bl-btn" id="login"
           >Masuk</button>
-          <div class="invalid-feedback " :class="{show:!isLoggedIn}">
+          <div class="invalid-feedback " :class="{show:isLoggedIn}">
             Email atau password salah !
           </div>
           <router-link to="" class="forget-pass">Lupa kata sandi ?</router-link>
@@ -111,7 +111,7 @@ export default {
   },
   methods: {
     async checkLoginUser() {
-      this.isLoggedIn = true;
+      this.isLoggedIn = false;
       // melakukan check apakah user masih login atau tidak
       // jika user masih login, maka akan dilempar ke halaman utama
       const dataId = Cookie.get('dataIdMerchant');
@@ -123,10 +123,10 @@ export default {
             Authorization: `Bearer ${dataToken}`,
           },
         })
-        .then((response) => {
+        .then(() => {
           this.isLoggedIn = true;
-            this.$router.push('/merchant/menu-utama');
-            this.isLoading = false;
+          this.$router.push('/merchant/menu-utama');
+          this.isLoading = false;
         });
       this.isLoading = false;
     },
@@ -157,16 +157,15 @@ export default {
         };
         axios.post(`http://localhost:${this.port}/experience/api/auth/login`, login)
           .then((response) => {
-            this.isLoggedIn = true;
             if (response.data.userRoles[0] === 'ROLE_MERCHANT') {
+              this.isLoggedIn = false;
               Cookie.set('dataIdMerchant', response.data.userId, 1); // set cookies expired 1 hari
               Cookie.set('dataShopIdMerchant', response.data.shopId, 1); // set cookies expired 1 hari
               Cookie.set('dataTokenMerchant', response.data.accessToken, 1); // set cookies expired 1 hari
               setTimeout(() => this.$router.push('/merchant/menu-utama'), 1000); // jika login berhasil maka akan dilempar ke halaman utama
             }
-            this.isLoggedIn = false;
           });
-        this.isLoggedIn = false;
+        this.isLoggedIn = true;
         this.isLoading = false;
       }
     },

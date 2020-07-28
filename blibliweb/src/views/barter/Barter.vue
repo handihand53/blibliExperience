@@ -11,17 +11,18 @@
       <hr class="m-0 p-0 mb-3">
       <img src="@/assets/icon/bliblibarter.png" alt="" class="img-fluid mb-3">
     </div>
-    <!-- <label class="label-page pl-2">Kategori yang kamu suka</label>
+    <label class="label-page pl-2">Kategori yang kamu suka</label>
     <div class="card ml-2 mr-2 pt-1 pb-2">
       <div class="overflow-x">
-        <span class="category mr-2 ml-2 active">Semua</span>
-        <span class='category mr-2'
-        :class="{'un-active':category, active: !category}"
+        <span class="category mr-2 ml-2"
+        :class="{active: semuaFlag, 'un-active': !semuaFlag}"
+        @click="getProductBarter()">Semua</span>
+        <span class='category mr-2 un-active'
         v-for='category in category' v-bind:key='category'
-        :ref='category'
+        :ref='category' @click="getAllProductByCategory(category)"
         >{{category}}</span>
       </div>
-    </div> -->
+    </div>
     <div v-if="!empty">
       <label class="label-page pl-2 pt-2">Barang ini menunggu buat kamu tukar loh</label>
       <div class="content col-12 row no-margin pl-2 pr-2">
@@ -42,8 +43,12 @@
         </router-link>
       </div>
     </div>
+    <div class="mt-3" v-if="!empty">
+      <b-pagination v-model="currentPage" pills
+      align="center" :total-rows="rows"></b-pagination>
+    </div>
     <div v-if="empty">
-      <div class="text-align-center">
+      <div class="text-align-center content-margin">
         <img src="/assets/etc/people.png" alt=""
         class="img-empty">
         <h4 class="mt-1">Belum ada barang lagi nih!</h4>
@@ -70,11 +75,15 @@ export default {
   },
   data() {
     return {
-      catParam: '',
+      kat: '',
       skipCount: 0,
       category: [],
       barterProduct: [],
       empty: false,
+      rows: 200, // 20 rows in 1 page
+      currentPage: 1,
+      semuaFlag: true,
+      currentState: 'semua',
     };
   },
   async created() {
@@ -83,6 +92,10 @@ export default {
   },
   methods: {
     async getProductBarter() {
+      this.skipCount = 0;
+      this.currentState = 'semua';
+      this.empty = false;
+      this.barterProduct = '';
       const dataToken = Cookie.get('dataToken');
       await axios.get(`http://localhost:${this.port}/experience/api/barter/available?skipCount=${this.skipCount}`,
         {
@@ -93,7 +106,7 @@ export default {
         })
         .then((response) => {
           this.barterProduct = response.data.data;
-          console.log(response);
+          this.rows = this.barterProduct[0].count;
         })
         .catch(() => {
           this.empty = true;
@@ -105,9 +118,41 @@ export default {
           this.category = response.data.data.categories;
         });
     },
+    async getAllProductByCategory(cat) {
+      this.semuaFlag = false;
+      this.kat = cat;
+      this.skipCount = 0;
+      this.currentState = 'else';
+      this.barterProduct = '';
+      this.empty = false;
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/barter/category?productCategory=${cat}&skipCount=${this.skipCount}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((response) => {
+          this.barterProduct = response.data.data;
+        })
+        .catch(() => {
+          this.empty = true;
+        });
+    },
     getImage(imagePath) {
       const path = imagePath.split('/');
       return `/assets/resources/uploads/barterProductPhoto/${path[path.length - 1]}`;
+    },
+  },
+  watch: {
+    currentPage(newValue) {
+      this.skipCount = 20 * (newValue - 1);
+      if (this.currentState === 'semua') {
+        this.getProductBarter();
+      } else {
+        this.getAllProductByCategory(this.kat);
+      }
     },
   },
 };
@@ -201,6 +246,11 @@ p{
   overflow: hidden;
   text-overflow: ellipsis;
   color: #7c7c7c;
+}
+
+.content-margin{
+  margin-top: 120px;
+  margin-bottom: 120px;
 }
 
 .product-price {

@@ -20,7 +20,7 @@
         </span>
       </div>
     </div>
-    <div v-if="currentState === 'AVAILABLE'">
+    <div v-if="currentState === 'AVAILABLE' && !show">
       <div class="custom-card box-shadow p-3 row no-margin"
       v-for="product in product" :key="product.productBiddingId"
       >
@@ -44,7 +44,7 @@
         </div>
       </div>
     </div>
-    <div v-if="currentState === 'FINISHED'">
+    <div v-if="currentState === 'FINISHED' && !show">
       <div class="custom-card box-shadow p-3 row no-margin"
       v-for="product in product" :key="product.productBiddingId"
       >
@@ -68,7 +68,7 @@
         </div>
       </div>
     </div>
-    <div v-if="currentState === 'ORDER_GENERATED'">
+    <div v-if="currentState === 'ORDER_GENERATED' && !show">
       <div class="custom-card box-shadow p-3 row no-margin"
       v-for="product in product" :key="product.biddingOrderId">
         <div class="col-4 no-margin no-padding">
@@ -93,6 +93,15 @@
         </div>
       </div>
     </div>
+    <div class="text-align-center content-margin" v-if="show">
+      <img src="/assets/etc/people.png" alt=""
+      class="img-empty">
+      <h4 class="mt-1">Belum ada barang lagi nih!</h4>
+      <small>Mau tukar apa lagi ya ?<br>
+        Coba masukkan produk yang mau kamu tukar.</small>
+      <br>
+      <router-link to="/post-product" class="mt-3">Disini</router-link>
+    </div>
   </div>
 </template>
 
@@ -110,15 +119,21 @@ export default {
         false,
       ],
       display: true,
-      product: {
-        productBiddingForm: {
-          productBiddingName: '',
+      product: [
+        {
+          productBiddingForm: {
+            productBiddingName: '',
+          },
+          productBiddingImagePaths: [
+            '/',
+          ],
         },
-      },
+      ],
       monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
       ],
       currentState: 'AVAILABLE',
+      show: false,
     };
   },
   async created() {
@@ -146,6 +161,7 @@ export default {
         });
     },
     async getListPengajuan() {
+      this.show = false;
       const dataId = Cookie.get('dataId');
       const dataToken = Cookie.get('dataToken');
       await axios.get(`http://localhost:${this.port}/experience/api/products/bidding/user?userId=${dataId}`,
@@ -157,13 +173,14 @@ export default {
         })
         .then((res) => {
           this.product = res.data.data;
-          console.log(res);
         })
         .catch(() => {
+          this.show = true;
           // this.$router.push('/');
         });
     },
     async getListPengajuanFinished() {
+      this.show = false;
       const dataId = Cookie.get('dataId');
       const dataToken = Cookie.get('dataToken');
       await axios.get(`http://localhost:${this.port}/experience/api/products/bidding/user/finished?userId=${dataId}`,
@@ -175,13 +192,14 @@ export default {
         })
         .then((res) => {
           this.product = res.data.data;
-          console.log(res);
         })
         .catch(() => {
+          this.show = true;
           // this.$router.push('/');
         });
     },
     async getListPengajuanOrderCreated() {
+      this.show = false;
       const dataId = Cookie.get('dataId');
       const dataToken = Cookie.get('dataToken');
       await axios.get(`http://localhost:${this.port}/experience/api/biddingOrder/owner?userId=${dataId}`,
@@ -196,6 +214,7 @@ export default {
           console.log(res);
         })
         .catch(() => {
+          this.show = true;
           // this.$router.push('/');
         });
     },
@@ -280,12 +299,22 @@ p{
   float: right;
 }
 
+.content-margin{
+  margin-top: 120px;
+  margin-bottom: 120px;
+}
+
 .about-detail-product{
   background-color: #F3F3F3;
 }
 
 .detail-image-product{
   max-width: 320px;
+}
+
+.text-align-center{
+  text-align: center;
+  margin-top: 40px;
 }
 
 .overflow-y{
@@ -304,6 +333,15 @@ p{
   margin-right: 30px;
   color: #5A5A5A;
   font-size: 14px;
+}
+
+.img-empty{
+  width: 40%;
+}
+
+.text-align-center{
+  text-align: center;
+  margin-top: 40px;
 }
 
 .price-detail-text{
@@ -375,11 +413,20 @@ p{
   color: #F99401;
 }
 
+.content-margin{
+  margin-top: 120px;
+  margin-bottom: 120px;
+}
+
 .status-tag{
   color: white;
   padding: 3px 10px;
   font-size: 10px;
   border-radius: 15px;
+}
+
+.img-empty{
+  width: 40%;
 }
 
 .buttonActive{

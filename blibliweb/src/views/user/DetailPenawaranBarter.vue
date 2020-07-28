@@ -212,7 +212,7 @@
         </div>
       </div>
     </div>
-    <div v-if="order.sellerItemStatus === 'SENT_TO_CONSUMERS'">
+    <div class="p-3" v-if="order.sellerItemStatus === 'SENT_TO_CONSUMERS'">
       <hr>
       <button class="btn btn-primary btn-block mt-2"
       @click="confirmProduct">Barang sudah diterima</button>

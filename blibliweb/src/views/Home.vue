@@ -4,7 +4,7 @@
     <main>
       <div class="p-2 bg-blue sticky- blibli-scan">
         <b-form-input v-model="search" placeholder="Cari apa hari ini ?"
-        id="searchbar"></b-form-input>
+        id="searchbar" @click="searchBar"></b-form-input>
         <div class="card mt-2">
           <router-link to="/scan">
             <div class="row no-margin">
@@ -184,6 +184,9 @@ export default {
   methods: {
     hide() {
       this.isHide = true;
+    },
+    searchBar() {
+      this.$router.push('/search');
     },
   },
 };

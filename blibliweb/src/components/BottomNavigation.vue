@@ -19,7 +19,7 @@
       </router-link>
       <router-link to="/cart" class="col-navigation">
         <div>
-          <div class="notif">0</div>
+          <div class="notif">{{amount}}</div>
           <font-awesome-icon icon="shopping-cart" class="nav-icon" />
           <p class="icon-text">Keranjang</p>
         </div>
@@ -34,6 +34,37 @@
   </div>
 </template>
 
+<script>
+import axios from 'axios';
+import Cookie from 'vue-cookie';
+
+export default {
+  data() {
+    return {
+      amount: 0,
+    };
+  },
+  created() {
+    this.getCart();
+  },
+  methods: {
+    getCart() {
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/carts?userId=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((response) => {
+          this.amount = response.data.data.cartForms.length;
+        });
+    },
+  },
+};
+</script>
 
 <style lang="scss" scoped>
 @import "../style/font/font.scss";

@@ -118,12 +118,12 @@ export default {
           this.isLoading = false;
           this.nama = response.data.data.userName;
           this.email = response.data.data.userEmail;
-          this.gender = response.data.data.userGender;
+          this.jk = response.data.data.userGender;
           this.noTlp = response.data.data.userPhoneNumber;
           this.tglLahir = response.data.data.userBirthDate;
           this.createdAt = response.data.data.userCreatedAt;
           if (this.data.userAddressForms !== null) {
-            this.address = this.data.userAddressForms.detail;
+            this.address = this.data.userAddressForms[0].detail;
           }
           console.log(this.data);
         })

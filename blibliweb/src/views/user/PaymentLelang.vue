@@ -166,7 +166,7 @@ export default {
           })
           .then(() => {
             this.isLoading = true;
-            setTimeout(() => this.$router.replace('/sukses'), 1000);
+            setTimeout(() => this.$router.replace('/lelang/sukses'), 1000);
           })
           .catch(() => {
             // this.$router.replace('/');

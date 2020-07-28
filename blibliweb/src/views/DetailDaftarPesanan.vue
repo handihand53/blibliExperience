@@ -7,6 +7,7 @@
         <p class="text-detail pt-2">Tanggal pemesanan:
           {{getMonthYear(product.orderCreatedAt)}}</p>
         <p class="text-detail">No. Pesanan: {{product.orderTransactionId}}</p>
+        <p class="text-detail">Nama merchant: {{shopName}}</p>
         <p class="text-detail">Total yang harus dibayar:
           <span class="orange">Rp{{formatPrice(price)}}</span></p>
         <p class="text-detail">Status pembayaran:
@@ -53,6 +54,12 @@
             <span class="text-detail">Metode Pengiriman: </span>
             <span class="text-detail blue font-weight-bold">{{getType(product.deliveryType)}}</span>
           </p>
+          <p class="m-0 pembayaran"
+          v-if="product.deliveryType !== 'SELF_SERVICE'">
+            <span class="text-detail">Alamat pengiriman: </span>
+            <span class="text-detail">
+              {{address}}</span>
+          </p>
         </div>
         <router-link :to='"/pay/"+product.orderId'
         v-if="product.orderStatus === 'WAITING_FOR_PAYMENT'">
@@ -87,6 +94,8 @@ export default {
       monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
       ],
+      shopName: '',
+      address: '',
     };
   },
   async created() {
@@ -135,6 +144,8 @@ export default {
           this.product.cartForms.forEach((element) => {
             this.price += element.amount * element.stockForm.productPrice;
           });
+          this.shopName = this.product.cartForms[0].stockForm.shopForm.shopName;
+          this.address = this.product.userDataForm.userAddressForms[0].detail;
         })
         .catch(() => {
           this.$router.replace('/');
@@ -171,7 +182,7 @@ export default {
     },
     terima() {
       const dataToken = Cookie.get('dataToken');
-      axios.put(`http://localhost:${this.port}/experience/api/order/toFinished?orderId=${this.product.orderId}`,
+      axios.put(`http://localhost:${this.port}/experience/api/exc/order/toFinished?orderId=${this.product.orderId}`,
         {
           headers:
             {

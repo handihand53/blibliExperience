@@ -121,6 +121,7 @@ export default {
       this.getAllListData();
     },
     getAllListData() {
+      this.products = [];
       const dataToken = Cookie.get('dataTokenAdmin');
       axios.get(`http://localhost:${this.port}/experience/api/admin/barterOrder/orderStatus?request=${this.status}`,
         {
@@ -131,7 +132,6 @@ export default {
         })
         .then((response) => {
           this.products = response.data.data;
-          console.log(response);
         });
     },
     getImage(imagePath) {

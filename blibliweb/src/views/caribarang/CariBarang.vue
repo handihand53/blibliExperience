@@ -9,18 +9,18 @@
       <img src="@/assets/icon/bliblicaribarang.png" alt="" class="img-fluid">
     </div>
     <label class="label-page pl-2">Kategori yang kamu suka</label>
-    <!-- <div class="card ml-2 mr-2 pt-1 pb-2">
+    <div class="card ml-2 mr-2 pt-1 pb-2">
       <div class="overflow-x">
-        <span class="category mr-2 ml-2 un-active"
-        @click='getProductByCategoryName("")'
-        id="getProduct">Semua</span>
+        <span class="category mr-2 ml-2"
+        :class="{active: semuaFlag, 'un-active': !semuaFlag}"
+        @click="getBiddingAvailable()">Semua</span>
         <span class='category mr-2'
-        :class="{'un-active':category.categoryName, active: !category.categoryName}"
-        v-for='category in CategoriesDetails.data' v-bind:key='category.categoryId'
-        @click='getProductByCategoryName(category.categoryName)' :ref='category.categoryName'
-        >{{category.categoryName}}</span>
+        :class="{'un-active':category, active: !category}"
+        v-for='category in category' v-bind:key='category'
+        :ref='category' @click="getAllProductByCategory(category)"
+        >{{category}}</span>
       </div>
-    </div> -->
+    </div>
     <label class="label-page pl-2 pt-2">Barang ini lagi di cari-cari nih</label>
     <div
     class="content col-12 row no-margin pl-2 pr-2"
@@ -51,6 +51,21 @@
         </div>
       </div>
     </div>
+    <div class="mt-3" v-if="!empty">
+      <b-pagination v-model="currentPage" pills
+      align="center" :total-rows="rows"></b-pagination>
+    </div>
+    <div v-if="empty">
+      <div class="text-align-center content-margin">
+        <img src="/assets/etc/people.png" alt=""
+        class="img-empty">
+        <h4 class="mt-1">Belum ada barang lagi nih!</h4>
+        <small>Mau tukar apa lagi ya ?<br>
+          Coba masukkan produk yang mau kamu tukar.</small>
+        <br>
+        <router-link to="/post-product" class="mt-3">Disini</router-link>
+      </div>
+    </div>
     <Footer/>
   </div>
 </template>
@@ -68,21 +83,36 @@ export default {
   },
   data() {
     return {
+      kat: '',
       catParam: '',
       product: '',
       count: 0,
+      category: '',
+      empty: false,
       monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
       ],
+      rows: 0, // 20 rows in 1 page
+      currentPage: 1,
+      semuaFlag: true,
+      currentState: 'semua',
     };
   },
   async created() {
     await this.getBiddingAvailable();
+    await this.getAllCategory();
   },
   methods: {
+    async getAllCategory() {
+      await axios.get(`http://localhost:${this.port}/experience/api/products/enums/category`)
+        .then((response) => {
+          this.category = response.data.data.categories;
+        });
+    },
     async getBiddingAvailable() {
-      // melakukan check apakah user masih login atau tidak
-      // jika user masih login, maka akan dilempar ke halaman utama
+      this.kat = 'semua';
+      this.product = [];
+      this.empty = false;
       const dataToken = Cookie.get('dataToken');
       await axios.get(`http://localhost:${this.port}/experience/api/products/bidding/available?skipCount=${this.count}`,
         {
@@ -93,10 +123,33 @@ export default {
         })
         .then((res) => {
           this.product = res.data.data;
-          console.log(this.product);
+          this.rows = this.product[0].productBiddingCount;
         })
         .catch(() => {
-          this.$router.replace('/');
+          this.empty = true;
+          // this.$router.replace('/');
+        });
+    },
+    async getAllProductByCategory(cat) {
+      this.semuaFlag = false;
+      this.kat = cat;
+      this.product = [];
+      this.empty = false;
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/products/bidding/category?productCategory=${cat}&skipCount=${this.count}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          this.product = res.data.data;
+          this.rows = this.product[0].productBiddingCount;
+        })
+        .catch(() => {
+          this.empty = true;
+          // this.$router.replace('/');
         });
     },
     getImage(imagePath) {
@@ -116,6 +169,16 @@ export default {
       return `${theDate}`;
     },
   },
+  watch: {
+    currentPage(newValue) {
+      this.skipCount = 20 * (newValue - 1);
+      if (this.currentState === 'semua') {
+        this.getBiddingAvailable();
+      } else {
+        this.getAllProductByCategory(this.kat);
+      }
+    },
+  },
 };
 </script>
 
@@ -128,6 +191,19 @@ export default {
   border-radius: 10px;
 }
 
+.text-align-center{
+  text-align: center;
+  margin-top: 40px;
+}
+
+.img-empty{
+  width: 40%;
+}
+
+.content-margin{
+  margin-top: 120px;
+  margin-bottom: 120px;
+}
 
 .bid{
   font-size: 14px;
@@ -152,16 +228,16 @@ export default {
 }
 
 .buy-btn{
-    width: 100%;
-    background-color: rgb(0, 128, 255);
-    padding-top: 6px;
-    padding-bottom: 6px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-weight: 500;
-    transition: all 1s;
-    font-size: 13px;
+  width: 100%;
+  background-color: rgb(0, 128, 255);
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: 500;
+  transition: all 1s;
+  font-size: 13px;
 }
 
 .penawaran{

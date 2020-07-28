@@ -12,30 +12,23 @@
             class="px-3" @click="changeStatus(1, 'WIN')" size="sm" id="changeStat1"
             :class="{buttonActive : this.isActive[1]}">Menang</b-button>
           </span>
-          <span class="mx-2">
-            <b-button pill variant="outline-primary"
-            class="px-3" @click="changeStatus(2, 'DELIVERED_TO_CONSUMER')"
-            size="sm" id="changeStat2"
-            :class="{buttonActive : this.isActive[2]}">Sedang dikirim</b-button>
-          </span>
-          <span class="mx-2">
-            <b-button pill variant="outline-primary"
-            class="px-3" @click="changeStatus(3, 'FINISHED')"
-            size="sm" id="changeStat3"
-            :class="{buttonActive : this.isActive[3]}">Diterima</b-button>
-          </span>
         </div>
       </div>
-    <div class="p-2 mb-1"
-    v-for="product in product" :key="product.orderTransactionId">
+    <div v-if="!show && currentState=='WIN'">
+      <div class="p-2 mb-1"
+      v-for="product in product" :key="product.orderTransactionId"
+      >
         <div class="box-shadow">
-          <!-- <div class="background-gray2 p-2">
-            <small class="date-text">Tanggal : {{getMonthYear}}</small>
-          </div> -->
+          <div class="background-gray2 p-2">
+            <small class="date-text">Tanggal berakhir :
+              {{getMonthYear(product.productBiddingForm.closeBidDate)}},
+              {{getTime(product.productBiddingForm.closeBidDate)}}</small>
+          </div>
           <div class="background-white">
             <div class="p-3 row no-margin">
               <div class="col-4 no-margin no-padding">
-              <!-- <img :src="getImage(product.productBiddingForm.)" alt="" class="img-product"> -->
+              <img :src="getImage(product.productBiddingForm.productBiddingImagePaths[0])"
+              alt="" class="img-product">
               </div>
               <div class="col-8 no-margin  no-padding">
                   <p class="title-product">{{product.productBiddingForm.productBiddingName}}</p>
@@ -53,6 +46,46 @@
           </div>
         </div>
       </div>
+    </div>
+    <div v-if="!show && currentState=='WAITING_FOR_PAYMENT'">
+      <div class="p-2 mb-1"
+      v-for="product in product" :key="product.orderTransactionId"
+      >
+        <div class="box-shadow">
+          <div class="background-gray2 p-2">
+            <small class="date-text">Tanggal berakhir :
+              {{getMonthYear(product.closeBidDate)}}, {{getTime(product.closeBidDate)}}</small>
+          </div>
+          <div class="background-white">
+            <div class="p-3 row no-margin">
+              <div class="col-4 no-margin no-padding">
+              <img :src="getImage(product.productBiddingImagePaths[0])" alt="" class="img-product">
+              </div>
+              <div class="col-8 no-margin  no-padding">
+                  <p class="title-product">{{product.productBiddingName}}</p>
+                  <p class="brand-product">Brand: <span class="brand">
+                    {{product.productBiddingBrand}}</span></p>
+                  <p class="brand-product">Penawar: <span class="brand">Handi Hermawan</span></p>
+                  <p class="bid-product mt-0">Status lelang:
+                    {{(product.bidStatus)}}</p>
+                  <p class="bid-product mt-0">Bid:
+                    <span class="bid-price-product">
+                    Rp{{formatPrice(product.currentPrice)}}</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-align-center content-margin" v-if="show">
+      <img src="/assets/etc/people.png" alt=""
+      class="img-empty">
+      <h4 class="mt-1">Belum ada barang lagi nih!</h4>
+      <small>Mau tukar apa lagi ya ?<br>
+        Coba masukkan produk yang mau kamu tukar.</small>
+      <br>
+      <router-link to="/post-product" class="mt-3">Disini</router-link>
+    </div>
   </div>
 </template>
 
@@ -64,7 +97,11 @@ export default {
   data() {
     return {
       display: true,
-      product: '',
+      product: [
+        {
+          productBiddingName: '',
+        },
+      ],
       monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
       ],
@@ -74,11 +111,13 @@ export default {
         false,
         false,
       ],
-      currentState: 'WIN',
+      currentState: 'WAITING_FOR_PAYMENT',
+      show: false,
     };
   },
   async created() {
     await this.checkLoginUser();
+    await this.getListWaiting();
   },
   methods: {
     async checkLoginUser() {
@@ -98,8 +137,8 @@ export default {
         });
     },
     async getListPenawaran() {
-    // melakukan check apakah user masih login atau tidak
-    // jika user masih login, maka akan dilempar ke halaman utama
+      this.show = false;
+      this.product = [];
       const dataId = Cookie.get('dataId');
       const dataToken = Cookie.get('dataToken');
       await axios.get(`http://localhost:${this.port}/experience/api/biddingOrder/winner?userId=${dataId}`,
@@ -111,9 +150,35 @@ export default {
         })
         .then((res) => {
           this.product = res.data.data;
-          console.log(res);
+          if (this.product.length === 0) {
+            this.show = true;
+          }
         })
         .catch(() => {
+          this.show = true;
+          // this.$router.push('/');
+        });
+    },
+    async getListWaiting() {
+      this.product = [];
+      this.show = false;
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/products/bidding/user/bidding?userId=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          this.product = res.data.data;
+          if (this.product.length === 0) {
+            this.show = true;
+          }
+        })
+        .catch(() => {
+          this.show = true;
           // this.$router.push('/');
         });
     },
@@ -135,6 +200,9 @@ export default {
     },
     changeStatus(idx, stat) {
       this.currentState = stat;
+      if (this.currentState === 'WAITING_FOR_PAYMENT') {
+        this.getListWaiting();
+      }
       if (this.currentState === 'WIN') {
         this.getListPenawaran();
       }
@@ -169,6 +237,10 @@ export default {
   padding: 0px;
 }
 
+.img-empty{
+  width: 40%;
+}
+
 .date-text{
   color: rgb(130, 130, 130);
   font-weight: 500;
@@ -183,6 +255,11 @@ export default {
   font-size: 25px;
   font-weight: 500;
   color: #F99401;
+}
+
+.text-align-center{
+  text-align: center;
+  margin-top: 40px;
 }
 
 .brand-product{
@@ -204,6 +281,11 @@ export default {
 .buttonActive{
   background-color: rgb(0, 123, 255);
   color: white!important;
+}
+
+.content-margin{
+  margin-top: 120px;
+  margin-bottom: 120px;
 }
 
 .buy-btn{

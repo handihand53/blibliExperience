@@ -39,12 +39,6 @@
               <font-awesome-icon icon="chevron-right" class="right-arrow"/>
             </div>
           </router-link>
-          <router-link to="/wishlist" class="alink">
-            <div class="list-menu">
-              Wishlist
-              <font-awesome-icon icon="chevron-right" class="right-arrow"/>
-            </div>
-          </router-link>
           <router-link to="/barter" class="alink">
             <div class="list-menu">
               Barter di Blibli

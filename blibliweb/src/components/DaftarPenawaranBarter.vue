@@ -19,12 +19,10 @@
                   <p class="brand-product">Brand:
                     <span class="brand">
                     {{product.barterSubmissionTargetBarter.productBarterBrand}}</span></p>
-                  <span class="status-tag success">
-                    {{ product.barterSubmissionTargetBarter.availableStatus }}</span>
                   <span class="status-tag second ml-1">
                     {{ product.barterSubmissionTargetBarter.productBarterCondition }}</span>
                   <p class="desc-product">
-                    {{ getDeskripsi(product
+                    Deskripsi: {{ getDeskripsi(product
                     .barterSubmissionTargetBarter.productBarterDescription) }}</p>
                   <router-link :to="'/daftar-penawaran/detail-barter/'+product.barterSubmissionId">
                     <button class="buy-btn">Lihat Detail</button>
@@ -35,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div v-if="show">
+    <div class="content-margin" v-if="show">
       <div class="text-align-center">
         <img src="/assets/etc/people.png" alt=""
         class="img-empty">
@@ -97,8 +95,7 @@ export default {
         .then((res) => {
           this.products = res.data.data;
         })
-        .catch((e) => {
-          console.log(e.response.status);
+        .catch(() => {
           this.show = true;
         });
     },
@@ -184,6 +181,11 @@ export default {
 
 .success{
   background-color: #37C26A;
+}
+
+.content-margin{
+  margin-top: 120px;
+  margin-bottom: 120px;
 }
 
 .new{

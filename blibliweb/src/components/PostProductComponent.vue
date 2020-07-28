@@ -176,6 +176,9 @@ export default {
           .then(() => {
             this.dismissCountDown = this.dismissSecs;
             this.$router.push('/barter');
+          })
+          .catch((er) => {
+            console.log(er.response);
           });
       } else {
         this.formAllFilled = false;

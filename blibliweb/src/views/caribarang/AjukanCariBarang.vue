@@ -63,7 +63,11 @@ export default {
     return {
       check: false,
       amount: window.localStorage.getItem('price'),
-      product: '',
+      product: {
+        productBiddingImagePaths: [
+          '',
+        ],
+      },
     };
   },
   methods: {
@@ -114,8 +118,9 @@ export default {
           localStorage.clear();
           this.$router.replace('/lelang/berhasil');
         })
-        .catch(() => {
-          this.$router.replace('/');
+        .catch((er) => {
+          console.log(er.response);
+          // this.$router.replace('/');
         });
     },
   },

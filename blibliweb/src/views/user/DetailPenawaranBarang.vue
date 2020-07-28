@@ -189,8 +189,9 @@ export default {
           this.product = res.data.data;
           console.log(res);
         })
-        .catch(() => {
-          this.$router.replace('/');
+        .catch((re) => {
+          console.log(re.response);
+          // this.$router.replace('/');
         });
     },
     getStatus(str) {

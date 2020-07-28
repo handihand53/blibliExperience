@@ -246,17 +246,15 @@ export default {
     },
     confirmProduct() {
       const dataToken = Cookie.get('dataToken');
-      axios.put(`http://localhost:${this.port}/experience/api/biddingOrder/confirmation?biddingOrderId=${this.$route.params.id}`,
+      axios.put(`http://localhost:${this.port}/experience/api/exc/biddingOrder/confirmation?biddingOrderId=${this.$route.params.id}`,
         {
           headers:
           {
             Authorization: `Bearer ${dataToken}`,
           },
-          _method: 'patch',
         })
-        .then((res) => {
+        .then(() => {
           this.getDetailPengajuan();
-          console.log(res);
         })
         .catch(() => {
           // this.$router.push('/');

@@ -208,6 +208,22 @@ const routes = [
     },
   },
   {
+    path: '/search',
+    name: 'Search Page',
+    component: () => import(/* webpackChunkName: "category" */ '../views/SearchPage.vue'),
+    meta: {
+      title: 'Cari Produk',
+    },
+  },
+  {
+    path: '/lelang/sukses',
+    name: 'Pembayaran Lelang berhasil',
+    component: () => import(/* webpackChunkName: "category" */ '../views/user/LelangSukses.vue'),
+    meta: {
+      title: 'Pembayaran Lelang Sukses',
+    },
+  },
+  {
     path: '/pay/:id',
     name: 'Pembayaran',
     component: () => import(/* webpackChunkName: "category" */ '../views/user/Payment.vue'),

@@ -32,6 +32,15 @@
         </div>
       </div>
     </div>
+    <div class="text-align-center content-margin" v-if="show">
+      <img src="/assets/etc/people.png" alt=""
+      class="img-empty">
+      <h4 class="mt-1">Belum ada transaksi lagi nih!</h4>
+      <small>Mau beli apa lagi ya ?<br>
+        Coba cari produk yang mau kamu beli.</small>
+      <br>
+      <router-link to="/" class="mt-3 mb-5">Disini</router-link>
+    </div>
     <div class="bg-gray"
     v-for="(product, idx) in product" :key="product.orderId">
       <div class="p-2">
@@ -94,6 +103,7 @@ export default {
       monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
       ],
+      show: false,
     };
   },
   async created() {
@@ -103,11 +113,11 @@ export default {
   methods: {
     changeStatus(idx, stat) {
       this.currentState = stat;
+      this.getPesanan();
       this.isActive.splice(idx, 1, true);
       for (let i = 0; i < this.isActive.length; i += 1) {
         if (i !== idx) this.isActive.splice(i, 1, false);
       }
-      this.getPesanan();
     },
     checkUser() {
       // melakukan check apakah user masih login atau tidak
@@ -133,12 +143,12 @@ export default {
           this.isLogin = false;
         });
     },
-    getPesanan() {
+    async getPesanan() {
       // melakukan check apakah user masih login atau tidak
       // jika user masih login, maka akan dilempar ke halaman utama
       const dataId = Cookie.get('dataId');
       const dataToken = Cookie.get('dataToken');
-      axios.get(`http://localhost:${this.port}/experience/api/order/user?userId=${dataId}`,
+      await axios.get(`http://localhost:${this.port}/experience/api/order/user?userId=${dataId}`,
         {
           headers:
             {
@@ -171,8 +181,9 @@ export default {
           });
         })
         .catch(() => {
-          this.isLogin = false;
+          this.show = true;
         });
+      this.show = this.product.length === 0;
     },
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
@@ -213,6 +224,10 @@ export default {
   color: white!important;
 }
 
+.img-empty{
+  width: 40%;
+}
+
 .brand-product{
   font-size: 12px;
   white-space: nowrap;
@@ -235,6 +250,11 @@ export default {
 
 .bg-gray-card{
   background-color: #E3E3E3;
+}
+
+.text-align-center{
+  text-align: center;
+  margin-top: 40px;
 }
 
 .price{
@@ -424,6 +444,11 @@ a:hover{
   border: 1px solid rgba(0, 0, 0, 0.061);
   padding: 7px;
   transition: all 1s;
+}
+
+.content-margin{
+  margin-top: 120px;
+  margin-bottom: 120px;
 }
 
 .cst-card:hover{

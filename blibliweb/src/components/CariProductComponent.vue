@@ -192,6 +192,9 @@ export default {
           .then(() => {
             this.dismissCountDown = this.dismissSecs;
             this.$router.push('/lelang');
+          })
+          .catch((er) => {
+            console.log(er.response);
           });
       } else {
         this.formAllFilled = false;

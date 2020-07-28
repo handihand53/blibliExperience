@@ -22,7 +22,7 @@
         </router-link>
       </div>
     </div>
-    <div class="text-align-center" v-if="show">
+    <div class="text-align-center content-margin" v-if="show">
       <img src="/assets/etc/people.png" alt=""
       class="img-empty">
       <h4 class="mt-1">Belum ada barang lagi nih!</h4>
@@ -202,6 +202,11 @@ p{
   padding: 2px 7px;
   border-radius: 10px;
   margin-bottom: 0px;
+}
+
+.content-margin{
+  margin-top: 120px;
+  margin-bottom: 120px;
 }
 
 .bid-product{
