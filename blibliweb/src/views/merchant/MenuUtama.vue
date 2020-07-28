@@ -5,7 +5,7 @@
     </div>
     <div class='bg'>
       <div>
-        <h5 class='p-4 text-center'>Handi Hermawan</h5>
+        <h5 class='p-4 text-center'>{{ userName }}</h5>
         <div class='p-2 d-flex align-content-start flex-wrap no-gutters'>
           <router-link to="/merchant/list-barang"
           class="width card text-center border-0 shadow-sm ml-auto mr-auto p-1">
@@ -50,10 +50,43 @@
 
 <script>
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
     Footer,
+  },
+  data() {
+    return {
+      userName: '',
+    };
+  },
+  async created() {
+    await this.checkLoginUser();
+  },
+  methods: {
+    async checkLoginUser() {
+      this.isLoggedIn = true;
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataIdMerchant');
+      // const dataShopId = Cookie.get('dataShopIdMerchant');
+      const dataToken = Cookie.get('dataTokenMerchant');
+      await axios.get(`http://localhost:${this.port}/experience/api/shops?userId=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((response) => {
+          this.userName = response.data.data.userName;
+        })
+        .catch(() => {
+          this.$router.push('/merchant/login');
+        });
+    },
   },
 };
 </script>

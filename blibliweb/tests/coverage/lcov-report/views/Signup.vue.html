@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">51.82% </span>
+                <span class="strong">51.85% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>57/110</span>
+                <span class='fraction'>56/108</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.14% </span>
+                <span class="strong">57.32% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>48/84</span>
+                <span class='fraction'>47/82</span>
             </div>
         
             
@@ -460,9 +460,7 @@
 <a name='L402'></a><a href='#L402'>402</a>
 <a name='L403'></a><a href='#L403'>403</a>
 <a name='L404'></a><a href='#L404'>404</a>
-<a name='L405'></a><a href='#L405'>405</a>
-<a name='L406'></a><a href='#L406'>406</a>
-<a name='L407'></a><a href='#L407'>407</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L405'></a><a href='#L405'>405</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -627,7 +625,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -754,8 +751,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -766,6 +761,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1016,8 +1012,7 @@ export default {
           } else {
             this.isLoading = false;
           }
-        }).catch((s) =&gt; {
-          console.log(s);
+        }).catch(() =&gt; {
           this.isLoading = false;
         });
     },
@@ -1026,11 +1021,11 @@ export default {
       if (id === 'password2') this.isContentVisible = !this.isContentVisible;
 &nbsp;
       const passwordField = document.getElementById(id);
-      if<span class="missing-if-branch" title="else path not taken" >E</span> (passwordField.getAttribute('type') === 'password') {
-        passwordField.setAttribute('type', 'text');
+      if (passwordField.getAttribute('type') === 'password') {
+        <span class="missing-if-branch" title="else path not taken" >E</span>passwordField.setAttribute('type', 'text');
       } else {
-        pa<span class="cstat-no" title="statement not covered" >sswordField.setAttribute</span>('type', 'password');
-      }
+        passwordField.setAttribute('type', 'password');
+      }<span class="cstat-no" title="statement not covered" ></span>
     },
     nameCheck() {
       if (this.nama === undefined || this.nama === '') {
@@ -1139,8 +1134,7 @@ export default {
               setTimeout(() =&gt; this.$router.push('/'), 1000);
             });
         })
-        .catch((e) =&gt; {
-          console.log(e);
+        .catch(() =&gt; {
         });
     },
   },
@@ -1158,19 +1152,19 @@ export default {
     cursor: not-allowed;
 }
 &nbsp;
-.invalid-feedback{<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  display: block;
-  visibility: h<span class="fstat-no" title="function not covered" >id</span>den;
-}<span class="cstat-no" title="statement not covered" ></span>
+.invalid-feedback{
+  display: block;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  visibility: hidden;
+}<span class="fstat-no" title="function not covered" ></span>
 &nbsp;
 .show{
   visibility: visible;
 }
 &nbsp;
 .password-field{
-    padding-right: 37px;
-    margin-top: 19px;<span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-1 cbranch-no" title="branch not covered" ></span></span>
-}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-1 cbranch-no" title="branch not covered" ></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
+    padding-right: 37px;<span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-1 cbranch-no" title="branch not covered" ></span></span>
+    margin-top: 19px;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-1 cbranch-no" title="branch not covered" ></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
+}
 &nbsp;
 .overlay-loading{
   z-index: 200;
@@ -1281,7 +1275,7 @@ export default {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Jul 10 2020 12:18:04 GMT+0700 (Indochina Time)
+                at Wed Jul 22 2020 22:42:50 GMT+0700 (Indochina Time)
             </div>
         </div>
         <script src="..\prettify.js"></script>

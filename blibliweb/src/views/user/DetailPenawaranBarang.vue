@@ -4,33 +4,75 @@
     <div class="overlay">
       <div class="modal-detail show-modal">
         <div class="p-2 pl-2 detail-barang-text" id="modal-show">
-          <p class="detail-title-product">Detail Penawaran Barang</p>
+          <p class="detail-title-product">Detail Order Lelang</p>
         </div>
         <div class="custom-detail-card">
           <div class="p-2">
             <div>
-              <p class="detail-title-product float-left">Samsung A10</p>
-              <p class="detail-tag-product float-right mt-1">Sudah dikonfirmasi</p>
+              <p class="detail-title-product float-left">
+                {{product.productBiddingForm.productBiddingName}}</p>
+              <p class="detail-tag-product float-right mt-1">
+                {{getStatus(product.biddingOrderStatus)}}</p>
             </div>
             <div style="clear: both;">
               <p class="brand-detail-product">
                 Brand:
-                <span class="blue-brand">Samsung</span>
+                <span class="blue-brand">
+                  {{product.productBiddingForm.productBiddingBrand}}</span>
               </p>
             </div>
           </div>
           <div class="overflow-y">
-            <div class="p-3 center">
-              <img src="@/assets/etc/aqua.png" alt class="detail-image-product p-3" />
+            <div class="p-3">
+              <div class="d-flex justify-content-center">
+                <b-carousel
+                    id="carousel-1"
+                    v-model="slide"
+                    :interval="0"
+                    indicators
+                    background="transparent"
+                    style="text-shadow: 1px 1px 2px #333;"
+                  >
+                    <!-- Text slides with image -->
+                    <b-carousel-slide
+                    v-for="(image, idx) in
+                    product.productBiddingForm.productBiddingImagePaths"
+                    :key="image+idx"
+                      :img-src="getImage(image)"
+                    ></b-carousel-slide>
+                  </b-carousel>
+              </div>
+              <div class="row m-0 p-0 mt-4">
+                <img
+                  v-for="(image, idx) in product.productBiddingForm.productBiddingImagePaths"
+                  :key="image+idx"
+                  :src="getImage(image)"
+                @click="moveSlider(idx)"
+                alt="" class="img-preview">
+              </div>
             </div>
             <div class="pl-3 mb-2">
-              <span class="uang-text">Bid awal</span>
-              <span class="price-detail-text ml-2">Rp13.000.000</span>
-            </div>
-            <hr class="m-0">
-            <div class="pl-3 mb-2">
-              <span class="uang-text">Bid anda</span>
-              <span class="price-detail-text ml-2">Rp13.000.000</span>
+              <table>
+                <tr>
+                  <td>
+                    <span class="uang-text">Bid</span>
+                  </td>
+                  <td>
+                    <span class="price-detail-text ml-2">
+                    Rp{{formatPrice(product.productBiddingForm.nextBid)}}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="uang-text">Bid anda</span>
+                  </td>
+                  <td>
+                    <span class="price-detail-text ml-2">
+                      Rp{{formatPrice(product.productBiddingForm.currentPrice)}}
+                    </span>
+                  </td>
+                </tr>
+              </table>
             </div>
             <div class="about-detail-product">
               <div class="p-3">
@@ -40,31 +82,44 @@
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Status Barang :
-                      <span class="tag">Baru</span>
+                      Status barang :
+                      <span class="tag">{{
+                        product.productBiddingForm.productBiddingCondition}}</span>
                     </p>
                   </div>
                   <div class="list-detail-tentang">
-                    <p class="text-detail-product">Lama Pemakaian : 3 Tahun 6 bulan</p>
+                    <p class="text-detail-product">Kelengkapan barang
+                      : {{product.productBiddingForm.productBiddingPackage}}</p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">Volume barang
+                      : {{product.productBiddingForm.productBiddingVolume}}</p>
+                  </div>
+                  <div class="list-detail-tentang">
+                    <p class="text-detail-product">Kelengkapan barang
+                      : {{product.productBiddingForm.productBiddingWeight}}</p>
                   </div>
                   <div class="list-detail-tentang">
                     <p class="text-detail-product">
-                      Deskripsi barang : Lorem ipsum dolor
-                      sit amet consectetur adipisicing elit. Neque reiciendis eos, doloribus
-                      veniam nobis praesentium nesciunt, voluptatum voluptas corporis ipsam
-                      exercitationem fugit perferendis quisquam ab voluptates voluptate doloremque
-                      quibusdam accusamus.
+                      Deskripsi barang :
+                      {{product.productBiddingForm.productBiddingDescription}}
                     </p>
                   </div>
+                </div>
+                <div
+                v-if="product.biddingOrderStatus
+                === 'PAID'">
+                  <small>Masukkan no resi pengiriman anda</small>
+                  <b-input v-model="resi" placeholder="No. Resi"></b-input>
+                  <small v-if="resiMsg" class="red">Masukkan no resi!</small>
+                  <b-button variant="primary" block class="mt-2"
+                  @click="sendProduct">Kirimkan Resi</b-button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="bottom-buy box-shadow">
-      <div>s</div>
     </div>
     <Footer/>
   </div>
@@ -73,6 +128,8 @@
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -81,11 +138,19 @@ export default {
   },
   data() {
     return {
-      isExpand: [
-        false,
-        false,
-      ],
+      product: {
+        productBiddingForm: {
+          productBiddingName: '',
+        },
+      },
+      slide: 0,
+      resi: '',
+      resiMsg: false,
     };
+  },
+  async created() {
+    await this.checkUser();
+    this.getDetail();
   },
   methods: {
     formatPrice(value) {
@@ -95,6 +160,93 @@ export default {
     expand(idx) {
       this.isExpand.splice(idx, 1, !this.isExpand[idx]);
     },
+    async checkUser() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .catch(() => {
+          this.$router.replace('/');
+        });
+    },
+    getDetail() {
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/biddingOrder?biddingOrderId=${this.$route.params.id}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((res) => {
+          this.product = res.data.data;
+          console.log(res);
+        })
+        .catch((re) => {
+          console.log(re.response);
+          // this.$router.replace('/');
+        });
+    },
+    getStatus(str) {
+      console.log(str);
+      if (str === 'WAITING_FOR_PAYMENT_FROM_BIDDING_WINNER') {
+        return 'Menunggu pembayaran';
+      }
+
+      if (str === 'PAID') {
+        return 'Sudah dibayar';
+      }
+
+      if (str === 'DELIVERED_TO_BIDDING_OWNER') {
+        return 'Barang sedang dikirim';
+      }
+
+      if (str === 'PAID_TO_WINNER') {
+        return 'Barang sudah diterima';
+      }
+
+      return '';
+    },
+    sendProduct() {
+      console.log(this.resi);
+      if (this.resi !== '') {
+        const resi = {
+          biddingOrderId: this.product.biddingOrderId,
+          deliveryReceipt: this.resi,
+        };
+        const dataToken = Cookie.get('dataToken');
+        axios.put(`http://localhost:${this.port}/experience/api/biddingOrder/deliveryReceipt`, resi,
+          {
+            headers:
+              {
+                Authorization: `Bearer ${dataToken}`,
+              },
+          })
+          .then((res) => {
+            console.log(res);
+            this.getDetail();
+          })
+          .catch(() => {
+            this.$router.replace('/');
+          });
+      } else {
+        this.resiMsg = true;
+      }
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/biddingProductPhoto/${path[path.length - 1]}`;
+    },
+    moveSlider(idx) {
+      this.slide = idx;
+    },
   },
 };
 </script>
@@ -102,6 +254,13 @@ export default {
 <style scoped>
 .hideIcon{
   display: none;
+}
+
+.img-preview{
+  width: 60px;
+  border: 0.8px gray solid;
+  padding: 5px;
+  margin-right: 10px;
 }
 
 .bottom-buy{
@@ -180,6 +339,10 @@ tr td{
   margin-right: 30px;
   color: #5A5A5A;
   font-size: 14px;
+}
+
+.red{
+  color: red;
 }
 
 .price-detail-text{
@@ -379,11 +542,6 @@ tr td{
     padding-bottom: 2px;
     display: inline-block;
     color: #AEAEAE;
-}
-
-.active{
-    border-bottom: 2px #0095DA solid;
-    color: #0095DA;
 }
 
 </style>

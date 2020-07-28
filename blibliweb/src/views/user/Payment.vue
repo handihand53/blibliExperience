@@ -7,47 +7,23 @@
     <div class="pl-2 pr-2 pb-2">
       <div class="custom-card">
         <div class="border-bottom pr-3 pt-2 pb-3" :class="{'bg-color': !isVirtual}">
-          <label class="container no-padding mt-1" @click="activePay('VA')">
+          <label class="container no-padding mt-1" @click="activePay('VA')" id='VA'>
             <input type="radio" checked="checked" name="radio" id="va">
             <span class="checkmark"></span>
           </label>
           <label for="va">Transfer via Virtual Account</label>
           <div class="ml-5 pt-1" :class="{'none': isVirtual}">
             <p class="label-text">Pilih Bank</p>
-            <select name="" id="" class="form-control mt-1 mb-1">
+            <select v-model="bank" class="form-control mt-1 mb-1">
               <option hidden selected disabled>--- Pilih Bank ---</option>
-              <option value="">BNI</option>
-              <option value="">BCA</option>
-              <option value="">Panin Bank</option>
+              <option value="BANK_TRANSFER_BNI">BNI</option>
+              <option value="BANK_TRANSFER_BCA">BCA</option>
+              <option value="BANK_TRANSFER_MANDIRI">MANDIRI</option>
             </select>
             <p class="mb-2 mt-2 label-text">Ketentuan :</p>
             <p class="deskripsi-text">Pilih metode pembayaran ini untuk melakukan
               pembayaran dengan ATM BNI / Mobile Banking BNI / Internet Banking BNI.
             Setelah Anda bayar, pesanan Anda akan langsung diproses.</p>
-          </div>
-        </div>
-        <div class="pt-2 pb-2 border-bottom pr-3" :class="{'bg-color-mid': !isDebit}">
-          <label class="container no-padding mt-1" @click="activePay('debit')">
-            <input type="radio" name="radio" id="kartuDebit">
-            <span class="checkmark"></span>
-          </label>
-          <label for="kartuDebit">Kartu Debit</label>
-           <div class="ml-5 pt-1" :class="{'none': isDebit}">
-            <p class="label-text">Pilih Kartu</p>
-            <select name="" id="" class="form-control mt-1 mb-1">
-              <option hidden selected disabled>--- Pilih Opsi Pembayaran---</option>
-              <option value="">Kartu Debit BNI</option>
-              <option value="">Kartu Debit BCA</option>
-              <option value="">Kartu Debit Bank</option>
-              <option value="">Kartu Debit Danamon</option>
-              <option value="">Kartu OCBC Nisp</option>
-              <option value="">Kartu Mega Debit</option>
-              <option value="">Kartu CIMB</option>
-            </select>
-           <img src="@/assets/icon/prima.jpg" alt="" class="mini-icon">
-           <img src="@/assets/icon/logo_bank_danamon.png" alt="" class="mini-icon">
-           <img src="@/assets/icon/mandiripng.png" alt="" class="mini-icon">
-           <img src="@/assets/icon/Jenius-logo.png" alt="" class="mini-icon">
           </div>
         </div>
         <div class="pt-2 pb-2 border-bottom pr-3" :class="{'bg-color-mid': !isGerai}">
@@ -59,11 +35,11 @@
           <p class="ml-5 desc-detail-pay">Alfa Group / Indomaret / Pos Indonesia</p>
            <div class="ml-5 pt-1" :class="{'none': isGerai}">
             <p class="label-text">Pilih gerai pembayaran</p>
-            <select name="" id="" class="form-control mt-1 mb-1">
+            <select v-model="bank" class="form-control mt-1 mb-1">
               <option hidden selected disabled>--- Pilih Opsi Pembayaran ---</option>
-              <option value="">Alfamart</option>
-              <option value="">Indomaret</option>
-              <option value="">Pos Indonesia</option>
+              <option value="ALFAMART">Alfamart</option>
+              <option value="INDOMART">Indomaret</option>
+              <option value="POS_INDONESIA">Pos Indonesia</option>
             </select>
            <img src="@/assets/icon/alfamart.png" alt="" class="mini-icon">
            <img src="@/assets/icon/Indomaret.png" alt="" class="mini-icon">
@@ -71,7 +47,8 @@
           </div>
         </div>
         <div class="pt-2 pb-2 pr-3" :class="{'bg-color-bot': !isElektronik}">
-          <label class="container no-padding mt-1" @click="activePay('elektronik')">
+          <label class="container no-padding mt-1" @click="activePay('elektronik')"
+          id="elektronik">
             <input type="radio" name="radio" id="elektronik">
             <span class="checkmark"></span>
           </label>
@@ -79,20 +56,21 @@
           <p class="ml-5 desc-detail-pay">Link aja, Sakuku, Ovo, Gopay</p>
           <div class="ml-5 pt-1" :class="{'none': isElektronik}">
             <p class="label-text">Pilih jenis uang elektronik</p>
-            <select name="" id="" class="form-control mt-1 mb-1">
+            <select v-model="bank" class="form-control mt-1 mb-1">
               <option hidden selected disabled>--- Pilih Opsi Pembayaran ---</option>
-              <option value="">Link aja</option>
-              <option value="">Ovo</option>
-              <option value="">Sakuku</option>
-              <option value="">Gopay</option>
+              <option value="LINK_AJA">Link aja</option>
+              <option value="OVO">Ovo</option>
+              <option value="GOPAY">Gopay</option>
             </select>
            <img src="@/assets/icon/link-aja.png" alt="" class="mini-icon">
-           <img src="@/assets/icon/sakuku.png" alt="" class="mini-icon">
            <img src="@/assets/icon/ovo.png" alt="" class="mini-icon">
            <img src="@/assets/icon/gopay.png" alt="" class="mini-icon">
           </div>
         </div>
       </div>
+    </div>
+    <div class="px-2 hint" v-if="isBank">
+      Pilih metode pembayaran!
     </div>
     <div class="mt-4 border pl-3 pt-3 pb-2" style="margin-bottom: 80px;">
       <p style="color: gray;">Belanja anda dijamin aman</p>
@@ -104,7 +82,7 @@
       <div class="row no-margin no-padding">
         <div class="col-7 no-padding pl-3">
           <p class="no-margin jumlah-total-text">Jumlah Total</p>
-          <p class="price">Rp3.000</p>
+          <p class="price">Rp{{formatPrice(amount)}}</p>
         </div>
         <div class="col-5 no-padding right" style="padding: 0;">
           <button @click="pay" class="btn-checkout">Lanjut</button>
@@ -124,6 +102,8 @@
 
 <script>
 import PaymentHeader from '@/components/PaymentHeader.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -136,7 +116,14 @@ export default {
       isDebit: true,
       isVirtual: false,
       isLoading: false,
+      bank: '',
+      amount: 0,
+      isBank: false,
     };
+  },
+  async created() {
+    await this.checkUser();
+    this.getOrderDetail();
   },
   methods: {
     activePay(str) {
@@ -164,8 +151,70 @@ export default {
     },
     pay() {
       // add logic checkout here
-      this.isLoading = true;
-      setTimeout(() => this.$router.push('/detailPayment'), 1000);
+      if (this.bank !== '') {
+        const pay = {
+          orderId: this.$route.params.id,
+          paymentType: this.bank,
+        };
+        const dataToken = Cookie.get('dataToken');
+        axios.post(`http://localhost:${this.port}/experience/api/payment`, pay,
+          {
+            headers:
+              {
+                Authorization: `Bearer ${dataToken}`,
+              },
+          })
+          .then(() => {
+            this.isLoading = true;
+            setTimeout(() => this.$router.replace('/sukses'), 1000);
+          })
+          .catch(() => {
+            this.$router.replace('/');
+          });
+      } else {
+        this.isBank = true;
+      }
+    },
+    checkUser() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .catch(() => {
+          this.$router.replace('/');
+        });
+    },
+    getOrderDetail() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/order?orderId=${this.$route.params.id}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((res) => {
+          res.data.data.cartForms.forEach((element) => {
+            this.amount += element.amount * element.stockForm.productPrice;
+          });
+          console.log(res);
+        })
+        .catch(() => {
+          this.$router.replace('/');
+        });
+    },
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     },
   },
 };
@@ -310,6 +359,11 @@ p{
   -ms-user-select: none;
   user-select: none;
   margin-left: 15px;
+}
+
+.hint{
+  color: red;
+  font-size: 12px;
 }
 
 /* Hide the browser's default radio button */

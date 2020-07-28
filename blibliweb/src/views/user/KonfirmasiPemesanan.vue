@@ -11,10 +11,10 @@
         name="method"
         id="method"
         @change="changeMethod"
-        ref="methode">
-          <option value=null>- Pilih metode pengambilan -</option>
-          <option value=0>Ambil di Bliblimart</option>
-          <option value=1>Delivery</option>
+        v-model="methode">
+          <option value='null' selected disabled>- Pilih metode pengambilan -</option>
+          <option value='SELF_SERVICE'>Ambil di Bliblimart</option>
+          <option value='DELIVERY_TO_HOME'>Delivery</option>
         </select>
       </div>
     </div>
@@ -23,82 +23,34 @@
         <div class="d-flex justify-content-between">
           <p class="address-label pt-2">
           <font-awesome-icon icon="map-marker-alt" /> Alamat Pengiriman</p>
-          <p class="change-label pt-2" v-b-modal.modal-sm>ubah</p>
+          <router-link to="/profile">
+            <p class="change-label pt-2" v-b-modal.modal-sm>ubah</p>
+          </router-link>
         </div>
         <div class="cst-card pl-3 pr-3 pt-2">
           <p class="name-text">Handi Hermawan</p>
           <p class="address-text">Alamat :
-            <span class="color-gray">Jl. Juadi No.29, Kotabaru, Kec.
-            Gondokusuman, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55224</span>
+            <span class="color-gray" v-if="user.userAddressForms === null">-</span>
+            <span class="color-gray" v-else>{{user.userAddressForms[0].detail}}</span>
           </p>
-          <p class="name-text">0821203585645</p>
         </div>
+        <p class="p-1 fs-red mt-2" v-if="addressIsEmpty"
+        >Alamat tidak boleh kosong</p>
       </div>
-      <div class="cst-card mt-3 pt-2">
-        <p class="border-bottom shop-name pl-3 pb-3 pt-1">Nama
-          ssadTokas dkoasjd oajsd jas;joasjd oo</p>
-        <div class="col-12 row no-margin no-padding">
+      <div class="cst-card mt-2 pt-2">
+        <p class=" shop-name border-bottom pl-3 pb-3 pt-1">List Produk</p>
+        <div class="col-12 row no-margin no-padding border-bottom"
+        v-for="product in product" :key="product.stockForm.stockId">
           <div class="pl-3 col-4 no-padding">
-            <img src="@/assets/etc/aqua.png" alt="aqua"
+            <img :src="getImage(product.stockForm.productDataForm.productImagePaths[0])"
             class="img-product ml-auto mr-auto" >
           </div>
           <div class="col-8 no-padding pr-3">
-            <p class="product-name">Botol minum aqua mineral 300 ML</p>
-            <p class="total-product">Jumlah: 1</p>
-            <p class="price-product">Total Harga <span class="price">Rp3.000</span></p>
-          </div>
-        </div>
-        <hr>
-        <div class="col-12 row no-margin no-padding">
-          <div class="pl-3 col-4 no-padding">
-            <img src="@/assets/etc/aqua.png" alt="aqua"
-            class="img-product ml-auto mr-auto" >
-          </div>
-          <div class="col-8 no-padding pr-3">
-            <p class="product-name">Botol minum aqua mineral 300 ML</p>
-            <p class="total-product">Jumlah: 1</p>
-            <p class="price-product">Total Harga <span class="price">Rp3.000</span></p>
-          </div>
-        </div>
-      </div>
-      <div class="cst-card mt-3 pt-2">
-        <p class="border-bottom shop-name pl-3 pb-3 pt-1">Nama
-          ssadTokas dkoasjd oajsd jas;joasjd oo</p>
-        <div class="col-12 row no-margin no-padding">
-          <div class="pl-3 col-4 no-padding">
-            <img src="@/assets/etc/aqua.png" alt="aqua"
-            class="img-product ml-auto mr-auto" >
-          </div>
-          <div class="col-8 no-padding pr-3">
-            <p class="product-name">Botol minum aqua mineral 300 ML</p>
-            <p class="total-product">Jumlah: 1</p>
-            <p class="price-product">Total Harga <span class="price">Rp3.000</span></p>
-          </div>
-        </div>
-        <hr>
-        <div class="col-12 row no-margin no-padding">
-          <div class="pl-3 col-4 no-padding">
-            <img src="@/assets/etc/aqua.png" alt="aqua"
-            class="img-product ml-auto mr-auto" >
-          </div>
-          <div class="col-8 no-padding pr-3">
-            <p class="product-name">Botol minum aqua mineral 300 ML</p>
-            <p class="total-product">Jumlah: 1</p>
-            <p class="price-product">Total Harga <span class="price">Rp3.000</span></p>
-          </div>
-        </div>
-      </div>
-      <div class="cst-card mt-3 pt-2">
-        <p class=" shop-name border-bottom pl-3 pb-3 pt-1">Nama Toko</p>
-        <div class="col-12 row no-margin no-padding">
-          <div class="pl-3 col-4 no-padding">
-            <img src="@/assets/etc/aqua.png" alt="aqua"
-            class="img-product ml-auto mr-auto" >
-          </div>
-          <div class="col-8 no-padding pr-3">
-            <p class="product-name">Botol minum aqua mineral 300 ML</p>
-            <p class="total-product">Jumlah: 1</p>
-            <p class="price-product">Total Harga <span class="price">Rp3.000</span></p>
+            <p class="product-name">{{ product.stockForm.productDataForm.productName }}</p>
+            <p class="total-product">Jumlah: {{ product.amount }}</p>
+            <p class="total-product blue">{{ product.stockForm.shopForm.shopName }}</p>
+            <p class="price-product">Total Harga
+              <span class="price">Rp{{ formatPrice(product.stockForm.productPrice) }}</span></p>
           </div>
         </div>
       </div>
@@ -107,15 +59,20 @@
       <div class="cst-card mt-1 mb-cst">
         <div class="col-12 row no-margin no-padding">
           <p class="detail pt-2 pl-3 pb-1 col-6">Total Belanja</p>
-          <p class="detail-price-total pt-2 pl-3 pb-1 col-6">Rp365.000.000</p>
+          <p class="detail-price-total pt-2 pl-3 pb-1 col-6">Rp{{
+            formatPrice(this.price)}}</p>
         </div>
-        <div class="col-12 row no-margin no-padding border-bottom">
+        <!-- <div class="col-12 row no-margin no-padding border-bottom"
+        v-if="methode !== 'SELF_SERVICE'">
           <p class="detail pt-2 pl-3 pb-1 col-6">Biaya Pengiriman</p>
           <p class="detail-price-total pt-2 pl-3 pb-1 col-6">Rp13.000</p>
-        </div>
+        </div> -->
+        <hr class="m-0 px-2">
         <div class="col-12 row no-margin no-padding">
           <p class="detail pt-2 pl-3 pb-1 col-6">Total Pembayaran</p>
-          <p class="detail-price-total pt-2 pl-3 pb-1 col-6">Rp365.013.000</p>
+          <p class="detail-price-total pt-2 pl-3 pb-1 col-6">Rp
+            {{formatPrice(price)}}
+          </p>
         </div>
       </div>
     </div>
@@ -123,10 +80,11 @@
       <div class="row no-margin no-padding">
         <div class="col-7 no-padding pl-3">
           <p class="no-margin jumlah-total-text">Jumlah Total</p>
-          <p class="price">Rp3.000</p>
+          <p class="price">Rp{{formatPrice(price)}}</p>
         </div>
         <div class="col-5 no-padding right">
-          <button @click="confirmProduct" class="btn-checkout">Lanjut</button>
+          <button @click="confirmProduct" class="btn-checkout"
+          :disabled="addressIsEmpty">Lanjut</button>
         </div>
       </div>
     </div>
@@ -174,6 +132,8 @@
 
 <script>
 import ConfirmHeader from '@/components/ConfirmHeader.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -188,22 +148,98 @@ export default {
         false,
         false,
       ],
+      product: [],
+      methode: 'SELF_SERVICE',
+      cartId: '',
+      price: 0,
+      productList: [],
+      user: '',
+      addressIsEmpty: false,
     };
   },
+  async created() {
+    await this.getFirstData();
+    await this.checkUser();
+    this.changeMethod();
+  },
   methods: {
+    async getFirstData() {
+      if (localStorage.length === 0) {
+        this.$router.replace('/');
+      }
+      this.product = JSON.parse(localStorage.getItem('data'));
+      this.cartId = JSON.parse(localStorage.getItem('cartId'));
+
+      await this.product.forEach((data) => {
+        this.productList.push(data.stockForm.stockId);
+        this.price += data.amount * data.stockForm.productPrice;
+      });
+    },
+    checkUser() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((res) => {
+          this.user = res.data.data;
+          console.log(this.user);
+        })
+        .catch(() => {
+          this.$router.replace('/');
+        });
+    },
     confirmProduct() {
       // add logic checkout here
       this.isLoading = true;
-      setTimeout(() => this.$router.push('/pay'), 1000);
+      const confirm = {
+        cartId: this.cartId,
+        deliveryType: this.methode,
+        productStockIdList: this.productList,
+        shopId: this.product[0].stockForm.shopForm.shopId,
+      };
+      const dataToken = Cookie.get('dataToken');
+      axios.post(`http://localhost:${this.port}/experience/api/order`, confirm,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((res) => {
+          localStorage.clear();
+          setTimeout(() => this.$router.push(`/pay/${res.data.data.orderId}`), 1000);
+        })
+        .catch(() => {
+          this.$router.replace('/');
+        });
     },
     confirmLocation() {
       console.log('ok');
     },
     changeMethod() {
-      if (this.$refs.methode.value === '1') {
+      if (this.methode === 'SELF_SERVICE') {
         this.isDelivery = true;
+        // if (this.methode === 'SELF_SERVICE') {
+        //   this.price -= 13000;
+        // }
       } else {
         this.isDelivery = false;
+        if (this.user.userAddressForms === null) {
+          console.log('sad');
+          this.addressIsEmpty = true;
+        } else {
+          this.addressIsEmpty = false;
+        }
+        // if (this.methode !== 'SELF_SERVICE') {
+        //   this.price += 13000;
+        // }
       }
     },
     changeLocation(idx) {
@@ -213,6 +249,14 @@ export default {
           this.isChoosen.splice(i, 1, false);
         }
       }
+    },
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
     },
   },
 };
@@ -232,6 +276,11 @@ export default {
 
 .mb-cst{
   margin-bottom: 75px;
+}
+
+.fs-red{
+  font-size: 12px;
+  color: red;
 }
 
 .mod-bod{
@@ -303,6 +352,10 @@ export default {
   background: #e86c00 radial-gradient(circle, transparent 1%, #e86c00 1%)
     center/15000%;
   color: white;
+}
+
+.blue{
+  color:rgb(0, 149, 255)!important;
 }
 
 .btn-checkout:active {

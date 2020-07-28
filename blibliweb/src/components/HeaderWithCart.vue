@@ -12,6 +12,7 @@
               <font-awesome-icon class="toggle-dropdown"
               :class="{rotate: isRotate}" icon="ellipsis-v" />
               <router-link to="/cart">
+                <div class="notif">{{amount}}</div>
                 <img src="@/assets/logo/blibli_wht_logoonly.png" class="stash-icon" alt="">
               </router-link>
             </div>
@@ -43,13 +44,19 @@
 </template>
 
 <script type="text/javascript">
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   data() {
     return {
       isRotate: false,
       isVisible: false,
+      amount: 0,
     };
+  },
+  created() {
+    this.getCart();
   },
   methods: {
     back() {
@@ -58,6 +65,20 @@ export default {
     dropdown() {
       this.isRotate = !this.isRotate;
       this.isVisible = !this.isVisible;
+    },
+    getCart() {
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/carts?userId=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((response) => {
+          this.amount = response.data.data.cartForms.length;
+        });
     },
   },
 };
@@ -68,6 +89,22 @@ export default {
 
 $break-small: 720px;
 $break-large: 730px;
+
+.notif{
+  text-align: center;
+  background-color: red;
+  color: white;
+  display: inline-block;
+  position: absolute;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  width: 18px;
+  height: 18px;
+  top: -10px;
+  right: 28px;
+  z-index: 10;
+}
 
 .stash-icon{
     position: absolute;

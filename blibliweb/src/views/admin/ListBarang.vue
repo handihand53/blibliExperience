@@ -7,58 +7,33 @@
     <div class="p-2 sticky shadow-sm">
       <b-input-group>
         <b-form-input
+        v-model="searchKey"
         placeholder="Cari"
         ></b-form-input>
         <b-input-group-append>
-          <b-button size="sm" variant="primary">
+          <b-button size="sm" variant="primary"
+          @click="searchProduk">
             <font-awesome-icon
             icon="search"/>
           </b-button>
         </b-input-group-append>
       </b-input-group>
     </div>
-    <div class="p-2">
-      <div class="row border card no-gutters shadow-sm p-3 mt-1"
+    <div class="p-1" v-for="data in listOfData" v-bind:key="data.productId">
+      <div class="row border card no-gutters shadow-sm p-3"
       style="flex-direction: row!important;">
-        <div class="col-4">
-          <img src="@/assets/etc/aqua.png" alt="" class="img-product">
-        </div>
-        <div class="col-8 column">
-          <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-          <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-          <p class="deskripsi">Deskripsi: Xiaomi Redmi 6A mempuyai dimensi
-            tinggi 147,5mm, lebar 71,5...</p>
-          <button class="btn btn-outline-primary pl-5 pr-5 float-right">Lihat</button>
-        </div>
-      </div>
-      <div class="row border card no-gutters shadow-sm p-3 mt-1"
-      style="flex-direction: row!important;">
-        <div class="col-4">
-          <img src="@/assets/etc/aqua.png" alt="" class="img-product">
-        </div>
-        <div class="col-8 column">
-          <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-          <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-          <p class="deskripsi">Deskripsi: Xiaomi Redmi 6A mempuyai dimensi
-            tinggi 147,5mm, lebar 71,5...</p>
-          <button class="btn btn-outline-primary pl-5 pr-5 float-right">Lihat</button>
-        </div>
-      </div>
-      <div class="row border card no-gutters shadow-sm p-3 mt-1"
-      style="flex-direction: row!important;">
-        <div class="col-4">
-          <img src="@/assets/etc/aqua.png" alt="" class="img-product">
-        </div>
-        <div class="col-8 column">
-          <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-          <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-          <p class="deskripsi">Deskripsi: Xiaomi Redmi 6A mempuyai dimensi
-            tinggi 147,5mm, lebar 71,5...</p>
-          <button class="btn btn-outline-primary pl-5 pr-5 float-right">Lihat</button>
+        <div class="column">
+          <p class="title-product">{{ data.productName }}</p>
+          <p class="brand-product">Brand: <span class="brand">{{ data.productBrand }}</span></p>
+          <p class="deskripsi mt-1">{{ getDescription(data.productDescription) }}</p>
+          <router-link :to='"/admin/list-barang/detail/"+data.productId'>
+            <b-button size="sm" variant="outline-primary" class="float-right px-3 py-1">
+              Lihat Detail
+            </b-button>
+          </router-link>
         </div>
       </div>
     </div>
-    <BottomNavMerchant/>
     <Footer/>
   </div>
 </template>
@@ -66,13 +41,79 @@
 <script>
 import PlainHeaderMarket from '@/components/PlainHeaderMarket.vue';
 import Footer from '@/components/Footer.vue';
-import BottomNavMerchant from '@/components/BottomNavMerchant.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
     PlainHeaderMarket,
-    BottomNavMerchant,
     Footer,
+  },
+  data() {
+    return {
+      listOfData: [],
+      searchKey: '',
+    };
+  },
+  async created() {
+    await this.checkLoginUser();
+    await this.getListProduct();
+  },
+  methods: {
+    async checkLoginUser() {
+      this.isLoggedIn = true;
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataIdAdmin');
+      const dataToken = Cookie.get('dataTokenAdmin');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .catch(() => {
+          this.$router.replace('/admin/login');
+        });
+    },
+    async getListProduct() {
+      this.isLoggedIn = true;
+      const dataToken = Cookie.get('dataTokenAdmin');
+      const dataCount = 0;
+      await axios.get(`http://localhost:${this.port}/experience/api/products/getAll?skipCount=${dataCount}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          this.listOfData = response.data.data;
+        });
+    },
+    getDescription(str) {
+      if (str.length > 180) {
+        return `${str.substr(0, 180)} ...`;
+      }
+      return str;
+    },
+    async searchProduk() {
+      const dataToken = Cookie.get('dataTokenAdmin');
+      await axios.get(`http://localhost:${this.port}/experience/api/products/search?searchKey=${this.searchKey}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((response) => {
+          this.listOfData = response.data.data;
+        });
+    },
+  },
+  computed: {
   },
 };
 </script>
@@ -122,6 +163,11 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 0px;
+}
+
+.brand{
+  color: rgb(45, 105, 223);
+  font-weight: 600;
 }
 
 .no-margin{

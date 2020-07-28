@@ -3,15 +3,15 @@
     <PlainHeaderMarket/>
     <div class="text-center pt-4 pb-2 column">
       <img src="@/assets/logo/signature.png" alt="" class="profile-logo">
-      <h5 class="mt-2 mb-0">Fu Store</h5>
+      <h5 class="mt-2 mb-0">{{ nama }}</h5>
       <p class="mb-0">Market</p>
-      <small>Sejak Nov 2010</small>
+      <small>Sejak {{ getMonthYear }}</small>
     </div>
     <div class="pl-3 pr-3">
-      <label for="email">Email Login<span class="red">*</span></label>
-      <b-form-input type="email" class="form-control" id="email"
-      placeholder="Email"
-      v-model="email" trim @change="checkAll"
+      <label for="nama">Nama Merchant<span class="red">*</span></label>
+      <b-form-input type="text" class="form-control" id="nama"
+      placeholder="Nama Merchant"
+      v-model="nama" trim
       disabled></b-form-input>
       <div class="row mt-3 no-gutters">
         <div>
@@ -34,7 +34,6 @@
         rows="3"
         max-rows="6"
         trim
-        @change="checkAll"
       ></b-form-textarea>
     </div>
     <div class="p-3">
@@ -43,6 +42,7 @@
       </router-link>
       <b-button class="col-12 simpan-btn mt-3" variant="warning">Simpan</b-button>
     </div>
+    <BottomNavMerchant/>
     <Footer/>
   </div>
 </template>
@@ -50,11 +50,61 @@
 <script>
 import PlainHeaderMarket from '@/components/PlainHeaderMarket.vue';
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
+import BottomNavMerchant from '@/components/BottomNavMerchant.vue';
 
 export default {
   components: {
     PlainHeaderMarket,
+    BottomNavMerchant,
     Footer,
+  },
+  data() {
+    return {
+      email: '',
+      hp: '',
+      alamat: '',
+      nama: '',
+      monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+      ],
+      createdAt: '',
+    };
+  },
+  async created() {
+    await this.checkLoginUser();
+  },
+  methods: {
+    async checkLoginUser() {
+      this.isLoggedIn = true;
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataIdMerchant');
+      // const dataShopId = Cookie.get('dataShopIdMerchant');
+      const dataToken = Cookie.get('dataTokenMerchant');
+      await axios.get(`http://localhost:${this.port}/experience/api/shops?userId=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((response) => {
+          this.nama = response.data.data.shopName;
+          this.createdAt = response.data.data.shopCreatedAt;
+          this.alamat = response.data.data.shopAddress.kota;
+        })
+        .catch(() => {
+          this.$router.push('/merchant/login');
+        });
+    },
+  },
+  computed: {
+    getMonthYear() {
+      const theDate = new Date(this.createdAt);
+      return `${this.monthNames[theDate.getMonth()]} ${theDate.getFullYear()}`;
+    },
   },
 };
 </script>

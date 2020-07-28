@@ -28,7 +28,7 @@
               <p class="label">Konfirmasi Barter</p>
             </div>
           </router-link>
-          <router-link to="/merchant/pemberitahuan"
+          <router-link to="/merchant/login"
           class="width card text-center border-0 shadow-sm ml-auto mr-auto p-1">
             <img src="@/assets/icon/logout.png" alt="" class="img-icon ml-auto mr-auto m-2">
             <p class="label">Keluar</p>
@@ -36,21 +36,78 @@
         </div>
       </div>
     </div>
-    <Footer />
+    <Footer/>
+    <div class="overlay-loading d-flex align-items-center"
+    :class="{hide: !isLoading}">
+      <b-spinner
+      type="grow"
+      variant="primary"
+      class="ml-auto mr-auto spinner"
+      ></b-spinner>
+    </div>
   </div>
 </template>
 
 <script>
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
     Footer,
   },
+  data() {
+    return {
+      isLoggedIn: false,
+      isLoading: false,
+    };
+  },
+  async created() {
+    await this.checkLoginUser();
+  },
+  methods: {
+    async checkLoginUser() {
+      this.isLoggedIn = true;
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataIdAdmin');
+      const dataToken = Cookie.get('dataTokenAdmin');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .catch(() => {
+          this.$router.replace('/admin/login');
+        });
+    },
+  },
 };
 </script>
 
 <style scoped>
+.overlay-loading{
+  z-index: 200;
+  background-color: #0000006a;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+
+.hide{
+  display: none!important;
+}
+
+.spinner{
+  width: 50px;
+  height: 50px;
+}
+
 .bg-blue {
   background-color: #0095da;
 }

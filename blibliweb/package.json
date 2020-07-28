@@ -29,6 +29,7 @@
     "vue-barcode": "^1.2.0",
     "vue-barcode-reader": "0.0.3",
     "vue-barcode-scanner": "^0.6.0",
+    "vue-bootstrap-typeahead": "^0.2.6",
     "vue-cookie": "^1.1.4",
     "vue-full-calendar": "^2.7.0",
     "vue-mapbox": "^0.4.1",
@@ -55,7 +56,8 @@
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-vue": "^6.1.2",
     "jest": "^26.1.0",
-    "node-sass": "^4.12.0",
+    "jest-transform-stub": "^2.0.0",
+    "node-sass": "^4.14.1",
     "sass-loader": "^8.0.2",
     "sonarqube-scanner": "^2.6.0",
     "vue-template-compiler": "^2.6.11"

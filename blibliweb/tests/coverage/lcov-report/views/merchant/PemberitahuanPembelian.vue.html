@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -36,16 +36,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -144,11 +144,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -159,19 +159,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -201,9 +201,9 @@
       &lt;small class="text-gray"&gt;Pemberitahuan Pembelian&lt;/small&gt;
       &lt;div&gt;
         &lt;small class="text-gray bold mr-3" :class="{active: isActive}"
-        @click="pesananMasuk"&gt;Pesanan Masuk&lt;/small&gt;
+        @click="pesananMasuk" id="pesananMasuk"&gt;Pesanan Masuk&lt;/small&gt;
         &lt;small class="text-gray bold" :class="{active: !isActive}"
-        @click="riwayat"&gt;Riwayat&lt;/small&gt;
+        @click="riwayat" id="riwayat"&gt;Riwayat&lt;/small&gt;
       &lt;/div&gt;
     &lt;/div&gt;
     &lt;component :is="currentComponent"&gt;&lt;/component&gt;
@@ -213,11 +213,11 @@
 &lt;/template&gt;
 &nbsp;
 &lt;script&gt;
-<span class="cstat-no" title="statement not covered" >import PlainHeaderMarket from '@/components/PlainHeaderMarket.vue';</span>
-<span class="cstat-no" title="statement not covered" >import Footer from '@/components/Footer.vue';</span>
-<span class="cstat-no" title="statement not covered" >import BottomNavMerchant from '@/components/BottomNavMerchant.vue';</span>
-<span class="cstat-no" title="statement not covered" >import PesananMasukMerchant from '@/components/PesananMasukMerchant.vue';</span>
-<span class="cstat-no" title="statement not covered" >import RiwayatMerchant from '@/components/RiwayatMerchant.vue';</span>
+import PlainHeaderMarket from '@/components/PlainHeaderMarket.vue';
+import Footer from '@/components/Footer.vue';
+import BottomNavMerchant from '@/components/BottomNavMerchant.vue';
+import PesananMasukMerchant from '@/components/PesananMasukMerchant.vue';
+import RiwayatMerchant from '@/components/RiwayatMerchant.vue';
 &nbsp;
 export default {
   components: {
@@ -227,20 +227,20 @@ export default {
     RiwayatMerchant,
     Footer,
   },
-<span class="fstat-no" title="function not covered" >  data() {</span>
-<span class="cstat-no" title="statement not covered" >    return {</span>
+  data() {
+    return {
       isActive: true,
       currentComponent: PesananMasukMerchant,
     };
   },
   methods: {
-<span class="fstat-no" title="function not covered" >    pesananMasuk() {</span>
-<span class="cstat-no" title="statement not covered" >      this.isActive = true;</span>
-<span class="cstat-no" title="statement not covered" >      this.currentComponent = PesananMasukMerchant;</span>
+    pesananMasuk() {
+      this.isActive = true;
+      this.currentComponent = PesananMasukMerchant;
     },
-<span class="fstat-no" title="function not covered" >    riwayat() {</span>
-<span class="cstat-no" title="statement not covered" >      this.isActive = false;</span>
-<span class="cstat-no" title="statement not covered" >      this.currentComponent = RiwayatMerchant;</span>
+    riwayat() {
+      this.isActive = false;
+      this.currentComponent = RiwayatMerchant;
     },
   },
 };
@@ -270,7 +270,7 @@ export default {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Jul 10 2020 12:18:04 GMT+0700 (Indochina Time)
+                at Wed Jul 22 2020 22:42:50 GMT+0700 (Indochina Time)
             </div>
         </div>
         <script src="..\..\prettify.js"></script>

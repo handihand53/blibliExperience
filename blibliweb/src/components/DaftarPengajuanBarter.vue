@@ -1,48 +1,101 @@
 <template>
   <div class="p-2">
-    <div class="custom-card box-shadow p-3 row no-margin">
+    <div class="custom-card box-shadow p-3 row no-margin"
+    v-for="product in product" :key="product.productBarterId">
       <div class="col-4 no-margin no-padding">
-        <img src="@/assets/etc/aqua.png" alt="" class="img-product">
+        <img :src="getImage(product.productBarterImagePaths[0])"
+        alt="" class="img-product">
       </div>
-      <div class="col-8 no-margin  no-padding">
-        <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-        <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
+      <div class="col-8 no-margin no-padding">
+        <p class="title-product">{{
+          product.productBarterName
+          }}</p>
+        <p class="brand-product">Brand: <span class="brand">{{
+          product.productBarterBrand}}</span></p>
         <!-- <span class="status-tag success">Sudah Dikonfirmasi</span> -->
-        <p class="desc-product">Deskripsi: Lorem ipsum dolor, sit amet
-          consectetur adipisicing elit.</p>
-        <router-link to="/detail-pengajuan-barter">
+        <p class="desc-product">Deskripsi: {{
+          getDeskripsi(product.productBarterDescription)
+        }}
+        </p>
+        <router-link :to="'/barter/detail-pengajuan/'+product.productBarterId">
           <button class="buy-btn">Lihat Detail</button>
         </router-link>
       </div>
     </div>
-    <div class="custom-card box-shadow p-3 row no-margin">
-      <div class="col-4 no-margin no-padding">
-        <img src="@/assets/etc/aqua.png" alt="" class="img-product">
-      </div>
-      <div class="col-8 no-margin  no-padding">
-        <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-        <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-        <!-- <span class="status-tag pending">Menunggu Konfirmasi</span> -->
-        <p class="desc-product">Deskripsi: Lorem ipsum dolor, sit amet
-          consectetur adipisicing elit.</p>
-        <button class="buy-btn">Lihat Detail</button>
-      </div>
-    </div>
-    <div class="custom-card box-shadow p-3 row no-margin">
-      <div class="col-4 no-margin no-padding">
-        <img src="@/assets/etc/aqua.png" alt="" class="img-product">
-      </div>
-      <div class="col-8 no-margin  no-padding">
-        <p class="title-product">Botol Minum Aqua Mineral 300ML</p>
-        <p class="brand-product">Brand: <span class="brand">Aqua</span></p>
-        <!-- <span class="status-tag fail">Ditolak</span> -->
-        <p class="desc-product">Deskripsi: Lorem ipsum dolor, sit amet
-          consectetur adipisicing elit.</p>
-        <button class="buy-btn">Lihat Detail</button>
-      </div>
+    <div class="text-align-center content-margin" v-if="show">
+      <img src="/assets/etc/people.png" alt=""
+      class="img-empty">
+      <h4 class="mt-1">Belum ada barang lagi nih!</h4>
+      <small>Mau tukar apa lagi ya ?<br>
+        Coba masukkan produk yang mau kamu tukar.</small>
+      <br>
+      <router-link to="/post-product" class="mt-3">Disini</router-link>
     </div>
   </div>
 </template>
+
+<script>
+import axios from 'axios';
+import Cookie from 'vue-cookie';
+
+export default {
+  data() {
+    return {
+      show: false,
+      product: '',
+    };
+  },
+  async created() {
+    await this.checkLoginUser();
+    await this.getBarterSubmission();
+  },
+  methods: {
+    async checkLoginUser() {
+    // melakukan check apakah user masih login atau tidak
+    // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .catch(() => {
+          this.$router.push('/');
+        });
+    },
+    async getBarterSubmission() {
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/barter/user?userId=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          this.product = res.data.data;
+        })
+        .catch(() => {
+          this.show = true;
+        });
+    },
+    getDeskripsi(str) {
+      if (str.length > 100) {
+        return str.substr(0, 100);
+      }
+      return str;
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/barterProductPhoto/${path[path.length - 1]}`;
+    },
+  },
+};
+</script>
 
 <style scoped>
 .list-detail-tentang{
@@ -107,6 +160,10 @@ p{
   font-size: 25px;
 }
 
+.img-empty{
+  width: 40%;
+}
+
 .detail-barang-text{
   background-color: white;
   border-bottom: solid 10px rgb(204, 204, 204);
@@ -129,6 +186,11 @@ p{
   margin-bottom: 0px;
 }
 
+.text-align-center{
+  text-align: center;
+  margin-top: 40px;
+}
+
 .detail-title-product::after{
   clear: left;
 }
@@ -140,6 +202,11 @@ p{
   padding: 2px 7px;
   border-radius: 10px;
   margin-bottom: 0px;
+}
+
+.content-margin{
+  margin-top: 120px;
+  margin-bottom: 120px;
 }
 
 .bid-product{

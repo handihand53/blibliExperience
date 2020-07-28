@@ -37,6 +37,17 @@ export default {
     PlainHeaderMarket,
     Footer,
   },
+  data() {
+    return {
+      sandiLama: '',
+      sandiBaru: '',
+      konfSandiBaru: '',
+    };
+  },
+  methods: {
+    checkAll() {
+    },
+  },
 };
 </script>
 

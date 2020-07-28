@@ -8,9 +8,9 @@
         </div>
         <div class="pl-2">
           <span @click="penawaranBarter" class="penawaran-barter"
-          :class="{active: isActive}">Barter</span>
+          :class="{active: isActive}" id="barter">Barter</span>
           <span @click="penawaranBarang" class="penawaran-barang"
-          :class="{active: !isActive}">Lelang</span>
+          :class="{active: !isActive}" id="lelang">Lelang</span>
         </div>
       </div>
       <component :is="currentComponent"></component>
@@ -24,6 +24,8 @@ import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import DaftarPenawaranBarter from '@/components/DaftarPenawaranBarter.vue';
 import DaftarPenawaranBarang from '@/components/DaftarPenawaranBarang.vue';
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -36,6 +38,9 @@ export default {
       currentComponent: DaftarPenawaranBarter,
     };
   },
+  async created() {
+    await this.checkUser();
+  },
   methods: {
     penawaranBarter() {
       this.isActive = true;
@@ -44,6 +49,22 @@ export default {
     penawaranBarang() {
       this.isActive = false;
       this.currentComponent = DaftarPenawaranBarang;
+    },
+    checkUser() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .catch(() => {
+          this.$router.replace('/');
+        });
     },
   },
 };

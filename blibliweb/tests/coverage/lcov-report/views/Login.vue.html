@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.86% </span>
+                <span class="strong">86.67% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>39/42</span>
+                <span class='fraction'>39/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.25% </span>
+                <span class="strong">77.78% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>13/16</span>
+                <span class='fraction'>14/18</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.86% </span>
+                <span class="strong">86.67% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>39/42</span>
+                <span class='fraction'>39/45</span>
             </div>
         
             
@@ -330,7 +330,17 @@
 <a name='L272'></a><a href='#L272'>272</a>
 <a name='L273'></a><a href='#L273'>273</a>
 <a name='L274'></a><a href='#L274'>274</a>
-<a name='L275'></a><a href='#L275'>275</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -463,7 +473,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -472,7 +481,12 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -633,10 +647,13 @@
             &lt;input v-model="password" id="password" type="password" placeholder="Kata Sandi"
             ref="pass"
             class="form-control password-field"&gt;
-            &lt;div class="invalid-feedback" :class="{show:passwordIsFalse, 'mb-3':passwordIsFalse}"&gt;
+            &lt;div class="invalid-feedback" :class="{show:passwordIsFalse, 'mb-1':passwordIsFalse}"&gt;
               {{ passwordMsg }}
             &lt;/div&gt;
             &lt;button @click="login" class="btn-masuk" id="login"&gt;Masuk&lt;/button&gt;
+            &lt;div class="invalid-feedback " :class="{show:!isLoggedIn}"&gt;
+              Email atau password salah !
+            &lt;/div&gt;
             &lt;p class="sign-information"&gt;Belum punya akun ?
               &lt;router-link to="/signup"&gt;Daftar disini&lt;/router-link&gt;
             &lt;/p&gt;
@@ -679,7 +696,7 @@ export default {
       passwordIsFalse: false,
       passwordMsg: '',
       password: '',
-      isLoggedIn: false,
+      isLoggedIn: true,
     };
   },
   async created() {
@@ -737,16 +754,20 @@ export default {
           userEmail: this.email,
           userPassword: this.password,
         };
-&nbsp;
         axios.post(`http://localhost:${this.port}/experience/api/auth/login`, login)
           .then((response) =&gt; {
-            console.log(response);
-            this.isLoggedIn = true;
-            Cookie.set('dataId', response.data.userId, 1); // set cookies dengan expired 1 hari
-            Cookie.set('dataToken', response.data.accessToken, 1); // set cookies dengan expired 1 hari
-<span class="fstat-no" title="function not covered" >            setTimeout(() =&gt; this.$router.push('/'), 1000); // jika login berhasil maka akan dilempar ke halaman utama</span>
+<span class="missing-if-branch" title="else path not taken" >E</span>            if (response.data.userRoles[0] === 'ROLE_USER') {
+              Cookie.set('dataId', response.data.userId, 1); // set cookies expired 1 hari
+              Cookie.set('dataToken', response.data.accessToken, 1); // set cookies expired 1 hari
+<span class="fstat-no" title="function not covered" >              setTimeout(() =&gt; this.$router.push('/'), 1000); // jika login berhasil maka akan dilempar ke halaman utama</span>
+              this.isLoggedIn = true;
+            } else {
+<span class="cstat-no" title="statement not covered" >              this.isLoggedIn = false;</span>
+<span class="cstat-no" title="statement not covered" >              this.isLoading = false;</span>
+            }
 <span class="fstat-no" title="function not covered" >          })</span>
           .catch(() =&gt; {
+<span class="cstat-no" title="statement not covered" >            this.isLoggedIn = false;</span>
 <span class="cstat-no" title="statement not covered" >            this.isLoading = false;</span>
           });
       }
@@ -885,7 +906,7 @@ export default {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Jul 10 2020 12:18:04 GMT+0700 (Indochina Time)
+                at Wed Jul 22 2020 22:42:50 GMT+0700 (Indochina Time)
             </div>
         </div>
         <script src="..\prettify.js"></script>

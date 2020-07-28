@@ -27,10 +27,13 @@
             <input v-model="password" id="password" type="password" placeholder="Kata Sandi"
             ref="pass"
             class="form-control password-field">
-            <div class="invalid-feedback" :class="{show:passwordIsFalse, 'mb-3':passwordIsFalse}">
+            <div class="invalid-feedback" :class="{show:passwordIsFalse, 'mb-1':passwordIsFalse}">
               {{ passwordMsg }}
             </div>
             <button @click="login" class="btn-masuk" id="login">Masuk</button>
+            <div class="invalid-feedback " :class="{show:!isLoggedIn}">
+              Email atau password salah !
+            </div>
             <p class="sign-information">Belum punya akun ?
               <router-link to="/signup">Daftar disini</router-link>
             </p>
@@ -73,7 +76,7 @@ export default {
       passwordIsFalse: false,
       passwordMsg: '',
       password: '',
-      isLoggedIn: false,
+      isLoggedIn: true,
     };
   },
   async created() {
@@ -131,16 +134,20 @@ export default {
           userEmail: this.email,
           userPassword: this.password,
         };
-
         axios.post(`http://localhost:${this.port}/experience/api/auth/login`, login)
           .then((response) => {
-            console.log(response);
-            this.isLoggedIn = true;
-            Cookie.set('dataId', response.data.userId, 1); // set cookies dengan expired 1 hari
-            Cookie.set('dataToken', response.data.accessToken, 1); // set cookies dengan expired 1 hari
-            setTimeout(() => this.$router.push('/'), 1000); // jika login berhasil maka akan dilempar ke halaman utama
+            if (response.data.userRoles[0] === 'ROLE_USER') {
+              Cookie.set('dataId', response.data.userId, 1); // set cookies expired 1 hari
+              Cookie.set('dataToken', response.data.accessToken, 1); // set cookies expired 1 hari
+              setTimeout(() => this.$router.push('/'), 1000); // jika login berhasil maka akan dilempar ke halaman utama
+              this.isLoggedIn = true;
+            } else {
+              this.isLoggedIn = false;
+              this.isLoading = false;
+            }
           })
           .catch(() => {
+            this.isLoggedIn = false;
             this.isLoading = false;
           });
       }

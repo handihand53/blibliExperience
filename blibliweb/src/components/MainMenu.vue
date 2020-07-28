@@ -1,152 +1,104 @@
 <template>
   <div>
-    <div class='card mt-2 ml-2 mr-2 pt-1 pb-1'>
+    <!-- <div class='card mt-2 ml-2 mr-2 pt-1 pb-1'>
       <div class='overflow-x'>
         <span class='category mr-2 ml-2'
         :class="{'un-active':true, active: !true}"
         @click="getProductByCategoryName('')">Semua</span>
         <span class='category mr-2'
         :class="{'un-active':category.categoryName, active: !category.categoryName}"
-        v-for='category in CategoriesDetails.data' v-bind:key='category.categoryId'
-        @click='getProductByCategoryName(category.categoryName)' :ref='category.categoryName'
-        >{{category.categoryName}}</span>
+        v-for='category in category' v-bind:key='category'
+        @click='getProductByCategoryName(category)' :ref='category'
+        >{{category}}</span>
       </div>
-    </div>
-    <!-- <div class="p-2" v-for='category in this.categoryNames' v-bind:key='category.categoryId'
-    :ref='category.categoryName'>
-      <p class="label-tag">{{category.categoryName}}</p>
+    </div> -->
+    <p class="label-tag font-weight-bold p-2">Produk Pilihan</p>
+    <div class="p-2" v-for='(category, idx) in this.category' v-bind:key='category'
+    :ref='category'>
+      <div class="d-flex justify-content-between">
+        <p class="label-tag">{{category}}</p>
+        <router-link :to="'/c/'+category">
+          <p class="label-tag">Lihat Semua</p>
+        </router-link>
+      </div>
       <div class="overflow-x m-0 p-0">
-        <router-link :to='"/detail-product/"+product.id' class='cst-card col-6'
-        v-for='product in this.ProductDetails'
-        v-bind:key='product.id'>
+        <router-link :to='"/detail-product/"+product.productDataForm.productId'
+        class='cst-card col-6'
+        v-for='product in product[idx]'
+        v-bind:key='product.productId'>
           <div class='align-items-start'>
             <div class="cont d-flex align-items-center">
-              <img :src='product.imgUrl[0]' :alt='product.productName'
+              <img :src='getImage(product.productDataForm.productImagePaths[0])'
+              :alt='product.productName'
               class='img-product ml-auto mr-auto'/>
             </div>
             <div class="mt-auto">
-              <p class='title-product'>{{product.productName}}</p>
-              <p class='product-price' title=product.productPrice>
+              <p class='title-product'>{{product.productDataForm.productName}}</p>
+              <p class="start-from">Harga mulai dari</p>
+              <p class='product-price' :title='product.productPrice'>
                 Rp.{{formatPrice(product.productPrice)}}
               </p>
             </div>
           </div>
         </router-link>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+// import { mapGetters, mapActions } from 'vuex';
 import axios from 'axios';
 
 export default {
   data() {
     return {
-      catParam: '',
+      category: '',
       categoryNames: null,
       allProduct: null,
-      products: [
-        {
-          id: 'kkjs-1231',
-          barcode: '9878654679854',
-          productName: 'Aqua 330ML',
-          productPrice: 2500,
-          imgUrl: [
-            './assets/etc/aqu.png',
-          ],
-          category: 'Minuman',
-          createdAt: 12322020564654,
-          status: 'Baru',
-          tag: 'Blimart',
-        },
-        {
-          id: 'kkjs-128981',
-          barcode: '9878654679854',
-          productName: 'Aqua 330ML',
-          productPrice: 2500,
-          imgUrl: [
-            './assets/etc/aqu.png',
-          ],
-          category: 'Minuman',
-          createdAt: 12322020564654,
-          status: 'Baru',
-          tag: 'Blimart',
-        },
-      ],
+      product: [],
+      startingIndex: 0,
     };
   },
   created() {
-    // this.$store.commit('productData/increment'); ==> mutation
-    // console.log(this.$store.state.productData.count); ==> state
-    // console.log(this.$store.getters['productData/doubleCount']); ==> getters
-    // this.$store.dispatch('productData/incrementIfOdd'); ==> action
-    const store = this.$store;
-    store.dispatch('productData/getProducts');
-    store.dispatch('productData/getCategory');
-    // this.CategoriesDetails.data.forEach((e) => {
-    //   console.log(e.categoryName);
-    // });
-    // this.categoryNames = await this.CategoriesDetails;
-    // console.log(this.categoryNames);
-    // this.allProduct = this.ProductDetails;
+    this.getAllCategory();
   },
   computed: {
-    ...mapGetters([
-      'productData/productList',
-      'productData/categoryList',
-    ]),
-    ProductDetails() {
-      console.log('terpanggil');
-      const store = this.$store;
-      return store.getters['productData/productList'].data;
-      // return store.getters['productData/productList']
-      // .data.filter((ele) => ele.category === this.catParam);
-    },
-    CategoriesDetails() {
-      console.log('category terpanggil');
-      const store = this.$store;
-      return store.getters['productData/categoryList'];
-    },
   },
   methods: {
-    ...mapActions([
-      'productData/getProducts',
-      'productData/getCategory',
-    ]),
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     },
-    getProductByCategoryName(category) {
-      this.catParam = category;
+    async getAllDataByCategory(cat) {
+      await axios.get(`http://localhost:${this.port}/experience/api/products/category?productCategory=${cat}&skipCount=${this.startingIndex}`)
+        .then((response) => {
+          this.product.push(response.data.data);
+        });
+      console.log(this.product);
     },
-    scroll() {
-      window.onscroll = () => {
-        const bottomOfWindow = document.documentElement.scrollTop
-        + window.innerHeight > document.documentElement.offsetHeight - 1;
-        if (bottomOfWindow) {
-          axios
-            .get('http://www.mocky.io/v2/5ec18a432f0000417a4c88c2?mocky-delay=50ms')
-            .then((response) => {
-              this.products.push(response.data.data[5]);
-              this.products.push(response.data.data[6]);
-              this.products.push(response.data.data[7]);
-              this.products.push(response.data.data[8]);
-            });
-        }
-      };
+    async getAllCategory() {
+      await axios.get(`http://localhost:${this.port}/experience/api/products/enums/category`)
+        .then((response) => {
+          this.category = response.data.data.categories;
+        });
+      console.log(this.category);
+      this.category.forEach((element) => {
+        this.getAllDataByCategory(element);
+      });
     },
-    setProduct(cat) {
-      console.log(this.allProduct.data.filter((ele) => ele.category === cat));
+    // getAllData() {
+    //   const count = 0;
+    //   axios.get(`http://localhost:${this.port}/experience/api/products/available?skipCount=${count}`)
+    //     .then((response) => {
+    //       this.allProduct = response.data.data;
+    //       console.log(this.allProduct);
+    //     });
+    // },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
     },
-  },
-  async mounted() {
-    const data = await axios.get('http://www.mocky.io/v2/5ec98a583000006b00a6ce11?mocky-delay=50ms');
-    this.allProduct = data;
-    console.log(data);
-    this.scroll();
   },
 };
 </script>
@@ -187,6 +139,10 @@ export default {
 .overflow-x{
   overflow-x: auto;
   white-space: nowrap;
+}
+
+.start-from{
+  font-size: 12px;
 }
 
 a:hover{

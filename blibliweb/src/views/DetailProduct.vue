@@ -3,9 +3,9 @@
     <HeaderWithCart/>
     <div class="">
       <div class="p-3 bg-white mt-3">
-        <p class="title-product">{{ ProductDetails.productName }}</p>
+        <p class="title-product">{{ allProduct.productName }}</p>
         <p class="brand-product">Brand:
-          <span class="brand">{{ ProductDetails.brand }}</span></p>
+          <span class="brand">{{ allProduct.productBrand }}</span></p>
           <b-carousel
             id="carousel-1"
             v-model="slide"
@@ -15,109 +15,51 @@
             background="transparent"
             style="text-shadow: 1px 1px 2px #333;"
           >
-            <!-- Text slides with image -->
-            <b-carousel-slide
-              :img-src=ProductDetails.imgUrl[0]
-            ></b-carousel-slide>
-             <b-carousel-slide
-              :img-src=ProductDetails.imgUrl[0]
-            ></b-carousel-slide>
-             <b-carousel-slide
-              :img-src=ProductDetails.imgUrl[0]
+            <b-carousel-slide v-for="image in allProduct.productImagePaths"
+              :key="image" :img-src="getImage(image)"
             ></b-carousel-slide>
           </b-carousel>
         <div class="row m-0 p-0 mt-4">
-          <img :src="ProductDetails.imgUrl[0]"
-          @click="moveSlider(0)"
-          alt="" class="img-preview">
-          <img :src="ProductDetails.imgUrl[0]"
-          @click="moveSlider(1)"
-          alt="" class="img-preview">
-          <img :src="ProductDetails.imgUrl[0]"
-          @click="moveSlider(2)"
+          <img :src="getImage(image)"
+          v-for="(image, idx) in allProduct.productImagePaths"
+          :key="image"
+          @click="moveSlider(idx)"
           alt="" class="img-preview">
         </div>
-        <p class="price-text">Harga <span class="price">
-          Rp{{ formatPrice(ProductDetails.productPrice) }}</span></p>
-        <hr>
-        <p @click="addToWishList"
-          class="wishlist-text">
-          <font-awesome-icon
-          class="f-icon"
-          icon="heart"/>
-           Wishlist</p>
+        <hr class="mt-3">
+        <p class="price-text"
+        v-if="this.currentIdx !== null">Harga <span class="price">
+          Rp{{ formatPrice(allProduct.productStockList[currentIdx].productPrice) }}</span></p>
       </div>
       <div class="bg-white mt-3 p-3">
         <p class="pilih-lokasi">Pilih Lokasi
           <span ref="lokasi" v-b-modal.modal-sm class="lokasi float-right">Pilih</span></p>
         <p class="selected-location">{{ currentLocation }}</p>
       </div>
-      <div class="bg-white mt-3 pb-2">
+      <div class="bg-white mt-3 pb-2" v-if="this.currentIdx !== null">
         <div class="p-3">
-          <div class="row no-margin no-padding col-12">
-            <b-form-group label="Metode Pengiriman">
-              <b-form-radio v-model="selected"
-              :disabled="ProductDetails.bliblimartStock === 0"
-              name="some-radios" value="A">
-                <div class="no-padding">
-                  <div class="d-flex justify-content-between row p-0 m-0">
-                   <table class="table m-0 p-0">
-                     <tr class="stock-item">
-                       <td>
-                        <p class="radio-text">Ambil langsung
-                          <img src="@/assets/logo/bliblimart2.png"
-                          class="blimart-icon" alt="">
-                        </p>
-                      </td>
-                      <td class="stock-table">
-                        <span v-if="this.ProductDetails.bliblimartStock
-                        > 0" class="stock ml-auto display-content">Stock Ada
-                          <font-awesome-icon
-                          class="f-icon"
-                          icon="check-circle"/>
-                        </span>
-                        <span v-else
-                        class="stock-red display-content ml-auto">Tidak Ada
-                          <font-awesome-icon
-                          class="f-icon"
-                          icon="times-circle"/>
-                        </span>
-                      </td>
-                     </tr>
-                   </table>
-                  </div>
-                </div>
-                <p class="radio-text-desc">Ambil barang langsung di bliblimart</p>
-              </b-form-radio>
-              <b-form-radio v-model="selected" name="some-radios"
-              :disabled="ProductDetails.deliveryStock === 0" value="B">
-                <div class="no-padding">
-                  <div class="d-flex justify-content-between row p-0 m-0">
-                   <table class="table m-0 p-0">
-                     <tr class="stock-item">
-                       <td>
-                        <p class="radio-text">Pengiriman Langsung</p>
-                      </td>
-                      <td class="text-right">
-                        <span v-if="this.ProductDetails.deliveryStock
-                        > 0" class="stock">Stock Ada
-                          <font-awesome-icon
-                          class="f-icon"
-                          icon="check-circle"/>
-                        </span>
-                        <span v-else class="stock-red">Tidak Ada
-                          <font-awesome-icon
-                          class="f-icon-red"
-                          icon="times-circle"/>
-                        </span>
-                      </td>
-                     </tr>
-                   </table>
-                  </div>
-                </div>
-                <p class="radio-text-desc">Barang akan dikirim langsung ke tempat anda</p>
-              </b-form-radio>
-            </b-form-group>
+          <label for="">Ketersediaan Barang</label>
+          <hr>
+          <div class="no-margin no-padding">
+            <span v-if="allProduct.productStockList[currentIdx].productStock
+              > 0"
+              class="stock">Stock Ada
+                <font-awesome-icon
+                class="f-icon"
+                icon="check-circle"/>
+              </span>
+              <span v-else
+              class="stock-red display-content ml-auto">Tidak Ada
+                <font-awesome-icon
+                class="f-icon"
+                icon="times-circle"/>
+              </span>
+            <p class="radio-text-desc"
+            v-if="allProduct.productStockList[currentIdx].productStock
+              > 0">Barang siap untuk diambil/dikirim
+              langsung ke alamat anda</p>
+              <p class="radio-text-desc"
+            v-else>Barang tidak tersedia</p>
           </div>
         </div>
       </div>
@@ -137,30 +79,30 @@
           </div>
           <div class="desc pt-2 pl-3 pr-3 pb-2">
             <p class="title-product2"
-            >{{this.ProductDetails.productName}}</p>
+            >{{allProduct.productName}}</p>
             <p class="desc-product"
             :class="{'display-block': descActive, 'display-none': !descActive}">
-            {{this.ProductDetails.description}}
+            {{ allProduct.productDescription }}
             </p>
             <h5 :class="{'display-block': detailActive, 'display-none': !detailActive}"
             >Detail Barang</h5>
             <table class="table table-striped border-0 m-0 p-0"
             :class="{'display-none': !detailActive}">
               <tr class="content-table">
-                <td>Kelengkapan paket</td>
-                <td>{{this.ProductDetails.packetSet}}</td>
+                <td>Kategori</td>
+                <td>{{allProduct.productCategory}}</td>
               </tr>
               <tr class="content-table">
                 <td>Dimensi</td>
-                <td>{{this.ProductDetails.volume}}</td>
+                <td>{{allProduct.productVolume}}</td>
               </tr>
               <tr class="content-table">
-                <td>Berat</td>
-                <td>{{this.ProductDetails.weight}}</td>
+                <td>Berat (gram)</td>
+                <td>{{allProduct.productWeight}}</td>
               </tr>
               <tr class="content-table">
                 <td>Kode barcode</td>
-                <td>{{this.ProductDetails.barcode}}</td>
+                <td>{{allProduct.productBarcode}}</td>
               </tr>
             </table>
             <p class="desc-product" :class="{'kelas untuk detail': detailActive}">
@@ -191,15 +133,24 @@
       </b-alert>
     </div>
     <b-modal id="modal-sm" size="sm" centered
-    title="Pilih Lokasi Bliblimart"  @ok="confirmLocation">
+    v-model="show"
+    no-close-on-backdrop
+    no-close-on-esc
+    no-enforce-focus
+    hide-header-close
+    title="Pilih Lokasi Bliblimart"
+    hide-footer>
       <div class="mb-2">Pilih :</div>
       <select class="form-control" ref="location">
-        <option selected disabled hidden>--Pilih--</option>
-        <option value="bliblimartA">Bliblimart A</option>
-        <option value="bliblimartB">Bliblimart B</option>
-        <option value="bliblimartC">Bliblimart C</option>
-        <option value="bliblimartD">Bliblimart D</option>
+        <option selected disabled value=null>--Pilih--</option>
+        <option :value='idx'
+        v-for='(shop, idx) in allProduct.productStockList'
+        v-bind:key='shop.shopForm.shopId'>{{shop.shopForm.shopName}}</option>
       </select>
+      <p class="red mt-2"
+      :v-if="this.locations">Lokasi tidak boleh kosong</p>
+      <b-button variant="primary" class="float-right mt-1"
+      @click="confirmLocation">Pilih Lokasi</b-button>
     </b-modal>
     <Footer/>
     <div class="overlay-loading d-flex align-items-center"
@@ -215,7 +166,8 @@
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
-import { mapGetters, mapActions } from 'vuex';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -223,13 +175,13 @@ export default {
     Footer,
   },
   created() {
-    const store = this.$store;
-    store.dispatch('items/getItem');
+    this.getDetailProduct();
     this.scrollToTop();
-    this.$refs.lokasi.click();
   },
   data() {
     return {
+      locations: false,
+      currentIdx: null,
       slide: 0,
       descActive: true,
       detailActive: false,
@@ -238,35 +190,125 @@ export default {
       dismissCountDown: 0,
       alertMsg: '',
       isLoading: false,
+      allProduct: '',
+      show: true,
+      sama: false,
     };
   },
-  computed: {
-    ...mapGetters([
-      'items/dataProduct',
-    ]),
-    ProductDetails() {
-      const store = this.$store;
-      if (store.getters['items/dataProduct'].data !== undefined) {
-        const data = store.getters['items/dataProduct'].data.find((ele) => ele.id === this.$route.params.id);
-        return data;
-      }
-      return true;
-    },
-  },
   methods: {
-    ...mapActions([
-      'items/getProducts',
-    ]),
+    getDetailProduct() {
+      axios.get(`http://localhost:${this.port}/experience/api/products?id=${this.$route.params.id}`)
+        .then((response) => {
+          this.allProduct = response.data.data;
+        });
+    },
     description() {
       this.descActive = true;
       this.detailActive = false;
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
     },
     detail() {
       this.descActive = false;
       this.detailActive = true;
     },
     confirmLocation() {
-      this.currentLocation = this.$refs.location.value;
+      if (this.$refs.location.value !== null) {
+        this.currentIdx = this.$refs.location.value;
+        this.currentLocation = this.allProduct.productStockList[this.currentIdx].shopForm.shopName;
+        this.show = false;
+        this.locations = false;
+      } else {
+        this.locations = true;
+      }
+    },
+    getCart() {
+      this.sama = false;
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/carts?userId=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((response) => {
+          if (response.data.data.cartForms.length === 0) {
+            this.addToCart();
+          } else {
+            console.log(response.data.data.cartForms);
+            response.data.data.cartForms.forEach((element) => {
+              if (element.stockForm.stockId
+              === this.allProduct.productStockList[this.currentIdx].stockId) {
+                this.addAmount(element.amount, element.stockForm.stockId,
+                  element.stockForm.productStock, response.data.data.cartId);
+                this.sama = true;
+                console.log('asd');
+              }
+            });
+
+            if (this.sama === false) {
+              console.log('ds');
+              this.addToCart();
+            }
+          }
+        })
+        .catch((er) => {
+          if (er.response.status === 500) {
+            this.addToCart();
+          } else {
+            this.$router.replace('/');
+          }
+        });
+    },
+    addAmount(amt, stockIds, stock, idCart) {
+      // add logic change amount here
+      if (amt + 1 <= stock) {
+        const request = {
+          amount: 1,
+          cartId: idCart,
+          stockId: stockIds,
+        };
+        const dataToken = Cookie.get('dataToken');
+        axios.put(`http://localhost:${this.port}/experience/api/carts/updateAmount`, request,
+          {
+            headers:
+              {
+                Authorization: `Bearer ${dataToken}`,
+              },
+          })
+          .then(() => {
+            this.alertMsg = 'Produk berhasil ditambahkan';
+            this.dismissCountDown = this.dismissSecs;
+          });
+      }
+    },
+    async addToCart() {
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      const cart = {
+        productId: this.allProduct.productId,
+        stockId: this.allProduct.productStockList[this.currentIdx].stockId,
+        userId: dataId,
+      };
+
+      await axios.post(`http://localhost:${this.port}/experience/api/carts`, cart,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then(() => {
+          this.alertMsg = 'Produk berhasil ditambahkan';
+          this.dismissCountDown = this.dismissSecs;
+        })
+        .catch(() => {
+          this.$router.push('/login');
+        });
     },
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
@@ -279,26 +321,93 @@ export default {
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
     },
-    buyItem() {
+    async checkLoginUser() {
+    // melakukan check apakah user masih login atau tidak
+    // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .catch(() => {
+          this.$router.push('/login');
+        });
+    },
+    async buyItem() {
       // logic beli item
       // post axios
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/carts?userId=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((response) => {
+          if (response.data.data.cartForms.length === 0) {
+            this.doDuyItem();
+          } else {
+            response.data.data.cartForms.forEach((element) => {
+              if (element.stockForm.stockId
+              === this.allProduct.productStockList[this.currentIdx].stockId) {
+                this.addAmount(element.amount, element.stockForm.stockId,
+                  element.stockForm.productStock, response.data.data.cartId);
+                this.sama = true;
+                setTimeout(() => this.$router.push('/cart'), 1000);
+              }
+            });
+
+            if (this.sama === false) {
+              this.doDuyItem();
+            }
+          }
+        })
+        .catch((er) => {
+          if (er.response.status === 500) {
+            this.doDuyItem();
+          } else {
+            this.$router.replace('/');
+          }
+        });
+    },
+    async doDuyItem() {
       this.isLoading = true;
-      setTimeout(() => this.$router.push('/cart'), 1000);
+      await this.checkLoginUser();
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      const cart = {
+        productId: this.allProduct.productId,
+        stockId: this.allProduct.productStockList[this.currentIdx].stockId,
+        userId: dataId,
+      };
+
+      await axios.post(`http://localhost:${this.port}/experience/api/carts`, cart,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then(() => {
+          setTimeout(() => this.$router.push('/cart'), 1000);
+        })
+        .catch(() => {
+          this.$router.push('/login');
+        });
+      this.isLoading = false;
     },
     addToBag() {
-      this.alertMsg = 'Produk berhasil ditambahkan';
-      this.dismissCountDown = this.dismissSecs;
-    },
-    addToWishList() {
-      this.alertMsg = 'Berhasil masuk wishlist';
-      this.dismissCountDown = this.dismissSecs;
+      this.getCart();
     },
     moveSlider(idx) {
       this.slide = idx;
     },
-  },
-  mounted() {
-    this.$refs.lokasi.click();
   },
 };
 </script>
@@ -353,6 +462,12 @@ export default {
   font-size: 14px;
   color: rgb(228, 51, 51);
   margin-top: 3px;
+  font-weight: 600;
+}
+
+.red{
+  color: rgb(228, 51, 51);
+  font-size: 13px;
   font-weight: 600;
 }
 
@@ -558,7 +673,7 @@ hr{
 
 .price-text{
   font-size: 12px;
-  margin-top: 20px;
+  margin-top: 5px;
 }
 
 .price{

@@ -1,116 +1,50 @@
 <template>
   <div>
     <div>
-      <!-- <b class="decode-result">Last result: <b>{{ result }}</b></p> -->
-      <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit">
-        <div v-if="validationSuccess" class="validation-success">
-          This is a URL
-        </div>
-        <div v-if="validationFailure" class="validation-failure">
-          This is NOT a URL!
-        </div>
-        <div v-if="validationPending" class="validation-pending">
-          Long validation in progress...
-        </div>
-      </qrcode-stream>
-    </div>
-    <!-- <div>
-      <p class="decode-result">Last result: <b>{{ result }}</b></p>
       <qrcode-drop-zone @decode="onDecode" @init="logErrors">
       <qrcode-stream @decode="onDecode" @init="onInit" />
       </qrcode-drop-zone>
       <qrcode-capture v-if="noStreamApiSupport" @decode="onDecode" />
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
-import { QrcodeStream } from 'vue-qrcode-reader';
-// import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
-
-// export default {
-//   components: { QrcodeStream, QrcodeDropZone, QrcodeCapture },
-//   data() {
-//     return {
-//       result: '',
-//       noStreamApiSupport: false,
-//     };
-//   },
-//   methods: {
-//     onDecode(result){
-//       this.result = result;
-//     },
-//     logErrors(promise){
-//       promise.catch(console.error)
-//     },
-//     async onInit(promise) {
-//       try {
-//         await promise;
-//       } catch(error) {
-//         if (error.name === 'StreamApiNotSupportedError') {
-//           this.noStreamApiSupport = true;
-//         }
-//       }
-//     },
-//   },
-// }
+import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader';
+import axios from 'axios';
 
 export default {
-  components: {
-    QrcodeStream,
-  },
+  components: { QrcodeStream, QrcodeDropZone, QrcodeCapture },
   data() {
     return {
-      isValid: undefined,
-      camera: 'auto',
-      result: null,
+      result: '',
+      noStreamApiSupport: false,
+      shopId: this.$attrs.id,
+      error: '',
     };
   },
-  computed: {
-    validationPending() {
-      return this.isValid === undefined
-        && this.camera === 'off';
-    },
-
-    validationSuccess() {
-      return this.isValid === true;
-    },
-
-    validationFailure() {
-      return this.isValid === false;
-    },
-  },
   methods: {
-    onInit(promise) {
-      promise
-        .catch(console.error)
-        .then(this.resetValidationState);
+    async getProduct() {
+      await axios.get(`http://localhost:${this.port}/experience/api/products/barcode?shopId=${this.shopId}&productBarcode=${this.result}`)
+        .then(() => {
+          this.$router.push(`/detail-scan/${this.shopId}/${this.result}`);
+        });
     },
-    resetValidationState() {
-      this.isValid = undefined;
+    onDecode(result) {
+      this.result = result;
+      this.getProduct();
     },
-    async onDecode(content) {
-      this.result = content;
-      this.turnCameraOff();
-
-      // pretend it's taking really long
-      await this.timeout(3000);
-      this.isValid = content.startsWith('http');
-
-      // some more delay, so users have time to read the message
-      await this.timeout(2000);
-      this.turnCameraOn();
+    logErrors(promise) {
+      this.error = promise;
     },
-    turnCameraOn() {
-      this.camera = 'auto';
-    },
-    turnCameraOff() {
-      this.camera = 'off';
-    },
-    timeout(ms) {
-      return new Promise((resolve) => {
-        window.setTimeout(resolve, ms);
-      });
+    async onInit(promise) {
+      try {
+        await promise;
+      } catch (error) {
+        if (error.name === 'StreamApiNotSupportedError') {
+          this.noStreamApiSupport = true;
+        }
+      }
     },
   },
 };

@@ -4,7 +4,7 @@ import flushPromises from 'flush-promises';
 import Vue from 'vue';
 import Cookie from 'vue-cookie';
 
-Vue.config.ignoredElements = ['router-link', 'font-awesome-icon', 'b-button'];
+Vue.config.ignoredElements = ['router-link', 'b-input-group-prepend', 'b-input-group-append', 'b-form-input', 'b-input-group-prepend', 'b-input-group', 'font-awesome-icon', 'b-button'];
 Cookie.get = jest.fn().mockImplementation(() => 'ok');
 
 jest.mock('axios', () => ({
@@ -34,6 +34,7 @@ describe('Header.vue', () => {
     const wrapper = shallowMount(Header);
     wrapper.vm.getUserData();
     await flushPromises();
+    console.log(wrapper.vm.user);
     // expect(wrapper.vm.getFirstName).toBe('Handi');
     // expect(wrapper.vm.getName).toBe('Handi Hermawan');
   });

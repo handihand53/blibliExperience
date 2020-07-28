@@ -1,5 +1,5 @@
 <template>
-  <div class="bottom-nav">
+  <div class="bottom-nav hide-mob">
     <div class="col-12 row no-margin no-padding nav-style" id="nav">
       <router-link to="/" class="col-navigation">
         <font-awesome-icon icon="home" class="nav-icon" />
@@ -19,6 +19,7 @@
       </router-link>
       <router-link to="/cart" class="col-navigation">
         <div>
+          <div class="notif">{{amount}}</div>
           <font-awesome-icon icon="shopping-cart" class="nav-icon" />
           <p class="icon-text">Keranjang</p>
         </div>
@@ -33,57 +34,112 @@
   </div>
 </template>
 
+<script>
+import axios from 'axios';
+import Cookie from 'vue-cookie';
+
+export default {
+  data() {
+    return {
+      amount: 0,
+    };
+  },
+  created() {
+    this.getCart();
+  },
+  methods: {
+    getCart() {
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/carts?userId=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .then((response) => {
+          this.amount = response.data.data.cartForms.length;
+        });
+    },
+  },
+};
+</script>
 
 <style lang="scss" scoped>
 @import "../style/font/font.scss";
 
-.bottom-nav {
-  height: 50px;
-  width: 100%;
-  background-color: white;
-  position: fixed;
-  box-shadow: 0px 0px 13px -9px rgba(0, 0, 0, 0.75);
-  bottom: 0;
+$break-small: 720px;
+$break-large: 730px;
+
+@media screen and (min-width: $break-large) {
+  .hide-mob{
+    display: none;
+  }
 }
+@media screen and (max-width: $break-small) {
+  .bottom-nav {
+    height: 50px;
+    width: 100%;
+    background-color: white;
+    position: fixed;
+    box-shadow: 0px 0px 13px -9px rgba(0, 0, 0, 0.75);
+    bottom: 0;
+  }
 
-.icon-text {
-  font-size: 9px;
-}
+  .icon-text {
+    font-size: 9px;
+  }
 
-.col-navigation {
-  flex: 0 0 20%;
-  max-width: 20%;
-}
+  .col-navigation {
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
 
-.nav-style {
-  height: 100%;
-  text-align: center;
-}
+  .notif{
+    background-color: red;
+    color: white;
+    display: inline-block;
+    position: absolute;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    width: 18px;
+    height: 18px;
+    margin-left: 20px;
+    margin-top: 3px;
+  }
 
-a:hover {
-  text-decoration: none;
-}
+  .nav-style {
+    height: 100%;
+    text-align: center;
+  }
 
-.no-padding {
-  padding: 0px !important;
-}
+  a:hover {
+    text-decoration: none;
+  }
 
-.no-margin {
-  margin: 0px !important;
-}
+  .no-padding {
+    padding: 0px !important;
+  }
 
-.nav-icon {
-  font-size: 25px;
-  margin-top: 8px;
-}
+  .no-margin {
+    margin: 0px !important;
+  }
 
-#nav {
-  a {
-    font-weight: bold;
-    color: #808080;
+  .nav-icon {
+    font-size: 25px;
+    margin-top: 8px;
+  }
 
-    &.router-link-exact-active {
-      color: #0095DA !important;
+  #nav {
+    a {
+      font-weight: bold;
+      color: #808080;
+
+      &.router-link-exact-active {
+        color: #0095DA !important;
+      }
     }
   }
 }

@@ -14,41 +14,49 @@
     <label class="label-page pl-2">Kategori yang kamu suka</label>
     <div class="card ml-2 mr-2 pt-1 pb-2">
       <div class="overflow-x">
-        <span class="category mr-2 ml-2 active"
-        @click='getProductByCategoryName("")'>Semua</span>
-        <span class='category mr-2'
-        :class="{'un-active':category.categoryName, active: !category.categoryName}"
-        v-for='category in CategoriesDetails.data' v-bind:key='category.categoryId'
-        @click='getProductByCategoryName(category.categoryName)' :ref='category.categoryName'
-        >{{category.categoryName}}</span>
+        <span class="category mr-2 ml-2"
+        :class="{active: semuaFlag, 'un-active': !semuaFlag}"
+        @click="getProductBarter()">Semua</span>
+        <span class='category mr-2 un-active'
+        v-for='category in category' v-bind:key='category'
+        :ref='category' @click="getAllProductByCategory(category)"
+        >{{category}}</span>
       </div>
     </div>
-    <label class="label-page pl-2 pt-2">Barang ini menunggu buat kamu tukar loh</label>
-    <div class="content col-12 row no-margin pl-2 pr-2">
-      <router-link to="/barter/detail" class="cst-card col-6">
-        <div class="">
-          <img src="@/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <span class="tag-label-baru">Baru</span>
-          <p class="title-product">Botol Minum Aqua Mineralasdkj lkjashlkjd haskhd askd</p>
-          <p class="product-price">Rp.3.000</p>
-        </div>
-      </router-link>
-      <router-link to="/barter/detail" class="cst-card col-6">
-        <div class="">
-          <img src="@/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <span class="tag-label-baru">Baru</span>
-          <p class="title-product">Botol Minum Aqua Mineralasdkj lkjashlkjd haskhd askd</p>
-          <p class="product-price">Rp.3.000</p>
-        </div>
-      </router-link>
-      <router-link to="/barter/detail" class="cst-card col-6">
-        <div class="">
-          <img src="@/assets/etc/aqua.png" alt="aqua" class="img-product ml-auto mr-auto" />
-          <span class="tag-label-bekas">Bekas</span>
-          <p class="title-product">Botol Minum Aqua Mineralasdkj lkjashlkjd haskhd askd</p>
-          <p class="product-price">Rp.3.000</p>
-        </div>
-      </router-link>
+    <div v-if="!empty">
+      <label class="label-page pl-2 pt-2">Barang ini menunggu buat kamu tukar loh</label>
+      <div class="content col-12 row no-margin pl-2 pr-2">
+        <router-link :to="'/barter/detail/'+product.productBarterId" class="cst-card col-6"
+        v-for="product in barterProduct" v-bind:key='product.productBarterId'>
+          <div class="">
+            <div class="divimg d-flex align-items-center">
+              <img :src="getImage(product.productBarterImagePaths[0])"
+              alt="" class="img-product ml-auto mr-auto" />
+            </div>
+            <span class="tag-label-baru" v-if="product.productBarterCondition === 'NEW'">
+              {{product.productBarterCondition}}</span>
+            <span class="tag-label-bekas" v-if="product.productBarterCondition === 'SECOND'">
+              {{product.productBarterCondition}}</span>
+            <p class="title-product">{{ product.productBarterName }}</p>
+            <p class="product-price">Prefer {{ product.productBarterPreference }}</p>
+          </div>
+        </router-link>
+      </div>
+    </div>
+    <div class="mt-3" v-if="!empty">
+      <b-pagination v-model="currentPage" pills
+      align="center" :total-rows="rows"></b-pagination>
+    </div>
+    <div v-if="empty">
+      <div class="text-align-center content-margin">
+        <img src="/assets/etc/people.png" alt=""
+        class="img-empty">
+        <h4 class="mt-1">Belum ada barang lagi nih!</h4>
+        <small>Mau tukar apa lagi ya ?<br>
+          Coba masukkan produk yang mau kamu tukar.</small>
+        <br>
+        <router-link to="/post-product" class="mt-3">Disini</router-link>
+      </div>
     </div>
     <Footer/>
   </div>
@@ -57,7 +65,8 @@
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
-import { mapGetters, mapActions } from 'vuex';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -66,37 +75,99 @@ export default {
   },
   data() {
     return {
-      catParam: '',
+      kat: '',
+      skipCount: 0,
+      category: [],
+      barterProduct: [],
+      empty: false,
+      rows: 200, // 20 rows in 1 page
+      currentPage: 1,
+      semuaFlag: true,
+      currentState: 'semua',
     };
   },
-  created() {
-    const store = this.$store;
-    // store.dispatch('_cariBarang/getProducts');
-    store.dispatch('_barter/getCategory');
-  },
-  computed: {
-    ...mapGetters([
-      // '_cariBarang/productList',
-      '_barter/categoryList',
-    ]),
-    CategoriesDetails() {
-      const store = this.$store;
-      return store.getters['_barter/categoryList'];
-    },
+  async created() {
+    await this.getProductBarter();
+    await this.getAllCategory();
   },
   methods: {
-    ...mapActions([
-      // '_cariBarang/getProducts',
-      '_barter/getCategory',
-    ]),
-    getProductByCategoryName(category) {
-      this.catParam = category;
+    async getProductBarter() {
+      this.skipCount = 0;
+      this.currentState = 'semua';
+      this.empty = false;
+      this.barterProduct = '';
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/barter/available?skipCount=${this.skipCount}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((response) => {
+          this.barterProduct = response.data.data;
+          this.rows = this.barterProduct[0].count;
+        })
+        .catch(() => {
+          this.empty = true;
+        });
+    },
+    async getAllCategory() {
+      await axios.get(`http://localhost:${this.port}/experience/api/products/enums/category`)
+        .then((response) => {
+          this.category = response.data.data.categories;
+        });
+    },
+    async getAllProductByCategory(cat) {
+      this.semuaFlag = false;
+      this.kat = cat;
+      this.skipCount = 0;
+      this.currentState = 'else';
+      this.barterProduct = '';
+      this.empty = false;
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/barter/category?productCategory=${cat}&skipCount=${this.skipCount}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((response) => {
+          this.barterProduct = response.data.data;
+        })
+        .catch(() => {
+          this.empty = true;
+        });
+    },
+    getImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/barterProductPhoto/${path[path.length - 1]}`;
+    },
+  },
+  watch: {
+    currentPage(newValue) {
+      this.skipCount = 20 * (newValue - 1);
+      if (this.currentState === 'semua') {
+        this.getProductBarter();
+      } else {
+        this.getAllProductByCategory(this.kat);
+      }
     },
   },
 };
 </script>
 
 <style scoped>
+.text-align-center{
+  text-align: center;
+  margin-top: 40px;
+}
+
+.img-empty{
+  width: 40%;
+}
+
 .tag-label-baru {
   background-color: #0095DA;
   color: white;
@@ -135,9 +206,14 @@ export default {
   margin-left: 5px;
 }
 
+.divimg{
+  min-width: 120px;
+  min-height: 120px;
+}
+
 .img-product {
-  width: 120px;
-  height: 120px;
+  max-width: 120px;
+  max-height: 120px;
   display: block;
 }
 
@@ -170,6 +246,11 @@ p{
   overflow: hidden;
   text-overflow: ellipsis;
   color: #7c7c7c;
+}
+
+.content-margin{
+  margin-top: 120px;
+  margin-bottom: 120px;
 }
 
 .product-price {

@@ -120,8 +120,8 @@
 
 <script>
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
-import DaftarPengajuanBarter from '@/components/DaftarPengajuanBarter.vue';
-import DaftarPengajuanBarang from '@/components/DaftarPengajuanBarang.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 import Footer from '@/components/Footer.vue';
 
 export default {
@@ -131,29 +131,38 @@ export default {
   },
   data() {
     return {
-      isActive: true,
-      currentComponent: DaftarPengajuanBarter,
       isExpand: [
         false,
         false,
       ],
     };
   },
+  async created() {
+    await this.checkUser();
+  },
   methods: {
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     },
-    pengajuanBarter() {
-      this.isActive = true;
-      this.currentComponent = DaftarPengajuanBarter;
-    },
-    pengajuanBarang() {
-      this.isActive = false;
-      this.currentComponent = DaftarPengajuanBarang;
-    },
     expand(idx) {
       this.isExpand.splice(idx, 1, !this.isExpand[idx]);
+    },
+    checkUser() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .catch(() => {
+          this.$router.replace('/');
+        });
     },
   },
 };

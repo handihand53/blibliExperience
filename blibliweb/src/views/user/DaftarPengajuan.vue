@@ -5,19 +5,17 @@
       <div>
         <div class="background-white border-bottom box-shadow">
           <div class="p-2">
-            <small style="color: #AEAEAE; font-weight: 600;">Daftar Pengajuan Masuk</small>
+            <small style="color: #AEAEAE; font-weight: 600;">Daftar Pengajuan anda</small>
           </div>
           <div class="pl-2">
             <span @click="pengajuanBarter" class="pengajuan-barter"
-            :class="{active: isActive}">Barter</span>
+            :class="{active: isActive}" id="barter">Barter</span>
             <span @click="pengajuanBarang" class="pengajuan-barang"
-            :class="{active: !isActive}"
-            id="pengajuanBarang">Lelang</span>
+            :class="{active: !isActive}" id="lelang">Lelang</span>
           </div>
         </div>
         <component :is="currentComponent"></component>
       </div>
-      <!--  -->
     </div>
     <Footer/>
   </div>
@@ -28,6 +26,8 @@ import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import DaftarPengajuanBarter from '@/components/DaftarPengajuanBarter.vue';
 import DaftarPengajuanBarang from '@/components/DaftarPengajuanBarang.vue';
 import Footer from '@/components/Footer.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -40,6 +40,9 @@ export default {
       currentComponent: DaftarPengajuanBarter,
     };
   },
+  async created() {
+    await this.checkUser();
+  },
   methods: {
     pengajuanBarter() {
       this.isActive = true;
@@ -49,21 +52,24 @@ export default {
       this.isActive = false;
       this.currentComponent = DaftarPengajuanBarang;
     },
+    checkUser() {
+      // melakukan check apakah user masih login atau tidak
+      // jika user masih login, maka akan dilempar ke halaman utama
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/users?id=${dataId}`,
+        {
+          headers:
+            {
+              Authorization: `Bearer ${dataToken}`,
+            },
+        })
+        .catch(() => {
+          this.$router.replace('/');
+        });
+    },
   },
 };
-// console.log(this.$route.query.page);
-// const urlParams = new URLSearchParams(window.location.search);
-// console.log(urlParams);
-// console.log(urlParams.has('page'));
-// const urls = 'http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5';
-// const url = new URL(urls);
-// console.log(url);
-// const page = url.searchParams.get('page');
-// console.log(page);
-// if (page === 'pengajuanBarang') {
-//   document.getElementById('pengajuanBarang').click();
-//   console.log('ada');
-// }
 </script>
 
 <style scoped>
