@@ -208,6 +208,14 @@ const routes = [
     },
   },
   {
+    path: '/pengajuan/sukses',
+    name: 'Pembayaran berhasil',
+    component: () => import(/* webpackChunkName: "category" */ '../views/barter/Sukses.vue'),
+    meta: {
+      title: 'Sukses',
+    },
+  },
+  {
     path: '/search',
     name: 'Search Page',
     component: () => import(/* webpackChunkName: "category" */ '../views/SearchPage.vue'),

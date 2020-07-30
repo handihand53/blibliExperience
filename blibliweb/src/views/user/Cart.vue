@@ -47,9 +47,6 @@
                       <font-awesome-icon
                       class="float-right f-icon mt-auto mb-auto"
                       icon="trash" @click="deleteProduct(cart.stockForm.stockId)"/>
-                      <font-awesome-icon
-                      class="float-right f-icon mt-auto mb-auto"
-                      icon="heart"/>
                   </div>
                 </div>
               </div>

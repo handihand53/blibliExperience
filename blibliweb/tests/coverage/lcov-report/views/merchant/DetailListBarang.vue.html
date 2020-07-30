@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.17% </span>
+                <span class="strong">73.08% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>19/24</span>
+                <span class='fraction'>19/26</span>
             </div>
         
             
@@ -36,16 +36,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">61.54% </span>
+                <span class="strong">57.14% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>8/13</span>
+                <span class='fraction'>8/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.17% </span>
+                <span class="strong">73.08% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>19/24</span>
+                <span class='fraction'>19/26</span>
             </div>
         
             
@@ -587,19 +587,7 @@
 <a name='L529'></a><a href='#L529'>529</a>
 <a name='L530'></a><a href='#L530'>530</a>
 <a name='L531'></a><a href='#L531'>531</a>
-<a name='L532'></a><a href='#L532'>532</a>
-<a name='L533'></a><a href='#L533'>533</a>
-<a name='L534'></a><a href='#L534'>534</a>
-<a name='L535'></a><a href='#L535'>535</a>
-<a name='L536'></a><a href='#L536'>536</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L532'></a><a href='#L532'>532</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -768,6 +756,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -1134,13 +1126,15 @@
         &lt;div class="custom-detail-card"&gt;
           &lt;div class="p-2 pl-3 pr-3"&gt;
             &lt;div&gt;
-              &lt;p class="detail-title-product float-left"&gt;{{ product.productForm.productName }}&lt;/p&gt;
-              &lt;p class="tag float-right mt-1"&gt;Kategori {{product.productForm.productCategory}}&lt;/p&gt;
+              &lt;p class="detail-title-product float-left"&gt;
+                {{ product.productDataForm.productName }}&lt;/p&gt;
+              &lt;p class="tag float-right mt-1"&gt;Kategori
+                {{product.productDataForm.productCategory}}&lt;/p&gt;
             &lt;/div&gt;
             &lt;div style="clear: both;"&gt;
               &lt;p class="brand-detail-product"&gt;
                 Brand:
-                &lt;span class="blue-brand"&gt;{{product.productForm.productBrand}}&lt;/span&gt;
+                &lt;span class="blue-brand"&gt;{{product.productDataForm.productBrand}}&lt;/span&gt;
               &lt;/p&gt;
             &lt;/div&gt;
           &lt;/div&gt;
@@ -1158,25 +1152,15 @@
               style="text-shadow: 1px 1px 2px #333;"
             &gt;
               &lt;!-- slides with image --&gt;
-              &lt;b-carousel-slide
-                img-src="/assets/etc/vit.png"
-              &gt;&lt;/b-carousel-slide&gt;
-              &lt;b-carousel-slide
-                img-src="/assets/etc/vit.png"
-              &gt;&lt;/b-carousel-slide&gt;
-              &lt;b-carousel-slide
-                img-src="/assets/etc/vit.png"
+              &lt;b-carousel-slide v-for="image in product.productDataForm.productImagePaths"
+                :key="image" :img-src="getImage(image)"
               &gt;&lt;/b-carousel-slide&gt;
             &lt;/b-carousel&gt;
             &lt;div class="row m-0 p-0 mt-4 ml-3"&gt;
-              &lt;img src="@/assets/etc/vit.png"
-              @click="moveSlider(0)"
-              alt="" class="img-preview"&gt;
-              &lt;img src="@/assets/etc/vit.png"
-              @click="moveSlider(1)"
-              alt="" class="img-preview"&gt;
-              &lt;img src="@/assets/etc/vit.png"
-              @click="moveSlider(2)"
+              &lt;img :src="getImage(image)"
+              @click="moveSlider(idx)"
+              v-for="(image, idx) in product.productDataForm.productImagePaths"
+              :key="image"
               alt="" class="img-preview"&gt;
             &lt;/div&gt;
             &lt;hr&gt;
@@ -1193,11 +1177,11 @@
                 &lt;div class="box-shadow mb-2"&gt;
                   &lt;div class="head-tentang"&gt;
                     &lt;p class="text-detail-product"&gt;Tentang Produk
-                      {{ product.productForm.productName }}&lt;/p&gt;
+                      {{ product.productDataForm.productName }}&lt;/p&gt;
                   &lt;/div&gt;
                   &lt;div class="list-detail-tentang"&gt;
                     &lt;p class="text-detail-product"&gt;
-                      Barcode : &lt;span&gt;{{ product.productForm.productBarcode }}&lt;/span&gt;
+                      Barcode : &lt;span&gt;{{ product.productDataForm.productBarcode }}&lt;/span&gt;
                     &lt;/p&gt;
                   &lt;/div&gt;
                   &lt;div class="list-detail-tentang"&gt;
@@ -1207,17 +1191,17 @@
                   &lt;/div&gt;
                   &lt;div class="list-detail-tentang"&gt;
                     &lt;p class="text-detail-product"&gt;
-                      Berat : &lt;span&gt;{{ product.productForm.productWeight }}&lt;/span&gt;
+                      Berat : &lt;span&gt;{{ product.productDataForm.productWeight }}&lt;/span&gt;
                     &lt;/p&gt;
                   &lt;/div&gt;
                   &lt;div class="list-detail-tentang"&gt;
                     &lt;p class="text-detail-product"&gt;
-                      Dimensi Barang : &lt;span&gt;{{ product.productForm.productVolume }}&lt;/span&gt;
+                      Dimensi Barang : &lt;span&gt;{{ product.productDataForm.productVolume }}&lt;/span&gt;
                     &lt;/p&gt;
                   &lt;/div&gt;
                   &lt;div class="list-detail-tentang"&gt;
                     &lt;p class="text-detail-product"&gt;
-                      Deskripsi : {{ product.productForm.productDescription }}
+                      Deskripsi : {{ product.productDataForm.productDescription }}
                     &lt;/p&gt;
                   &lt;/div&gt;
                 &lt;/div&gt;
@@ -1258,7 +1242,7 @@ export default {
       slide: 0,
       isLoading: false,
       product: {
-        productForm: {
+        productDataForm: {
           productName: '',
         },
       },
@@ -1303,6 +1287,10 @@ export default {
         .catch(() =&gt; {
 <span class="cstat-no" title="statement not covered" >          this.$router.push('/merchant/login');</span>
         });
+    },
+<span class="fstat-no" title="function not covered" >    getImage(imagePath) {</span>
+<span class="cstat-no" title="statement not covered" >      const path = imagePath.split('/');</span>
+<span class="cstat-no" title="statement not covered" >      return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;</span>
     },
     editProduct() {
       this.isLoading = true;
@@ -1668,7 +1656,7 @@ p{
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jul 22 2020 22:42:50 GMT+0700 (Indochina Time)
+                at Thu Jul 30 2020 11:51:50 GMT+0700 (Indochina Time)
             </div>
         </div>
         <script src="..\..\prettify.js"></script>

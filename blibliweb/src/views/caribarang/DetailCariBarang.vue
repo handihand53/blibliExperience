@@ -65,9 +65,8 @@
       <p class="profile-text mb-1">Profile Pemilik Barang</p>
       <p class="name-text mb-1">Nama : <span class="detail-name">
         {{product.userData.userName}}</span></p>
-      <!-- <p class="address-text mb-1">Alamat : <span class="detail-address">Jl.
-        Juadi No.29, Kotabaru, Kec. Gondokusuman, Kota Yogyakarta,
-        Daerah Istimewa Yogyakarta 55224</span></p> -->
+      <!-- <p class="address-text mb-1">Alamat :
+        <span class="detail-address">{{product.userData.userAddressForms.detail}}</span></p> -->
     </div>
     <!-- <div class="mt-3 bg-white p-3">
       <p class="riwayat-text">Riwayat Penawaran</p>
@@ -152,6 +151,17 @@
           Rp.{{this.formatPrice(product.currentPrice - product.nextBid)}}
         </span>
       </p>
+      <div class="fixed-alert text-center pl-3 pr-3">
+      <b-alert
+        :show="dismissCountDown"
+        dismissible
+        variant="danger"
+        @dismissed="dismissCountDown=0"
+        @dismiss-count-down="countDownChanged"
+      >
+        {{alertMsg}}
+      </b-alert>
+    </div>
       <button class="rounded orange-button"
       @click="tawarkan">Tawarkan</button>
     </b-modal>
@@ -177,6 +187,8 @@ export default {
     return {
       history: null,
       boxTwo: '',
+      match: false,
+      alertMsg: '',
       amount: 0,
       show: false,
       slide: 0,
@@ -209,7 +221,6 @@ export default {
         })
         .then((res) => {
           this.product = res.data.data;
-          console.log(this.product);
         })
         .catch(() => {
           this.$router.replace('/');
@@ -225,6 +236,36 @@ export default {
     getImage(imagePath) {
       const path = imagePath.split('/');
       return `/assets/resources/uploads/biddingProductPhoto/${path[path.length - 1]}`;
+    },
+    async getListPengajuan() {
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      await axios.get(`http://localhost:${this.port}/experience/api/products/bidding/user?userId=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((ress) => {
+          ress.data.data.forEach((res) => {
+            if (res.productBiddingId === this.$route.params.id) {
+              this.match = true;
+            }
+          });
+          if (this.match) {
+            this.alertMsg = 'Produk ini milik anda!';
+            this.dismissCountDown = this.dismissSecs;
+          } else {
+            window.localStorage.setItem('price', this.amount);
+            this.$router.push(`/lelang/ajukan/${this.$route.params.id}`);
+          }
+        })
+        .catch(() => {
+          // this.$router.push('/login');
+          window.localStorage.setItem('price', this.amount);
+          this.$router.push(`/lelang/ajukan/${this.$route.params.id}`);
+        });
     },
     setAmount() {
       this.amount = this.product.currentPrice - this.product.nextBid;
@@ -243,8 +284,7 @@ export default {
       this.slide = idx;
     },
     tawarkan() {
-      window.localStorage.setItem('price', this.amount);
-      this.$router.push(`/lelang/ajukan/${this.$route.params.id}`);
+      this.getListPengajuan();
     },
     getMonthYear(date) {
       const theDate = new Date(date);
@@ -253,6 +293,9 @@ export default {
     getTime(date) {
       const theDate = new Date(date).toLocaleTimeString();
       return `${theDate}`;
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
     },
   },
 };
@@ -317,6 +360,15 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.fixed-alert{
+  z-index: 100;
+  position: fixed;
+  bottom: 15px;
+  margin: 5% auto; /* Will not center vertically and won't work in IE6/7. */
+  left: 0;
+  right: 0;
 }
 
 .list-detail-tentang{

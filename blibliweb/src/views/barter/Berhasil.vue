@@ -1,6 +1,6 @@
 <template>
   <div class="bg-gray">
-    <PlainHeaderMarket/>
+    <PlainHeader/>
     <div class="text-center mar-custom">
       <font-awesome-icon icon="check-circle" class="ml-auto check-icon"/>
       <p class="mt-4">Pengajuan berhasil di proses</p>
@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import PlainHeaderMarket from '@/components/PlainHeaderMarket.vue';
+import PlainHeader from '@/components/PlainHeader.vue';
 import Footer from '@/components/Footer.vue';
 
 export default {
   components: {
-    PlainHeaderMarket,
+    PlainHeader,
     Footer,
   },
 };

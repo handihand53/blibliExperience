@@ -60,41 +60,42 @@ export default {
       startingIndex: 0,
     };
   },
-  created() {
-    this.getAllCategory();
-  },
-  computed: {
+  async created() {
+    await this.getAllDataByCategory();
+    await this.getAllCategory();
   },
   methods: {
     formatPrice(value) {
       const val = (value / 1).toFixed(0).replace('.', ',');
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     },
-    async getAllDataByCategory(cat) {
-      await axios.get(`http://localhost:${this.port}/experience/api/products/category?productCategory=${cat}&skipCount=${this.startingIndex}`)
+    async getAllDataByCategory() {
+      await axios.get(`http://localhost:${this.port}/experience/api/products/category?productCategory=DAILY&skipCount=${this.startingIndex}`)
         .then((response) => {
-          this.product.push(response.data.data);
+          this.product[0] = response.data.data;
         });
-      console.log(this.product);
+
+      await axios.get(`http://localhost:${this.port}/experience/api/products/category?productCategory=ELECTRONIC&skipCount=${this.startingIndex}`)
+        .then((response) => {
+          this.product[1] = response.data.data;
+        });
+
+      await axios.get(`http://localhost:${this.port}/experience/api/products/category?productCategory=TOYS&skipCount=${this.startingIndex}`)
+        .then((response) => {
+          this.product[2] = response.data.data;
+        });
+
+      await axios.get(`http://localhost:${this.port}/experience/api/products/category?productCategory=SPORT&skipCount=${this.startingIndex}`)
+        .then((response) => {
+          this.product[3] = response.data.data;
+        });
     },
     async getAllCategory() {
       await axios.get(`http://localhost:${this.port}/experience/api/products/enums/category`)
         .then((response) => {
           this.category = response.data.data.categories;
         });
-      console.log(this.category);
-      this.category.forEach((element) => {
-        this.getAllDataByCategory(element);
-      });
     },
-    // getAllData() {
-    //   const count = 0;
-    //   axios.get(`http://localhost:${this.port}/experience/api/products/available?skipCount=${count}`)
-    //     .then((response) => {
-    //       this.allProduct = response.data.data;
-    //       console.log(this.allProduct);
-    //     });
-    // },
     getImage(imagePath) {
       const path = imagePath.split('/');
       return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;

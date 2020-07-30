@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52.17% </span>
+                <span class="strong">46.15% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>12/23</span>
+                <span class='fraction'>12/26</span>
             </div>
         
             
@@ -36,16 +36,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">36.36% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/10</span>
+                <span class='fraction'>4/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52.17% </span>
+                <span class="strong">46.15% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/23</span>
+                <span class='fraction'>12/26</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -260,7 +260,14 @@
 <a name='L202'></a><a href='#L202'>202</a>
 <a name='L203'></a><a href='#L203'>203</a>
 <a name='L204'></a><a href='#L204'>204</a>
-<a name='L205'></a><a href='#L205'>205</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -332,6 +339,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -360,6 +371,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -489,19 +501,20 @@
       style="flex-direction: row!important;"
       v-for="product in productLists" v-bind:key="product.stockId"&gt;
         &lt;div class="col-4"&gt;
-          &lt;img src="@/assets/etc/aqua.png" alt="" class="img-product"&gt;
+          &lt;img :src="getImage(product.productDataForm.productImagePaths[0])"
+          alt="" class="img-product"&gt;
         &lt;/div&gt;
         &lt;div class="col-8 column"&gt;
-          &lt;p class="title-product"&gt;{{ product.productForm.productName }}&lt;/p&gt;
+          &lt;p class="title-product"&gt;{{ product.productDataForm.productName }}&lt;/p&gt;
           &lt;p class="brand-product"&gt;Brand:
-            &lt;span class="brand"&gt;{{  product.productForm.productBrand  }}&lt;/span&gt;&lt;/p&gt;
+            &lt;span class="brand"&gt;{{  product.productDataForm.productBrand  }}&lt;/span&gt;&lt;/p&gt;
           &lt;p class="brand-product"&gt;Harga:
           &lt;span class="price"&gt;Rp.{{ formatPrice(product.productPrice) }}&lt;/span&gt;&lt;/p&gt;
           &lt;p class="brand-product"&gt;Stok:
           &lt;span class="stok"&gt;{{ product.productStock }}&lt;/span&gt;&lt;/p&gt;
           &lt;p class="deskripsi"&gt;Deskripsi:
-            {{ getDescription(product.productForm.productDescription) }}&lt;/p&gt;
-          &lt;router-link :to='"/merchant/list-barang/detail/"+product.productForm.productId'&gt;
+            {{ getDescription(product.productDataForm.productDescription) }}&lt;/p&gt;
+          &lt;router-link :to='"/merchant/list-barang/detail/"+product.productDataForm.productId'&gt;
             &lt;button class="btn btn-outline-primary pl-5 pr-5 float-right"&gt;Lihat&lt;/button&gt;
           &lt;/router-link&gt;
         &lt;/div&gt;
@@ -535,6 +548,10 @@ export default {
 <span class="cstat-no" title="statement not covered" >    await this.getShopProduct();</span>
   },
   methods: {
+<span class="fstat-no" title="function not covered" >    getImage(imagePath) {</span>
+<span class="cstat-no" title="statement not covered" >      const path = imagePath.split('/');</span>
+<span class="cstat-no" title="statement not covered" >      return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;</span>
+    },
     async checkLoginUser() {
       this.isLoggedIn = true;
       // melakukan check apakah user masih login atau tidak
@@ -565,6 +582,7 @@ export default {
         })
         .then((response) =&gt; {
 <span class="cstat-no" title="statement not covered" >          this.productLists = response.data.data;</span>
+<span class="cstat-no" title="statement not covered" >          console.log(this.productLists);</span>
 <span class="fstat-no" title="function not covered" >        })</span>
         .catch(() =&gt; {
 <span class="cstat-no" title="statement not covered" >          this.$router.push('/merchant/login');</span>
@@ -675,7 +693,7 @@ export default {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jul 22 2020 22:42:50 GMT+0700 (Indochina Time)
+                at Thu Jul 30 2020 11:51:50 GMT+0700 (Indochina Time)
             </div>
         </div>
         <script src="..\..\prettify.js"></script>

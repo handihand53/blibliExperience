@@ -33,12 +33,12 @@
             class="img-product ml-auto mr-auto">
           </div>
           <div class="col-8 no-margin no-padding pt-2">
+            <p class="title-product">{{product.productBiddingName}}</p>
             <span class="tag-label-baru"
             v-if="product.productBiddingCondition === 'NEW'">
               Baru</span>
             <span class="tag-label-bekas" v-else>
               Lama</span>
-            <p class="title-product">{{product.productBiddingName}}</p>
             <p class="price-product">Rp.{{formatPrice(product.startPrice)}}</p>
             <p class="penawaran">Berakhir {{getMonthYear(product.closeBidDate)}},
                {{getTime(product.closeBidDate)}}</p>

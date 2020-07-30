@@ -66,7 +66,8 @@
         </div>
       </div>
       <div>
-        <button class="logout-button">Keluar</button>
+        <button class="logout-button"
+        @click="logOut">Keluar</button>
       </div>
     </div>
     <div class="bg-gray" v-else-if="isLogin === false">
@@ -149,6 +150,11 @@ export default {
         .catch(() => {
           this.isLogin = false;
         });
+    },
+    logOut() {
+      Cookie.set('dataId', '', 1); // set cookies expired 1 hari
+      Cookie.set('dataToken', '', 1); // set cookies expired 1 hari
+      this.$router.replace('/');
     },
   },
   computed: {

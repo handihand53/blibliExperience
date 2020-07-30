@@ -56,7 +56,7 @@
             </div>
         </div>
         <small class="text-suggest">Format foto yang diperbolehkan : png,
-        jpeg, jpg</small><br>
+        jpeg, jpg, jfif</small><br>
         <div class="mt-3">
           <p class="m-0 p-0 fs-12" v-for="(name, idx) in imageName" :key="idx">{{name}}
             <font-awesome-icon class="fs-icon" icon="times" @click="remove(idx)"/></p>

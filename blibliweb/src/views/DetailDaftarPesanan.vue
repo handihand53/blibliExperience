@@ -10,7 +10,7 @@
         <p class="text-detail">Nama merchant: {{shopName}}</p>
         <p class="text-detail">Total yang harus dibayar:
           <span class="orange">Rp{{formatPrice(price)}}</span></p>
-        <p class="text-detail">Status pembayaran:
+        <p class="text-detail">Status:
           <span class="text-bold">{{getStatus(product.orderStatus)}}</span></p>
       </div>
       <div class="px-3 mt-3">

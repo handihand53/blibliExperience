@@ -89,6 +89,17 @@
         </div>
       </div>
     </div>
+    <div class="fixed-alert text-center pl-3 pr-3">
+      <b-alert
+        :show="dismissCountDown"
+        dismissible
+        variant="danger"
+        @dismissed="dismissCountDown=0"
+        @dismiss-count-down="countDownChanged"
+      >
+        {{alertMsg}}
+      </b-alert>
+    </div>
     <div @click="ajukanBarter" class="bottom-ajukan box-shadow">
       <div class="text-uppercase">ajukan barter</div>
     </div>
@@ -108,6 +119,7 @@
 import HeaderWithCart from '@/components/HeaderWithCart.vue';
 import Footer from '@/components/Footer.vue';
 import axios from 'axios';
+import Cookie from 'vue-cookie';
 
 export default {
   components: {
@@ -119,6 +131,10 @@ export default {
       isLoading: false,
       product: [],
       slide: 0,
+      dismissSecs: 2,
+      dismissCountDown: 0,
+      isSame: false,
+      alertMsg: '',
     };
   },
   async created() {
@@ -131,10 +147,37 @@ export default {
           this.product = response.data.data;
         });
     },
+    getBarterSubmission() {
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/barter/user?userId=${dataId}`,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${dataToken}`,
+          },
+        })
+        .then((res) => {
+          res.data.data.forEach((element) => {
+            if (element.productBarterId === this.$route.params.id) {
+              this.isSame = true;
+            }
+          });
+          if (this.isSame) {
+            this.alertMsg = 'Produk ini milik anda!';
+            this.dismissCountDown = this.dismissSecs;
+          } else {
+            this.isLoading = true;
+            setTimeout(() => this.$router.push(`/barter/pengajuan/${this.$route.params.id}`), 200);
+          }
+        })
+        .catch(() => {
+          this.isLoading = true;
+          setTimeout(() => this.$router.push(`/barter/pengajuan/${this.$route.params.id}`), 200);
+        });
+    },
     ajukanBarter() {
-      // add logic checkout here
-      this.isLoading = true;
-      setTimeout(() => this.$router.push(`/barter/pengajuan/${this.$route.params.id}`), 1000);
+      this.getBarterSubmission();
     },
     getImage(imagePath) {
       const path = imagePath.split('/');
@@ -142,6 +185,9 @@ export default {
     },
     moveSlider(idx) {
       this.slide = idx;
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
     },
   },
 };
@@ -229,6 +275,15 @@ export default {
 .text-detail-product{
   font-size: 12px;
   text-align: justify;
+}
+
+.fixed-alert{
+  z-index: 100;
+  position: fixed;
+  bottom: 15px;
+  margin: 5% auto; /* Will not center vertically and won't work in IE6/7. */
+  left: 0;
+  right: 0;
 }
 
 .list-detail-tentang:nth-child(odd){

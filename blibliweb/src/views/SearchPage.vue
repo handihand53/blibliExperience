@@ -13,7 +13,7 @@
       <div v-if="searchKey !== '' && masterData.data.length !== 0">
         <p class="label-search mb-2">Pencarian Terpopuler</p>
         <p v-for="(product, idx) in productData" :key="product+idx"
-        class="search-result" @click="searchKey = product"> {{product}}</p>
+        class="search-result"> {{product}}</p>
       </div>
       <hr class="my-3" v-if="searchKey !== '' && masterData.data.length !== 0">
       <div v-if="searchKey !== '' && masterData.data.length !== 0">

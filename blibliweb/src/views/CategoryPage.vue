@@ -40,7 +40,7 @@
       <b-pagination v-model="currentPage" pills
       align="center" :total-rows="rows"></b-pagination>
     </div>
-    <div class="justify-content-center d-flex fix-filter-sort">
+    <!-- <div class="justify-content-center d-flex fix-filter-sort">
       <div class="sort-fix ml-auto mr-auto
       d-flex align-items-center justify-content-center">
         <div @click="sortPage = true">
@@ -55,7 +55,7 @@
           <span>Filter</span>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="sort-part"
     :class="{showSort: sortPage}">
       <div class="row p-0 m-0 d-flex align-items-center mt-1
@@ -159,6 +159,7 @@ export default {
       axios.get(`http://localhost:${this.port}/experience/api/products/category?productCategory=${this.$route.params.name}&skipCount=${this.startingIndex}`)
         .then((response) => {
           this.allProduct = response.data.data;
+          this.rows = this.allProduct[0].countProducts;
           console.log(this.allProduct);
         });
     },
