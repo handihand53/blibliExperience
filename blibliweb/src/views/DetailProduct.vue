@@ -18,12 +18,17 @@
             <b-carousel-slide v-for="image in allProduct.productImagePaths"
               :key="image" :img-src="getImage(image)"
             ></b-carousel-slide>
+            <b-carousel-slide :img-src="getQrImage(allProduct.qrImagePath)"
+            ></b-carousel-slide>
           </b-carousel>
         <div class="row m-0 p-0 mt-4">
           <img :src="getImage(image)"
           v-for="(image, idx) in allProduct.productImagePaths"
           :key="image"
           @click="moveSlider(idx)"
+          alt="" class="img-preview">
+          <img :src="getQrImage(allProduct.qrImagePath)"
+          @click="moveSlider(allProduct.productImagePaths.length)"
           alt="" class="img-preview">
         </div>
         <hr class="mt-3">
@@ -180,6 +185,9 @@ export default {
   },
   data() {
     return {
+      allProduct: {
+        qrImagePath: '/',
+      },
       locations: false,
       currentIdx: null,
       slide: 0,
@@ -190,7 +198,6 @@ export default {
       dismissCountDown: 0,
       alertMsg: '',
       isLoading: false,
-      allProduct: '',
       show: true,
       sama: false,
     };
@@ -209,6 +216,10 @@ export default {
     getImage(imagePath) {
       const path = imagePath.split('/');
       return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
+    },
+    getQrImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/productQr/${path[path.length - 1]}`;
     },
     detail() {
       this.descActive = false;
@@ -239,19 +250,16 @@ export default {
           if (response.data.data.cartForms.length === 0) {
             this.addToCart();
           } else {
-            console.log(response.data.data.cartForms);
             response.data.data.cartForms.forEach((element) => {
               if (element.stockForm.stockId
               === this.allProduct.productStockList[this.currentIdx].stockId) {
                 this.addAmount(element.amount, element.stockForm.stockId,
                   element.stockForm.productStock, response.data.data.cartId);
                 this.sama = true;
-                console.log('asd');
               }
             });
 
             if (this.sama === false) {
-              console.log('ds');
               this.addToCart();
             }
           }

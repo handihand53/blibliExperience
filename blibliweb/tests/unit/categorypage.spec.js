@@ -46,12 +46,12 @@ describe('CategoryPage.vue', () => {
     expect(wrapper.vm.ProductDetailsByCategory).toEqual([]);
   });
 
-  it('addToBag function work correctly', () => {
-    const wrapper = shallowMount(CategoryPage, {
-      mocks: { $route },
-    });
-    wrapper.vm.addToBag();
-    expect(wrapper.vm.alertMsg).toBe('Produk berhasil ditambahkan');
-    expect(wrapper.vm.dismissCountDown).toBe(2);
-  });
+  // it('addToBag function work correctly', () => {
+  //   const wrapper = shallowMount(CategoryPage, {
+  //     mocks: { $route },
+  //   });
+  // wrapper.vm.addToBag();
+  // expect(wrapper.vm.alertMsg).toBe('Produk berhasil ditambahkan');
+  // expect(wrapper.vm.dismissCountDown).toBe(2);
+  // });
 });

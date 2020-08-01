@@ -209,7 +209,7 @@ const routes = [
   },
   {
     path: '/pengajuan/sukses',
-    name: 'Pembayaran berhasil',
+    name: 'Pengajuan Pembayaran berhasil',
     component: () => import(/* webpackChunkName: "category" */ '../views/barter/Sukses.vue'),
     meta: {
       title: 'Sukses',

@@ -19,9 +19,6 @@
             </div>
           </div>
           <div class="overflow-y">
-            <!-- <div class=" center">
-              <img src="@/assets/etc/aqua.png" alt class="detail-image-product p-3" />
-            </div> -->
             <b-carousel
               id="carousel-1"
               v-model="slide"
@@ -31,9 +28,11 @@
               background="transparent"
               style="text-shadow: 1px 1px 2px #333;"
             >
-              <!-- slides with image -->
               <b-carousel-slide v-for="image in product.productDataForm.productImagePaths"
                 :key="image" :img-src="getImage(image)"
+              ></b-carousel-slide>
+              <b-carousel-slide
+                :img-src="getQrImage(product.productDataForm.qrImagePath)"
               ></b-carousel-slide>
             </b-carousel>
             <div class="row m-0 p-0 mt-4 ml-3">
@@ -41,6 +40,8 @@
               @click="moveSlider(idx)"
               v-for="(image, idx) in product.productDataForm.productImagePaths"
               :key="image"
+              alt="" class="img-preview">
+              <img :src="getQrImage(product.productDataForm.qrImagePath)"
               alt="" class="img-preview">
             </div>
             <hr>
@@ -124,6 +125,7 @@ export default {
       product: {
         productDataForm: {
           productName: '',
+          qrImagePath: '/',
         },
       },
     };
@@ -171,6 +173,10 @@ export default {
     getImage(imagePath) {
       const path = imagePath.split('/');
       return `/assets/resources/uploads/productPhoto/${path[path.length - 1]}`;
+    },
+    getQrImage(imagePath) {
+      const path = imagePath.split('/');
+      return `/assets/resources/uploads/productQr/${path[path.length - 1]}`;
     },
     editProduct() {
       this.isLoading = true;
