@@ -13,7 +13,6 @@
           <label>Pilih semua produk</label>
         </div>
         <div class='row no-padding no-margin'>
-          <!--  -->
           <div class='col-12 no-margin no-padding row mt-3 border-bottom'
           v-for='(cart, idx) in cartProduct' v-bind:key='cart.stockForm.stockId'>
             <label class="container col-1" style="padding: 0px!important; margin: 0px!important;">
@@ -37,7 +36,11 @@
                       idx, cart.stockForm.productPrice
                       )"
                     class="stock-btn">-</button>
-                    <span class="stock-product">{{ cart.amount }}</span>
+                    <input type="number" class="stock-amount" :value="cart.amount"
+                    min="0" @keydown="getDataBefore($event.target.value)"
+                    @keyup="getDataAfter($event.target.value, cart.stockForm.stockId,
+                    cart.stockForm.productStock, idx, cart.stockForm.productPrice)">
+                    <!-- <span class="stock-product">{{ cart.stockForm.productStock }}</span> -->
                     <button @click="addAmount(cart.amount, cart.stockForm.stockId,
                     idx, cart.stockForm.productStock,
                     cart.stockForm.productPrice)"
@@ -125,6 +128,9 @@ export default {
       dismissSecs: 2,
       dismissCountDown: 0,
       alertMsg: '',
+      before: '',
+      after: '',
+      range: '',
     };
   },
   created() {
@@ -132,6 +138,44 @@ export default {
     this.scrollToTop();
   },
   methods: {
+    getDataBefore(amnt) {
+      this.before = amnt;
+    },
+    getDataAfter(amnt, stockId, stock, idx, price) {
+      this.after = amnt;
+      this.range = this.after - this.before;
+      this.inputStock(this.before, stockId, stock, idx, price);
+    },
+    inputStock(amt, stockIds, stock, idx, price) {
+      if (Number(amt) + Number(this.range) <= stock) {
+        const request = {
+          amount: this.range,
+          cartId: this.cartId,
+          stockId: stockIds,
+        };
+        const dataToken = Cookie.get('dataToken');
+        axios.put(`http://localhost:${this.port}/experience/api/carts/updateAmount`, request,
+          {
+            headers:
+              {
+                Authorization: `Bearer ${dataToken}`,
+              },
+          })
+          .then(() => {
+            document.getElementById('toko1').checked = true;
+            this.getCart();
+          })
+          .catch(() => {
+            this.alertMsg = 'Stok tidak boleh 0';
+            this.dismissCountDown = this.dismissSecs;
+          });
+        this.price[idx].price += price;
+        this.countTotal();
+      } else {
+        this.alertMsg = 'Stok tidak tersedia';
+        this.dismissCountDown = this.dismissSecs;
+      }
+    },
     getCart() {
       this.amount = [];
       this.price = [];
@@ -147,6 +191,7 @@ export default {
             },
         })
         .then((response) => {
+          console.log(response);
           if (response.data.data.cartForms.length === 0) {
             this.empty = true;
           } else {
@@ -191,18 +236,14 @@ export default {
     checkItem(shop, idx) {
       this.price[idx].status = !this.price[idx].status;
       let xTrue = 0;
-      let xFalse = 0;
       for (let i = 0; i < document.getElementsByClassName(shop).length; i += 1) {
         if (document.getElementsByClassName(shop)[i].checked) {
           xTrue += 1;
-        } else {
-          xFalse += 1;
         }
       }
       if (xTrue === document.getElementsByClassName(shop).length) {
         document.getElementById(shop).checked = true;
-      }
-      if (xFalse === document.getElementsByClassName(shop).length) {
+      } else {
         document.getElementById(shop).checked = false;
       }
       this.countTotal();
@@ -268,6 +309,7 @@ export default {
               },
           })
           .then(() => {
+            document.getElementById('toko1').checked = true;
             this.getCart();
           });
         this.price[idx].price += price;
@@ -291,6 +333,7 @@ export default {
               },
           })
           .then(() => {
+            document.getElementById('toko1').checked = true;
             this.getCart();
           });
         this.price[idx].price -= price;
@@ -357,6 +400,11 @@ export default {
   margin-top: 3px;
   float: right;
   transition: all 0.7s;
+}
+
+.stock-amount{
+  display: inline-block;
+  width: 35px;
 }
 
 .btn-checkout:hover {

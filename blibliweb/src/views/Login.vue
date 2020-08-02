@@ -37,9 +37,6 @@
             <p class="sign-information">Belum punya akun ?
               <router-link to="/signup">Daftar disini</router-link>
             </p>
-            <div class="forget-password">
-              <router-link to="/ww">Lupa kata sandi </router-link>
-            </div>
           </div>
         </div>
         <Footer/>
