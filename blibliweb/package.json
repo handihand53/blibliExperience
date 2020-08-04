@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build-report": "vue-cli-service build --report",
-    "test:unit": "vue-cli-service test:unit --watchAll",
+    "test:unit": "vue-cli-service test:unit --watchAll --silent",
     "lint": "vue-cli-service lint",
     "sonar": "node sonar-project.js"
   },

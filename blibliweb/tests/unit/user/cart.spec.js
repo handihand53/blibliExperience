@@ -66,8 +66,7 @@ describe('Cart.vue', () => {
 
   it('checkOut function work correctly', () => {
     const wrapper = shallowMount(Cart);
-    // const mockMethod = jest.fn();
-    // wrapper.setMethods({ checkOut: mockMethod });
+    wrapper.vm.checkAll();
     wrapper.find('#checkOut').trigger('click');
     expect(wrapper.vm.isLoading).toBe(true);
     // expect(mockMethod).toHaveBeenCalled();

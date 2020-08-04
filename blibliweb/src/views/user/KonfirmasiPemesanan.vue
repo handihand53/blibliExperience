@@ -148,7 +148,17 @@ export default {
         false,
         false,
       ],
-      product: [],
+      product: [
+        {
+          stockForm: {
+            productDataForm: {
+              productImagePaths: [
+                'ds',
+              ],
+            },
+          },
+        },
+      ],
       methode: 'SELF_SERVICE',
       cartId: '',
       price: 0,

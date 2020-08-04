@@ -54,7 +54,7 @@
       </div>
       <div class="col-6 right p-0">
         <button class="btn-checkout"
-        @click="proses">Proses</button>
+        @click="proses" id="proses">Proses</button>
       </div>
     </div>
     <div class="overlay-loading d-flex align-items-center"
@@ -83,6 +83,18 @@ export default {
       product: {
         userDataForm: {
           userName: '',
+          userAddressForms: [
+            {
+              detail: '',
+            },
+          ],
+        },
+        stockForm: {
+          productDataForm: {
+            productImagePaths: [
+              'sd',
+            ],
+          },
         },
       },
       monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -129,7 +141,6 @@ export default {
         })
         .then((res) => {
           this.product = res.data.data;
-          console.log(this.product);
           this.long = this.product.cartForms.length;
           this.product.cartForms.forEach((data) => {
             this.price += data.amount * data.stockForm.productPrice;

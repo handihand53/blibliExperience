@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">90.91% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>10/11</span>
             </div>
         
             
@@ -36,16 +36,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>4/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">90.91% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>10/11</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -250,42 +250,42 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -393,31 +393,31 @@
 &lt;/template&gt;
 &nbsp;
 &lt;script&gt;
-<span class="cstat-no" title="statement not covered" >import Footer from '@/components/Footer.vue';</span>
-<span class="cstat-no" title="statement not covered" >import axios from 'axios';</span>
-<span class="cstat-no" title="statement not covered" >import Cookie from 'vue-cookie';</span>
+import Footer from '@/components/Footer.vue';
+import axios from 'axios';
+import Cookie from 'vue-cookie';
 &nbsp;
 export default {
   components: {
     Footer,
   },
-<span class="fstat-no" title="function not covered" >  data() {</span>
-<span class="cstat-no" title="statement not covered" >    return {</span>
+  data() {
+    return {
       userName: '',
     };
   },
-<span class="fstat-no" title="function not covered" >  async created() {</span>
-<span class="cstat-no" title="statement not covered" >    await this.checkLoginUser();</span>
+  async created() {
+    await this.checkLoginUser();
   },
   methods: {
-<span class="fstat-no" title="function not covered" >    async checkLoginUser() {</span>
-<span class="cstat-no" title="statement not covered" >      this.isLoggedIn = true;</span>
+    async checkLoginUser() {
+      this.isLoggedIn = true;
       // melakukan check apakah user masih login atau tidak
       // jika user masih login, maka akan dilempar ke halaman utama
-<span class="cstat-no" title="statement not covered" >      const dataId = Cookie.get('dataIdMerchant');</span>
+      const dataId = Cookie.get('dataIdMerchant');
       // const dataShopId = Cookie.get('dataShopIdMerchant');
-<span class="cstat-no" title="statement not covered" >      const dataToken = Cookie.get('dataTokenMerchant');</span>
-<span class="cstat-no" title="statement not covered" >      await axios.get(`http://localhost:${this.port}/experience/api/shops?userId=${dataId}`,</span>
+      const dataToken = Cookie.get('dataTokenMerchant');
+      await axios.get(`http://localhost:${this.port}/experience/api/shops?userId=${dataId}`,
 <span class="fstat-no" title="function not covered" >        {</span>
           headers:
           {
@@ -426,9 +426,9 @@ export default {
         })
         .then((response) =&gt; {
 <span class="cstat-no" title="statement not covered" >          this.userName = response.data.data.userName;</span>
-<span class="fstat-no" title="function not covered" >        })</span>
+        })
         .catch(() =&gt; {
-<span class="cstat-no" title="statement not covered" >          this.$router.push('/merchant/login');</span>
+          this.$router.push('/merchant/login');
         });
     },
   },
@@ -492,7 +492,7 @@ a{
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Aug 01 2020 18:16:36 GMT+0700 (Indochina Time)
+                at Tue Aug 04 2020 18:54:43 GMT+0700 (Indochina Time)
             </div>
         </div>
         <script src="..\..\prettify.js"></script>

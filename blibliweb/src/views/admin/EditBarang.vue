@@ -123,8 +123,8 @@ export default {
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
     },
-    getCategory() {
-      axios.get(`http://localhost:${this.port}/experience/api/products/enums/category`)
+    async getCategory() {
+      await axios.get(`http://localhost:${this.port}/experience/api/products/enums/category`)
         .then((response) => {
           response.data.data.categories.forEach((i) => {
             this.kategoris.push({

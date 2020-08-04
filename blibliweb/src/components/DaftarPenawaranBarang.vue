@@ -100,6 +100,14 @@ export default {
       product: [
         {
           productBiddingName: '',
+          productBiddingForm: {
+            productBiddingImagePaths: [
+              'sd',
+            ],
+          },
+          productBiddingImagePaths: [
+            'fas',
+          ],
         },
       ],
       monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',

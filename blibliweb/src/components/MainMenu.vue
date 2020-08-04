@@ -1,17 +1,5 @@
 <template>
   <div>
-    <!-- <div class='card mt-2 ml-2 mr-2 pt-1 pb-1'>
-      <div class='overflow-x'>
-        <span class='category mr-2 ml-2'
-        :class="{'un-active':true, active: !true}"
-        @click="getProductByCategoryName('')">Semua</span>
-        <span class='category mr-2'
-        :class="{'un-active':category.categoryName, active: !category.categoryName}"
-        v-for='category in category' v-bind:key='category'
-        @click='getProductByCategoryName(category)' :ref='category'
-        >{{category}}</span>
-      </div>
-    </div> -->
     <p class="label-tag font-weight-bold p-2">Produk Pilihan</p>
     <div class="p-2" v-for='(category, idx) in this.category' v-bind:key='category'
     :ref='category'>
@@ -47,7 +35,6 @@
 </template>
 
 <script>
-// import { mapGetters, mapActions } from 'vuex';
 import axios from 'axios';
 
 export default {

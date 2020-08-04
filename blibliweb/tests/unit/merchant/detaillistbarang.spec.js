@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import DetailListBarang from '@/views/merchant/DetailListBarang.vue';
-// import flushPromises from 'flush-promises';
+import flushPromises from 'flush-promises';
 
 const $route = {
   push: '/merchant/login',
@@ -29,10 +29,11 @@ jest.mock('axios', () => ({
 describe('DetailListBarang.vue', () => {
   it('DetailListBarang page render correctly', async () => {
     const wrapper = shallowMount(DetailListBarang, {
-      mock: {
+      mocks: {
         $route,
       },
     });
+    await flushPromises();
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -46,5 +47,11 @@ describe('DetailListBarang.vue', () => {
     const wrapper = shallowMount(DetailListBarang);
     wrapper.vm.editProduct();
     expect(wrapper.vm.isLoading).toBe(true);
+  });
+
+  it('getImage function correctly', async () => {
+    const wrapper = shallowMount(DetailListBarang);
+    await flushPromises();
+    expect(wrapper.vm.getImage('sad/c.jpeg')).toBe('/assets/resources/uploads/productPhoto/c.jpeg');
   });
 });

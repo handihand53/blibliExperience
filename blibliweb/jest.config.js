@@ -13,8 +13,8 @@ module.exports = {
     'text',
   ],
   testMatch: [
-    // '<rootDir>/tests/unit/**/*.spec.(js)',
-    '<rootDir>/tests/unit/*.spec.(js)',
+    '<rootDir>/tests/unit/**/*.spec.(js)',
+    // '<rootDir>/tests/unit/user/*.spec.(js)',
   ],
   transformIgnorePatterns: ['/node_modules/'],
   transform: {

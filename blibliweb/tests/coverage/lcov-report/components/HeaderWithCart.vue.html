@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.18% </span>
+                <span class="strong">90.91% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/11</span>
+                <span class='fraction'>10/11</span>
             </div>
         
             
@@ -36,16 +36,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.18% </span>
+                <span class="strong">90.91% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/11</span>
+                <span class='fraction'>10/11</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -354,32 +354,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -610,28 +610,28 @@ import axios from 'axios';
 import Cookie from 'vue-cookie';
 &nbsp;
 export default {
-<span class="fstat-no" title="function not covered" >  data() {</span>
-<span class="cstat-no" title="statement not covered" >    return {</span>
+  data() {
+    return {
       isRotate: false,
       isVisible: false,
       amount: 0,
     };
   },
-<span class="fstat-no" title="function not covered" >  created() {</span>
-<span class="cstat-no" title="statement not covered" >    this.getCart();</span>
+  created() {
+    this.getCart();
   },
   methods: {
-<span class="fstat-no" title="function not covered" >    back() {</span>
-<span class="cstat-no" title="statement not covered" >      window.history.back();</span>
+    back() {
+      window.history.back();
     },
-<span class="fstat-no" title="function not covered" >    dropdown() {</span>
-<span class="cstat-no" title="statement not covered" >      this.isRotate = !this.isRotate;</span>
-<span class="cstat-no" title="statement not covered" >      this.isVisible = !this.isVisible;</span>
+    dropdown() {
+      this.isRotate = !this.isRotate;
+      this.isVisible = !this.isVisible;
     },
-<span class="fstat-no" title="function not covered" >    getCart() {</span>
-<span class="cstat-no" title="statement not covered" >      const dataId = Cookie.get('dataId');</span>
-<span class="cstat-no" title="statement not covered" >      const dataToken = Cookie.get('dataToken');</span>
-<span class="cstat-no" title="statement not covered" >      axios.get(`http://localhost:${this.port}/experience/api/carts?userId=${dataId}`,</span>
+    getCart() {
+      const dataId = Cookie.get('dataId');
+      const dataToken = Cookie.get('dataToken');
+      axios.get(`http://localhost:${this.port}/experience/api/carts?userId=${dataId}`,
 <span class="fstat-no" title="function not covered" >        {</span>
           headers:
             {
@@ -819,7 +819,7 @@ a {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Aug 01 2020 18:16:36 GMT+0700 (Indochina Time)
+                at Tue Aug 04 2020 18:54:43 GMT+0700 (Indochina Time)
             </div>
         </div>
         <script src="..\prettify.js"></script>

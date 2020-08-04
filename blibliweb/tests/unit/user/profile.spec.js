@@ -27,6 +27,7 @@ jest.mock('axios', () => ({
     },
   }),
   post: () => Promise.resolve({ data: [{ val: 1 }] }),
+  put: () => Promise.resolve({ data: 'sukses' }),
 }));
 
 Vue.config.ignoredElements = ['router-link', 'font-awesome-icon', 'b-spinner'];
@@ -37,10 +38,8 @@ describe('Profile.vue', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  it('first load Data loading correctly', async () => {
+  it('updateUser work correctly', async () => {
     const wrapper = shallowMount(Profile);
-    wrapper.vm.checkUser();
-    await flushPromises();
-    expect(wrapper.vm.isLoading).toBe(false);
+    wrapper.vm.updateUser();
   });
 });

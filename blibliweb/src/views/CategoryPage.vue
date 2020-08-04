@@ -1,18 +1,6 @@
 <template>
   <div>
     <HeaderWithCart/>
-    <!-- <div class='card mt-2 ml-2 mr-2 pt-1 pb-1 cat-sticky'>
-      <div class='overflow-x'>
-        <span class='category mr-2 ml-2'
-        :class="{'un-active':true, active: !true}"
-        @click="getProductByCategoryName('')">Semua</span>
-        <span class='category mr-2'
-        :class="{'un-active':category.categoryName, active: !category.categoryName}"
-        v-for='category in CategoriesDetails.data' v-bind:key='category.categoryId'
-        @click='getProductByCategoryName(category.categoryName)' :ref='category.categoryName'
-        >{{category.categoryName}}</span>
-      </div>
-    </div> -->
     <div class="p-2">Pilihan kategori {{this.$route.params.name}}</div>
     <div class='content col-12 row no-margin pl-2 pr-2'>
       <div class='cst-card col-6'
@@ -40,22 +28,6 @@
       <b-pagination v-model="currentPage" pills
       align="center" :total-rows="rows"></b-pagination>
     </div>
-    <!-- <div class="justify-content-center d-flex fix-filter-sort">
-      <div class="sort-fix ml-auto mr-auto
-      d-flex align-items-center justify-content-center">
-        <div @click="sortPage = true">
-          <font-awesome-icon
-          icon="sort-amount-down-alt"/>
-          <span class="border-right pr-2">Urutkan</span>
-        </div>
-        <div @click="filterPage = true">
-          <font-awesome-icon
-          class="ml-2"
-          icon="filter"/>
-          <span>Filter</span>
-        </div>
-      </div>
-    </div> -->
     <div class="sort-part"
     :class="{showSort: sortPage}">
       <div class="row p-0 m-0 d-flex align-items-center mt-1
@@ -148,19 +120,12 @@ export default {
   created() {
     this.getAllData();
   },
-  computed: {
-    ProductDetailsByCategory() {
-      return this.allProduct.filter((ele) => ele.productDataForm.productCategory
-        === this.$route.params.name);
-    },
-  },
   methods: {
     getAllData() {
       axios.get(`http://localhost:${this.port}/experience/api/products/category?productCategory=${this.$route.params.name}&skipCount=${this.startingIndex}`)
         .then((response) => {
           this.allProduct = response.data.data;
           this.rows = this.allProduct[0].countProducts;
-          console.log(this.allProduct);
         });
     },
     formatPrice(value) {

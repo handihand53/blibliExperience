@@ -1,12 +1,50 @@
 import { shallowMount } from '@vue/test-utils';
 import Payment from '@/views/user/Payment.vue';
 import Vue from 'vue';
+import flushPromises from 'flush-promises';
+import Cookie from 'vue-cookie';
 
-Vue.config.ignoredElements = ['b-spinner'];
+Vue.config.ignoredElements = ['router-link', 'font-awesome-icon', 'b-button', 'b-carousel', 'b-carousel-slide', 'b-alert', 'b-spinner', 'b-modal'];
+Cookie.get = jest.fn().mockImplementation(() => 'ok');
+
+const $route = {
+  params: {
+    id: '123',
+  },
+};
+
+jest.mock('axios', () => ({
+  put: () => Promise.resolve({
+    data: {
+      userRoles: [
+        'ROLE_USER',
+      ],
+    },
+  }),
+  get: () => Promise.resolve({
+    data: {
+      data: {
+        biddingForms: [
+          'sd',
+          'fsa',
+        ],
+      },
+    },
+  }),
+  post: () => Promise.resolve({
+    data: {
+      status: 'success',
+    },
+  }),
+}));
 
 describe('Payment.vue', () => {
   it('Payment page render correctly', () => {
-    const wrapper = shallowMount(Payment);
+    const wrapper = shallowMount(Payment, {
+      mocks: {
+        $route,
+      },
+    });
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -17,15 +55,6 @@ describe('Payment.vue', () => {
     expect(wrapper.vm.isGerai).toBe(true);
     expect(wrapper.vm.isElektronik).toBe(true);
     expect(wrapper.vm.isDebit).toBe(true);
-  });
-
-  it('debit click work correctly', () => {
-    const wrapper = shallowMount(Payment);
-    wrapper.find('#debit').trigger('click');
-    expect(wrapper.vm.isVirtual).toBe(true);
-    expect(wrapper.vm.isGerai).toBe(true);
-    expect(wrapper.vm.isElektronik).toBe(true);
-    expect(wrapper.vm.isDebit).toBe(false);
   });
 
   it('gerai click work correctly', () => {
@@ -48,7 +77,8 @@ describe('Payment.vue', () => {
 
   it('Pay button work correctly', () => {
     const wrapper = shallowMount(Payment);
+    wrapper.vm.activePay('debit');
     wrapper.find('button').trigger('click');
-    expect(wrapper.vm.isLoading).toBe(true);
+    expect(wrapper.vm.isLoading).toBe(false);
   });
 });

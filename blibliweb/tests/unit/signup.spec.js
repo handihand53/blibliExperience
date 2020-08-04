@@ -1,6 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 import Signup from '@/views/signup.vue';
 import Vue from 'vue';
+import flushPromises from 'flush-promises';
 import Cookie from 'vue-cookie';
 
 Vue.config.ignoredElements = ['b-spinner', 'router-link', 'font-awesome-icon', 'b-button'];
@@ -65,5 +66,11 @@ describe('Signup.vue', () => {
     expect(wrapper.vm.$refs.btn.disabled).toBe(false);
     wrapper.find('button').trigger('click');
     expect(wrapper.vm.isLoading).toBe(true);
+  });
+
+  it('showPassword function run correctly', async () => {
+    const wrapper = shallowMount(Signup);
+    await flushPromises();
+    wrapper.vm.isAllFormFill();
   });
 });

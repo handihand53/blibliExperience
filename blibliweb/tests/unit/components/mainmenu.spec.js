@@ -21,12 +21,6 @@ describe('MainMenu.vue', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  it('getAllData function work correctly', async () => {
-    const wrapper = shallowMount(MainMenu);
-    await flushPromises();
-    expect(wrapper.vm.allProduct.id).toBe('123');
-  });
-
   it('formatPrice function work correctly', async () => {
     const wrapper = shallowMount(MainMenu);
     await flushPromises();

@@ -120,8 +120,6 @@ export default {
       }
       return str;
     },
-    search() {
-    },
   },
 };
 </script>

@@ -1,8 +1,11 @@
 import { shallowMount } from '@vue/test-utils';
 import Qrcode from '@/components/Qrcode.vue';
 import Vue from 'vue';
+import flushPromises from 'flush-promises';
+import Cookie from 'vue-cookie';
 
-Vue.config.ignoredElements = ['qrcode-stream'];
+Vue.config.ignoredElements = ['qrcode-stream', 'b-modal', 'b-button'];
+Cookie.get = jest.fn().mockImplementation(() => 'ok');
 
 jest.mock('axios', () => ({
   get: () => Promise.resolve({ data: [{ val: 1 }] }),
@@ -10,8 +13,11 @@ jest.mock('axios', () => ({
 }));
 
 describe('Qrcode.vue', () => {
-  it('Qrcode page render correctly', () => {
+  it('Qrcode page render correctly', async () => {
     const wrapper = shallowMount(Qrcode);
+    wrapper.vm.getProductById();
+    wrapper.vm.getProduct();
+    await flushPromises();
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -38,37 +44,4 @@ describe('Qrcode.vue', () => {
     wrapper.vm.onInit('asd');
     // expect(wrapper.vm.error).toBe('error');
   });
-  // it('Check validationPending return work correctly', () => {
-  //   const wrapper = shallowMount(Qrcode, {
-  //     data() {
-  //       return {
-  //         isValid: undefined,
-  //         camera: 'off',
-  //       };
-  //     },
-  //   });
-  //   expect(wrapper.vm.validationPending).toBe(true);
-  // });
-
-  // it('Check validationSuccess return work correctly', () => {
-  //   const wrapper = shallowMount(Qrcode, {
-  //     data() {
-  //       return {
-  //         isValid: true,
-  //       };
-  //     },
-  //   });
-  //   expect(wrapper.vm.validationSuccess).toBe(true);
-  // });
-
-  // it('Check validationFailure return work correctly', () => {
-  //   const wrapper = shallowMount(Qrcode, {
-  //     data() {
-  //       return {
-  //         isValid: false,
-  //       };
-  //     },
-  //   });
-  //   expect(wrapper.vm.validationFailure).toBe(true);
-  // });
 });
